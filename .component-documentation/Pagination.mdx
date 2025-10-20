@@ -1,0 +1,940 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as PaginationStories from './Pagination.stories';
+import { Pagination } from './Pagination';
+
+<Meta of={PaginationStories} />
+
+# 🚨 AI CODING AGENT - CRITICAL IMPLEMENTATION GUIDE 🚨
+
+## PAGINATION COMPONENT ARCHITECTURE - READ FIRST
+
+The Pagination component is a **CONTROLLED component** - you MUST manage state externally!
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ YOUR COMPONENT (Manages State)                                  │
+│                                                                  │
+│  const [currentPage, setCurrentPage] = useState(1);            │
+│  const [pageSize, setPageSize] = useState(10);                 │
+│                                                                  │
+│  <Pagination                                                    │
+│    total={data.length}           ← Total items count           │
+│    current={currentPage}         ← Current page (controlled)   │
+│    pageSize={pageSize}           ← Items per page              │
+│    onChange={(page, size) => {   ← Page change handler         │
+│      setCurrentPage(page);                                      │
+│      setPageSize(size);                                         │
+│    }}                                                           │
+│  />                                                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## ❌ CRITICAL MISTAKES TO AVOID
+
+1. **❌ NEVER use Pagination without managing state**
+2. **❌ NEVER forget to provide `onChange` callback**
+3. **❌ NEVER use wrong `total` value (must be TOTAL ITEMS, not total pages)**
+4. **❌ NEVER forget to slice/filter data based on `current` and `pageSize`**
+5. **❌ NEVER assume page persists when changing page size (resets to page 1)**
+
+## ✅ CORRECT IMPLEMENTATION PATTERN
+
+```jsx
+// ✅ CORRECT - Complete pagination with data slicing
+import { useState } from 'react';
+import { Pagination } from 'tagaddod-design-react';
+
+function UserList() {
+  // Sample data (could be from API)
+  const allUsers = [...]; // 100 users
+
+  // State management (REQUIRED)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Calculate which data to display
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentData = allUsers.slice(startIndex, endIndex);
+
+  // Handle page changes
+  const handlePageChange = (page: number, newPageSize: number) => {
+    setCurrentPage(page);
+    setPageSize(newPageSize);
+
+    // Optional: Fetch new data from API
+    // fetchUsers(page, newPageSize);
+  };
+
+  return (
+    <div>
+      {/* Display current page data */}
+      <table>
+        {currentData.map(user => (
+          <tr key={user.id}>
+            <td>{user.name}</td>
+          </tr>
+        ))}
+      </table>
+
+      {/* Pagination controls */}
+      <Pagination
+        total={allUsers.length}      // Total items (NOT pages)
+        current={currentPage}         // Controlled state
+        pageSize={pageSize}           // Items per page
+        onChange={handlePageChange}   // Update state
+      />
+    </div>
+  );
+}
+```
+
+## ❌ WRONG PATTERNS
+
+```jsx
+// ❌ WRONG - Missing state management
+<Pagination total={100} />  // Won't work - needs current and onChange!
+
+// ❌ WRONG - Using total pages instead of total items
+<Pagination total={10} />   // If you have 100 items, use 100, not 10!
+
+// ❌ WRONG - Not slicing data
+const allUsers = [...100 users];
+<div>
+  {allUsers.map(user => <div>{user.name}</div>)}  // Shows all 100!
+  <Pagination total={100} current={1} pageSize={10} onChange={...} />
+</div>
+
+// ✅ CORRECT - Slice data based on current page
+const currentUsers = allUsers.slice(
+  (currentPage - 1) * pageSize,
+  currentPage * pageSize
+);
+<div>
+  {currentUsers.map(user => <div>{user.name}</div>)}  // Shows 10
+  <Pagination total={100} current={currentPage} pageSize={pageSize} onChange={...} />
+</div>
+```
+
+## 🎯 AI IMPLEMENTATION CHECKLIST
+
+- [ ] Create state: `const [currentPage, setCurrentPage] = useState(1)`
+- [ ] Create state: `const [pageSize, setPageSize] = useState(10)`
+- [ ] Pass `total` as TOTAL ITEMS COUNT (not pages)
+- [ ] Pass `current={currentPage}` (controlled)
+- [ ] Pass `pageSize={pageSize}` (controlled)
+- [ ] Provide `onChange` callback to update state
+- [ ] **CRITICAL:** Slice/filter data based on `currentPage` and `pageSize`
+- [ ] For API pagination: fetch data in `onChange` callback
+- [ ] Understand: changing `pageSize` resets to page 1 automatically
+
+---
+
+# Pagination Component
+
+The Pagination component provides navigation controls for large datasets, allowing users to browse through pages of content. It's a **controlled component** that requires external state management and is commonly used with the Table component.
+
+## Import
+```jsx
+import { Pagination } from 'tagaddod-design-react';
+```
+
+## Props
+<ArgTypes of={Pagination} />
+
+## Basic Usage (Controlled)
+<Canvas of={PaginationStories.Controlled} />
+
+```jsx
+import { useState } from 'react';
+import { Pagination } from 'tagaddod-design-react';
+
+function MyComponent() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Your data (could be from state, props, or API)
+  const allItems = [...]; // Array of items
+
+  // Calculate which items to show
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentItems = allItems.slice(startIndex, endIndex);
+
+  return (
+    <div>
+      {/* Display current page items */}
+      <YourContent data={currentItems} />
+
+      {/* Pagination controls */}
+      <Pagination
+        total={allItems.length}
+        current={currentPage}
+        pageSize={pageSize}
+        onChange={(page, size) => {
+          setCurrentPage(page);
+          setPageSize(size);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+## ❌ COMMON AI AGENT MISTAKES
+
+### Mistake 1: Missing State Management
+```jsx
+// ❌ WRONG - Component won't work without state
+function MyComponent() {
+  const data = [...100 items];
+
+  return (
+    <div>
+      <YourContent data={data} />
+      <Pagination total={100} />  {/* Missing current, pageSize, onChange! */}
+    </div>
+  );
+}
+
+// ✅ CORRECT - Properly managed state
+function MyComponent() {
+  const data = [...100 items];
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+
+  const currentData = data.slice((page - 1) * size, page * size);
+
+  return (
+    <div>
+      <YourContent data={currentData} />
+      <Pagination
+        total={100}
+        current={page}
+        pageSize={size}
+        onChange={(newPage, newSize) => {
+          setPage(newPage);
+          setSize(newSize);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Mistake 2: Confusing Total Items with Total Pages
+```jsx
+// ❌ WRONG - total should be ITEMS, not PAGES
+const totalPages = Math.ceil(100 / 10); // 10 pages
+<Pagination total={totalPages} />  // ❌ WRONG!
+
+// ✅ CORRECT - total is total ITEMS count
+<Pagination total={100} pageSize={10} />  // ✅ Component calculates pages
+```
+
+### Mistake 3: Not Slicing Data
+```jsx
+// ❌ WRONG - Showing all data, not just current page
+function UserList() {
+  const allUsers = [...100 users];
+  const [page, setPage] = useState(1);
+
+  return (
+    <div>
+      {allUsers.map(user => <UserRow user={user} />)}  {/* Shows all 100! */}
+      <Pagination total={100} current={page} onChange={(p) => setPage(p)} />
+    </div>
+  );
+}
+
+// ✅ CORRECT - Only show current page data
+function UserList() {
+  const allUsers = [...100 users];
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+
+  // Calculate current page data
+  const start = (page - 1) * size;
+  const currentUsers = allUsers.slice(start, start + size);
+
+  return (
+    <div>
+      {currentUsers.map(user => <UserRow user={user} />)}  {/* Shows 10 */}
+      <Pagination
+        total={allUsers.length}
+        current={page}
+        pageSize={size}
+        onChange={(p, s) => {
+          setPage(p);
+          setSize(s);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Mistake 4: Not Handling Page Size Changes
+```jsx
+// ❌ WRONG - onChange doesn't update pageSize
+<Pagination
+  total={100}
+  current={page}
+  pageSize={pageSize}
+  onChange={(newPage) => setPage(newPage)}  // Missing size parameter!
+/>
+
+// ✅ CORRECT - Handle both page and size changes
+<Pagination
+  total={100}
+  current={page}
+  pageSize={pageSize}
+  onChange={(newPage, newSize) => {
+    setPage(newPage);
+    setSize(newSize);
+  }}
+/>
+```
+
+## STEP-BY-STEP IMPLEMENTATION
+
+### Step 1: Static Data Pagination
+```jsx
+// Simple pagination with static data
+function ProductList() {
+  const products = [
+    { id: 1, name: 'Product 1' },
+    { id: 2, name: 'Product 2' },
+    // ... 100 products total
+  ];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Calculate which products to show
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  return (
+    <div>
+      <div className="product-grid">
+        {currentProducts.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      <Pagination
+        total={products.length}
+        current={currentPage}
+        pageSize={pageSize}
+        onChange={(page, size) => {
+          setCurrentPage(page);
+          setPageSize(size);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Step 2: API Pagination (Client-Side)
+```jsx
+// Pagination with data from API (all data loaded at once)
+function UserList() {
+  const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch all users once
+  useEffect(() => {
+    fetchAllUsers().then(data => {
+      setUsers(data);
+      setLoading(false);
+    });
+  }, []);
+
+  // Calculate current page users
+  const startIndex = (currentPage - 1) * pageSize;
+  const currentUsers = users.slice(startIndex, startIndex + pageSize);
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <table>
+        <tbody>
+          {currentUsers.map(user => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Pagination
+        total={users.length}
+        current={currentPage}
+        pageSize={pageSize}
+        onChange={(page, size) => {
+          setCurrentPage(page);
+          setPageSize(size);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Step 3: API Pagination (Server-Side)
+```jsx
+// Pagination with server-side data fetching
+function OrderList() {
+  const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data whenever page or size changes
+  useEffect(() => {
+    setLoading(true);
+    fetchOrders(currentPage, pageSize).then(response => {
+      setOrders(response.data);
+      setTotalItems(response.total);
+      setLoading(false);
+    });
+  }, [currentPage, pageSize]);
+
+  const handlePageChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+    // Data will be fetched in useEffect
+  };
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <table>
+        <tbody>
+          {orders.map(order => (
+            <tr key={order.id}>
+              <td>{order.number}</td>
+              <td>{order.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Pagination
+        total={totalItems}          // Total from server
+        current={currentPage}
+        pageSize={pageSize}
+        onChange={handlePageChange}
+      />
+    </div>
+  );
+}
+```
+
+### Step 4: With Table Component
+```jsx
+// Pagination integrated with Table component
+import { Table, Pagination } from 'tagaddod-design-react';
+
+function DataTable() {
+  const [data, setData] = useState([...]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Calculate current page data
+  const startIndex = (currentPage - 1) * pageSize;
+  const currentData = data.slice(startIndex, startIndex + pageSize);
+
+  const columns = [
+    { header: 'Name', accessor: 'name' },
+    { header: 'Email', accessor: 'email' },
+    { header: 'Role', accessor: 'role' },
+  ];
+
+  return (
+    <div>
+      <Table
+        columns={columns}
+        data={currentData}
+      />
+
+      <Pagination
+        total={data.length}
+        current={currentPage}
+        pageSize={pageSize}
+        onChange={(page, size) => {
+          setCurrentPage(page);
+          setPageSize(size);
+        }}
+      />
+    </div>
+  );
+}
+```
+
+## Count Type Variants
+
+### Long Count Type (Default)
+<Canvas of={PaginationStories.LongPagination} />
+
+Shows page numbers with ellipsis (`...`) when there are many pages. Displays 1 sibling page on each side of the current page.
+
+```jsx
+<Pagination
+  total={500}
+  current={6}
+  countType="long"  // Default - shows ellipsis for many pages
+  pageSize={10}
+  onChange={handleChange}
+/>
+// Displays: [Prev] 1 ... 5 6 7 ... 50 [Next]
+```
+
+**When to use:**
+- 8+ total pages
+- Default for most use cases
+- Table pagination with many items
+
+### Short Count Type
+<Canvas of={PaginationStories.ShortPagination} />
+
+Shows all page numbers without ellipsis. Only shows the current page without siblings.
+
+```jsx
+<Pagination
+  total={80}
+  current={3}
+  countType="short"  // No ellipsis, all pages shown
+  pageSize={10}
+  onChange={handleChange}
+/>
+// Displays: [Prev] 1 2 3 4 5 6 7 8 [Next]
+```
+
+**When to use:**
+- 8 or fewer total pages
+- Compact layouts
+- When you want all pages visible
+
+**Automatic behavior:** If you have more than 8 pages, use `countType="long"` to prevent UI overflow.
+
+## Visual Options
+
+### Without Count Text
+<Canvas of={PaginationStories.WithoutCount} />
+
+```jsx
+<Pagination
+  total={100}
+  current={1}
+  showCount={false}  // Hide "Showing X to Y of Z entries"
+  onChange={handleChange}
+/>
+```
+
+### Without Rows Per Page Selector
+<Canvas of={PaginationStories.WithoutRowsSelector} />
+
+```jsx
+<Pagination
+  total={100}
+  current={1}
+  showRowsInPage={false}  // Hide page size dropdown
+  onChange={handleChange}
+/>
+```
+
+### Minimal Pagination (Both Hidden)
+```jsx
+<Pagination
+  total={100}
+  current={1}
+  showCount={false}
+  showRowsInPage={false}
+  onChange={handleChange}
+/>
+```
+
+**When to use minimal:**
+- Outside Table component
+- Compact mobile layouts
+- Simple list pagination
+
+## Page Size Options
+
+Customize available page sizes in the dropdown:
+
+```jsx
+<Pagination
+  total={500}
+  current={1}
+  pageSize={20}
+  pageSizeOptions={[10, 20, 50, 100]}  // Default
+  onChange={handleChange}
+/>
+
+// Custom options
+<Pagination
+  total={1000}
+  current={1}
+  pageSize={25}
+  pageSizeOptions={[25, 50, 75, 100, 150, 200]}
+  onChange={handleChange}
+/>
+```
+
+**Important:** When user changes page size, the component automatically resets to page 1.
+
+```jsx
+// User is on page 5 with 10 items per page
+// User changes to 50 items per page
+// Component automatically goes to page 1
+// This prevents showing empty pages
+```
+
+## RTL Support
+
+The Pagination component automatically supports RTL with complete Arabic text and proper icon direction.
+
+### Automatic RTL Detection
+<Canvas of={PaginationStories.RTLMode} />
+
+The component automatically detects RTL mode and adjusts:
+
+1. **Navigation Icons**: Previous/Next buttons swap icons in RTL
+   - LTR: `[← Prev] [1] [2] [3] [Next →]`
+   - RTL: `[→ التالي] [3] [2] [1] [السابق ←]`
+
+2. **Page Numbers**: Reversed order in RTL (highest to lowest)
+   - LTR: `1 2 3 4 5`
+   - RTL: `5 4 3 2 1`
+
+3. **Count Text**: Arabic format
+   - English: "Showing 1 to 10 of 100 entries"
+   - Arabic: "عرض 1 إلى 10 من أصل 100"
+
+4. **Rows Dropdown**: Reversed layout
+   - English: "Rows in Page [10] ▼"
+   - Arabic: "▼ [10] عدد الصفوف"
+
+```jsx
+// RTL mode is automatic - no props needed!
+<div dir="rtl">
+  <Pagination
+    total={100}
+    current={5}
+    pageSize={10}
+    onChange={handleChange}
+  />
+</div>
+```
+
+### RTL Implementation Details
+
+**Icon Direction Logic:**
+```jsx
+// In RTL mode:
+// "Previous" button uses IconChevronRight (→) - points to the right
+// "Next" button uses IconChevronLeft (←) - points to the left
+
+// This matches reading direction:
+// In RTL, "previous" is to the right, "next" is to the left
+```
+
+**Automatic Detection:**
+The component uses `MutationObserver` to detect `dir` attribute changes in real-time, so changing `document.dir` dynamically updates the pagination automatically.
+
+## Common Use Cases
+
+### Table Pagination (Most Common)
+```jsx
+function UsersTable() {
+  const [users, setUsers] = useState([...]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+
+  const currentUsers = users.slice((page - 1) * size, page * size);
+
+  return (
+    <div>
+      <Table data={currentUsers} columns={columns} />
+      <Pagination
+        total={users.length}
+        current={page}
+        pageSize={size}
+        onChange={(p, s) => {
+          setPage(p);
+          setSize(s);
+        }}
+        showCount={true}        // Show count in tables
+        showRowsInPage={true}   // Show size selector in tables
+      />
+    </div>
+  );
+}
+```
+
+### Search Results Pagination
+```jsx
+function SearchResults({ query }) {
+  const [results, setResults] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const pageSize = 20;
+
+  useEffect(() => {
+    searchAPI(query, page, pageSize).then(data => {
+      setResults(data.results);
+      setTotalResults(data.total);
+    });
+  }, [query, page]);
+
+  return (
+    <div>
+      <div className="results">
+        {results.map(result => (
+          <SearchResult key={result.id} data={result} />
+        ))}
+      </div>
+
+      <Pagination
+        total={totalResults}
+        current={page}
+        pageSize={pageSize}
+        onChange={(p) => setPage(p)}
+        showCount={true}
+        showRowsInPage={false}  // Fixed page size for search
+      />
+    </div>
+  );
+}
+```
+
+### Blog Posts / Content List
+```jsx
+function BlogList() {
+  const [posts, setPosts] = useState([...]);
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
+
+  const currentPosts = posts.slice((page - 1) * pageSize, page * pageSize);
+
+  return (
+    <div>
+      <div className="posts-grid">
+        {currentPosts.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+
+      <Pagination
+        total={posts.length}
+        current={page}
+        pageSize={pageSize}
+        onChange={(p) => setPage(p)}
+        showCount={false}       // Hide count for content
+        showRowsInPage={false}  // Fixed size for blog
+      />
+    </div>
+  );
+}
+```
+
+### Infinite Scroll Alternative
+```jsx
+function ProductGrid() {
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(24);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    fetchProducts(page, size).then(data => {
+      setProducts(data.products);
+      setTotal(data.total);
+    });
+  }, [page, size]);
+
+  return (
+    <div>
+      <div className="product-grid">
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      <Pagination
+        total={total}
+        current={page}
+        pageSize={size}
+        onChange={(p, s) => {
+          setPage(p);
+          setSize(s);
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+        }}
+        pageSizeOptions={[12, 24, 48, 96]}
+      />
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+The Pagination component provides comprehensive accessibility:
+
+- **Keyboard Navigation**: All buttons are keyboard accessible
+- **ARIA Labels**: Previous/Next buttons have proper `aria-label`
+- **Current Page**: Uses `aria-current="page"` for current page button
+- **Screen Readers**: Announces page changes and controls
+- **Focus Management**: Proper tab order through pagination controls
+- **Semantic HTML**: Uses button elements for all interactive controls
+
+## Technical Details
+
+### State Management
+
+**CRITICAL:** Pagination is a controlled component. You MUST manage state:
+
+```jsx
+// Required state
+const [currentPage, setCurrentPage] = useState(1);
+const [pageSize, setPageSize] = useState(10);
+
+// Required props
+<Pagination
+  total={totalItems}
+  current={currentPage}      // Controlled
+  pageSize={pageSize}        // Controlled
+  onChange={(page, size) => {
+    setCurrentPage(page);
+    setPageSize(size);
+  }}
+/>
+```
+
+### Page Calculation Logic
+
+```jsx
+// Total pages
+const totalPages = Math.ceil(total / pageSize);
+
+// Current page data indices
+const startIndex = (currentPage - 1) * pageSize;
+const endIndex = startIndex + pageSize;
+
+// Slice data
+const currentData = allData.slice(startIndex, endIndex);
+```
+
+### Ellipsis Algorithm
+
+The component uses `usePagination` hook with sibling count logic:
+
+- **Long mode** (`siblingCount=1`): Shows 1 page on each side of current
+  - Example: `1 ... 5 [6] 7 ... 20`
+
+- **Short mode** (`siblingCount=0`): Shows only current page
+  - Example: `1 2 [3] 4 5 6 7 8`
+
+### RTL Detection
+
+Uses `MutationObserver` to watch `dir` attribute:
+
+```jsx
+// Automatically detects changes
+const observer = new MutationObserver((mutations) => {
+  const dirChanged = mutations.some(mutation =>
+    mutation.type === 'attributes' && mutation.attributeName === 'dir'
+  );
+  if (dirChanged) {
+    updateRTL();
+  }
+});
+```
+
+## Browser Support
+
+Compatible with all modern browsers with full RTL support.
+
+---
+
+## 🎯 QUICK REFERENCE FOR AI AGENTS
+
+### ✅ DO THIS (Complete Pattern):
+```jsx
+const [page, setPage] = useState(1);
+const [size, setSize] = useState(10);
+const data = [...]; // Your data
+
+// Calculate current page data
+const start = (page - 1) * size;
+const currentData = data.slice(start, start + size);
+
+return (
+  <div>
+    <YourContent data={currentData} />
+    <Pagination
+      total={data.length}           // Total ITEMS
+      current={page}                // Controlled
+      pageSize={size}               // Controlled
+      onChange={(p, s) => {
+        setPage(p);
+        setSize(s);
+      }}
+    />
+  </div>
+);
+```
+
+### ✅ API Pagination Pattern:
+```jsx
+const [page, setPage] = useState(1);
+const [size, setSize] = useState(10);
+const [data, setData] = useState([]);
+const [total, setTotal] = useState(0);
+
+useEffect(() => {
+  fetchData(page, size).then(res => {
+    setData(res.data);
+    setTotal(res.total);
+  });
+}, [page, size]);
+
+<Pagination
+  total={total}
+  current={page}
+  pageSize={size}
+  onChange={(p, s) => {
+    setPage(p);
+    setSize(s);
+  }}
+/>
+```
+
+### ❌ NEVER DO THIS:
+```jsx
+// ❌ Missing state
+<Pagination total={100} />
+
+// ❌ Wrong total (should be items, not pages)
+<Pagination total={10} />  // If 100 items, use 100!
+
+// ❌ Not slicing data
+{allData.map(item => <Item />)}  // Shows all!
+<Pagination total={100} current={1} />
+
+// ❌ Missing size in onChange
+onChange={(page) => setPage(page)}  // Missing size param!
+```
+
+**Remember: Pagination is CONTROLLED - manage state, slice data, use total ITEMS count!**

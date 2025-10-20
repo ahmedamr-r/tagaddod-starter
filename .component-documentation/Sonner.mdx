@@ -1,0 +1,557 @@
+import { Meta, Canvas, Story, ArgTypes, Source } from '@storybook/blocks';
+import { Sonner, showSonner } from './Sonner';
+import * as SonnerStories from './Sonner.stories';
+
+<Meta of={SonnerStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 INSTALLATION & SETUP (Lines 24-62)
+- App component integration (Lines 26-42)
+- showSonner usage pattern (Lines 44-62)
+
+🎯 BASIC USAGE (Lines 64-66)
+- Default toast implementation
+
+🎨 TOAST TYPES (Lines 68-88)
+- Error (Red #d51e25): Error messages and failures
+- Success (Green #00ae61): Completed actions
+- Default (White #ffffff): General information
+- Icon Background Options: With/without containers
+
+⚡ TOAST WITH ACTIONS (Lines 89-122)
+- Single action button implementation
+- Action and cancel button combinations
+
+🌍 RTL/LTR SUPPORT (Lines 124-135)
+- Automatic layout adaptation
+- Arabic text rendering
+- Position mirroring
+
+🎨 CUSTOM ICONS (Lines 137-154)
+- Custom icon replacement
+- Icon background configuration
+
+📄 LONG CONTENT (Lines 156-160)
+- Text wrapping handling
+
+🔢 MULTIPLE TOASTS (Lines 162-183)
+- Multiple toast management
+- dismissAll and dismiss methods
+
+📍 DIFFERENT POSITIONS (Lines 185-189)
+- Screen positioning options
+
+🔘 CLOSE BUTTON (Lines 191-195)
+- Manual dismissal option
+
+📋 API REFERENCE (Lines 197-230)
+- Sonner Component Props
+- showSonner Methods (Lines 204-214)
+- SonnerToastOptions (Lines 216-230)
+
+🎨 DESIGN SPECIFICATIONS (Lines 231-259)
+- Colors (Lines 235-244): Exact Figma colors
+- Typography (Lines 245-247): Outfit font specifications
+- Spacing (Lines 248-256): Padding and gaps
+- Effects (Lines 257-259): Shadow and border radius
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic setup: Lines 32-40
+- Success toast: Lines 52-56
+- With actions: Lines 98-121
+- Custom icons: Lines 144-152
+- Multiple toasts: Lines 171-181
+- RTL support: Lines 124-135
+
+⚠️ SETUP NOTE:
+Sonner requires the Sonner component to be added to your app root (Lines 32-40) and showSonner functions can be called from anywhere (Lines 48-61).
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Sonner component capabilities and patterns.
+
+
+# Sonner
+
+The Sonner component is a modern toast notification system that follows our Figma design specifications exactly. It provides three distinct toast types (Error, Success, Default) with consistent typography, spacing, and comprehensive RTL/LTR support.
+
+## Overview
+
+Sonner offers a powerful toast notification system with:
+
+- **Design System Aligned**: Matches Figma specifications with exact colors, typography, and spacing
+- **Three Toast Types**: Error (red #d51e25), Success (green #00ae61), and Default (white) variants
+- **Icon Background Options**: Icons can be displayed with or without background containers
+- **Built-in Close Button**: Always-visible close button with proper RTL/LTR positioning
+- **RTL/LTR Support**: Complete layout mirroring and text alignment for different directions
+- **Outfit Typography**: Uses Outfit font family with proper weights (Medium 500, Regular 400)
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Stacking Behavior**: Proper toast stacking with Sonner 2.0+ features
+
+## Installation & Setup
+
+First, add the Sonner component to your application root:
+
+<Source
+  language="tsx"
+  code={`
+import { Sonner } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <div>
+      {/* Your app content */}
+      <Sonner position="bottom-right" />
+    </div>
+  );
+}
+`}
+/>
+
+Then use the toast functions anywhere in your application:
+
+<Source
+  language="tsx"
+  code={`
+import { showSonner } from 'tagaddod-design-react';
+
+function MyComponent() {
+  const handleSuccess = () => {
+    showSonner.success({
+      title: 'Success!',
+      description: 'Your action was completed successfully.'
+    });
+  };
+
+  return <button onClick={handleSuccess}>Show Success Toast</button>;
+}
+`}
+/>
+
+## Basic Usage
+
+<Canvas of={SonnerStories.Default} />
+
+## Toast Types
+
+Our design system includes three main toast types based on the Figma specifications:
+
+<Canvas of={SonnerStories.ToastTypes} />
+
+### Available Types
+
+- **Error**: Red background (#d51e25) with white text - for error messages and failures
+- **Success**: Green background (#00ae61) with white text - for completed actions and positive feedback  
+- **Default**: White background (#ffffff) with dark text - for general information and neutral messages
+
+### Icon Background Options
+
+Icons can be displayed with or without background containers:
+
+<Canvas of={SonnerStories.IconBackgroundVariants} />
+
+- **With Background**: Icons get a rounded background container (20% white opacity for colored toasts, #f9f9fa for default)
+- **Without Background**: Icons are displayed directly without any background container
+
+## Toast with Actions
+
+Add interactive buttons to your toasts for better user engagement:
+
+<Canvas of={SonnerStories.WithActions} />
+
+<Source
+  language="tsx"
+  code={`
+// Toast with single action
+showSonner.info({
+  title: 'New Message',
+  description: 'You have a new message from John.',
+  action: {
+    label: 'View',
+    onClick: () => console.log('Viewing message')
+  }
+});
+
+// Toast with action and cancel
+showSonner.warning({
+  title: 'Unsaved Changes',
+  description: 'You have unsaved changes.',
+  action: {
+    label: 'Save',
+    onClick: () => console.log('Saving')
+  },
+  cancel: {
+    label: 'Discard',
+    onClick: () => console.log('Discarding')
+  }
+});
+`}
+/>
+
+## Internationalization and RTL Support
+
+The Sonner component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout positioning, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Sonner, showSonner } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <div>
+        {/* Your app content */}
+        <button onClick={() => showSonner.success({
+          title: 'نجح!',
+          description: 'تم إنجاز العملية بنجاح.'
+        })}>
+          عرض التنبيه
+        </button>
+        <Sonner position="bottom-right" />
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Sonner component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Mirroring**: Icon and close button positions are mirrored
+3. **Text Alignment**: Changes to right-aligned text for Arabic content
+4. **Position Mirroring**: Toast positions adapt to RTL reading patterns
+5. **Line Height**: Applies appropriate line height for Arabic text rendering
+
+### Toast Types in RTL
+
+All toast types work seamlessly in RTL mode with proper styling:
+
+<Canvas of={SonnerStories.RTLSupport} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function RTLToastExamples() {
+  const { isRTL } = useTheme();
+  
+  const showSuccess = () => {
+    showSonner.success({
+      title: isRTL ? 'تم بنجاح!' : 'Success!',
+      description: isRTL ? 'تم حفظ التغييرات بنجاح.' : 'Changes saved successfully.',
+      action: {
+        label: isRTL ? 'عرض' : 'View',
+        onClick: () => console.log('Viewing changes')
+      }
+    });
+  };
+
+  const showError = () => {
+    showSonner.error({
+      title: isRTL ? 'خطأ!' : 'Error!',
+      description: isRTL ? 'فشل في حفظ التغييرات.' : 'Failed to save changes.',
+      action: {
+        label: isRTL ? 'إعادة المحاولة' : 'Retry',
+        onClick: () => console.log('Retrying')
+      }
+    });
+  };
+
+  const showWarning = () => {
+    showSonner.warning({
+      title: isRTL ? 'تحذير!' : 'Warning!',
+      description: isRTL ? 'هناك تغييرات غير محفوظة.' : 'You have unsaved changes.',
+      action: {
+        label: isRTL ? 'حفظ' : 'Save',
+        onClick: () => console.log('Saving')
+      },
+      cancel: {
+        label: isRTL ? 'تجاهل' : 'Discard',
+        onClick: () => console.log('Discarding')
+      }
+    });
+  };
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <button onClick={showSuccess}>
+        {isRTL ? 'نجاح' : 'Success'}
+      </button>
+      <button onClick={showError}>
+        {isRTL ? 'خطأ' : 'Error'}
+      </button>
+      <button onClick={showWarning}>
+        {isRTL ? 'تحذير' : 'Warning'}
+      </button>
+    </div>
+  );
+}
+```
+
+### Action Buttons in RTL
+
+Action buttons automatically adapt to RTL layout:
+
+```jsx
+function ActionButtonsRTL() {
+  const { isRTL } = useTheme();
+  
+  const showToastWithActions = () => {
+    showSonner.info({
+      title: isRTL ? 'رسالة جديدة' : 'New Message',
+      description: isRTL ? 'لديك رسالة جديدة من أحمد.' : 'You have a new message from Ahmed.',
+      action: {
+        label: isRTL ? 'قراءة' : 'Read',
+        onClick: () => console.log('Reading message')
+      },
+      cancel: {
+        label: isRTL ? 'لاحقاً' : 'Later',
+        onClick: () => console.log('Dismiss')
+      }
+    });
+  };
+
+  return (
+    <button onClick={showToastWithActions}>
+      {isRTL ? 'عرض رسالة مع إجراءات' : 'Show Message with Actions'}
+    </button>
+  );
+}
+```
+
+### Loading States in RTL
+
+Loading toasts work properly in RTL contexts:
+
+```jsx
+function LoadingToastRTL() {
+  const { isRTL } = useTheme();
+  
+  const showLoadingToast = () => {
+    const toastId = showSonner.loading({
+      title: isRTL ? 'جاري التحميل...' : 'Loading...',
+      description: isRTL ? 'جاري حفظ البيانات.' : 'Saving data.'
+    });
+
+    // Simulate async operation
+    setTimeout(() => {
+      showSonner.success({
+        id: toastId,
+        title: isRTL ? 'تم!' : 'Done!',
+        description: isRTL ? 'تم حفظ البيانات بنجاح.' : 'Data saved successfully.'
+      });
+    }, 2000);
+  };
+
+  return (
+    <button onClick={showLoadingToast}>
+      {isRTL ? 'حفظ البيانات' : 'Save Data'}
+    </button>
+  );
+}
+```
+
+### Custom Icons in RTL
+
+Custom icons work seamlessly in RTL layouts:
+
+```jsx
+import { IconHeart, IconStar, IconBookmark } from '@tabler/icons-react';
+
+function CustomIconsRTL() {
+  const { isRTL } = useTheme();
+  
+  const showCustomIconToast = () => {
+    showSonner.info({
+      title: isRTL ? 'مُفضّل!' : 'Favorited!',
+      description: isRTL ? 'تم إضافة العنصر للمفضلة.' : 'Item added to favorites.',
+      icon: <IconHeart size={16} style={{ color: '#e74c3c' }} />,
+      iconBackground: true
+    });
+  };
+
+  return (
+    <button onClick={showCustomIconToast}>
+      {isRTL ? 'إضافة للمفضلة' : 'Add to Favorites'}
+    </button>
+  );
+}
+```
+
+### Position Adjustment in RTL
+
+Toast positions automatically adjust for RTL:
+
+```jsx
+function RTLPositions() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div>
+      {/* Position adjusts automatically based on reading direction */}
+      <Sonner position={isRTL ? "bottom-left" : "bottom-right"} />
+      
+      <button onClick={() => showSonner.info({
+        title: isRTL ? 'معلومة' : 'Information',
+        description: isRTL ? 'هذا تنبيه في الموضع المناسب.' : 'This is a toast in the proper position.'
+      })}>
+        {isRTL ? 'عرض تنبيه' : 'Show Toast'}
+      </button>
+    </div>
+  );
+}
+```
+
+### RTL Layout Features
+
+**In RTL mode, the toast component automatically:**
+- **Icon and close button positions are mirrored** - close button appears on the left
+- **Text alignment changes to right-aligned** for Arabic text
+- **Layout flows from right to left** maintaining natural reading patterns
+- **Proper Arabic text rendering** with Tajawal font and correct line heights
+- **Action buttons reorder** appropriately for RTL interfaces
+- **Toast positioning** respects RTL reading patterns
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering
+3. **Use `useTheme` hook** to access RTL state and theme information  
+4. **Consider toast positioning** - choose positions that feel natural for RTL
+5. **Test action buttons** to ensure proper ordering and interaction
+6. **Provide Arabic labels** for actions and button text
+7. **Test loading states** with Arabic text to ensure proper display
+
+## Custom Icons
+
+Replace the default type icons with your own custom icons:
+
+<Canvas of={SonnerStories.CustomIcon} />
+
+<Source
+  language="tsx"
+  code={`
+import { IconHeart } from '@tabler/icons-react';
+
+showSonner.info({
+  title: 'Liked!',
+  description: 'You liked this post.',
+  icon: <IconHeart size={16} style={{ color: '#e74c3c' }} />,
+  iconBackground: true // or false to show without background
+});
+`}
+/>
+
+## Long Content
+
+Sonner handles long content gracefully with proper text wrapping:
+
+<Canvas of={SonnerStories.LongContent} />
+
+## Multiple Toasts
+
+Show multiple toasts and manage them collectively:
+
+<Canvas of={SonnerStories.MultipleToasts} />
+
+<Source
+  language="tsx"
+  code={`
+// Show multiple toasts
+showSonner.success({ title: 'First', description: 'First toast' });
+showSonner.info({ title: 'Second', description: 'Second toast' });
+showSonner.warning({ title: 'Third', description: 'Third toast' });
+
+// Dismiss all toasts
+showSonner.dismissAll();
+
+// Dismiss specific toast
+const toastId = showSonner.info({ title: 'Toast', description: 'Message' });
+showSonner.dismiss(toastId);
+`}
+/>
+
+## Different Positions
+
+Position toasts in different areas of the screen:
+
+<Canvas of={SonnerStories.DifferentPositions} />
+
+## Close Button
+
+Enable a close button for manual dismissal:
+
+<Canvas of={SonnerStories.WithCloseButton} />
+
+## API Reference
+
+### Sonner Component Props
+
+<ArgTypes of={SonnerStories} />
+
+### showSonner Methods
+
+| Method | Description | Parameters |
+|--------|-------------|------------|
+| `showSonner.success(options)` | Show success toast | `SonnerToastOptions` |
+| `showSonner.error(options)` | Show error toast | `SonnerToastOptions` |
+| `showSonner.warning(options)` | Show warning toast | `SonnerToastOptions` |
+| `showSonner.info(options)` | Show info toast | `SonnerToastOptions` |
+| `showSonner.loading(options)` | Show loading toast | `SonnerToastOptions` |
+| `showSonner.custom(options)` | Show custom toast | `SonnerToastOptions` |
+| `showSonner.dismiss(id?)` | Dismiss specific toast | `string \| number` (optional) |
+| `showSonner.dismissAll()` | Dismiss all toasts | - |
+
+### SonnerToastOptions
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `id` | `string \| number` | - | Unique identifier for the toast |
+| `title` | `string` | - | The main title text of the toast |
+| `description` | `string` | - | The description text below the title |
+| `duration` | `number` | `4000` | How long the toast should be visible (in milliseconds) |
+| `icon` | `React.ReactNode` | - | Custom icon to display (overrides default type icon) |
+| `iconBackground` | `boolean` | `true` | Whether to show a background container around the icon |
+| `action` | `{ label: string; onClick: () => void }` | - | Primary action button |
+| `cancel` | `{ label: string; onClick: () => void }` | - | Secondary cancel button |
+| `onDismiss` | `() => void` | - | Callback when toast is manually dismissed |
+| `onAutoClose` | `() => void` | - | Callback when toast auto-closes |
+
+## Design Specifications
+
+Based on the Figma design, the component uses these exact specifications:
+
+### Colors
+- **Error Background**: #d51e25
+- **Success Background**: #00ae61  
+- **Default Background**: #ffffff
+- **Icon Background (colored toasts)**: rgba(255, 255, 255, 0.2)
+- **Icon Background (default toast)**: #f9f9fa
+- **Text on colored backgrounds**: #ffffff
+- **Primary text (default)**: #16161d
+- **Secondary text (default)**: #7d8096
+
+### Typography
+- **Title**: Outfit Medium, 16px, line-height 1.5
+- **Description**: Outfit Regular, 14px, line-height 1.5
+
+### Spacing
+- **Toast padding**: 12px
+- **Gap between content and close button**: 8px
+- **Gap between icon and text**: 3px
+- **Gap between title and description**: 2px
+- **Icon size**: 20px
+- **Icon background padding**: 12px
+
+### Effects
+- **Shadow**: 0px 8px 16px -4px rgba(26, 26, 26, 0.22)
+- **Border radius**: 8px (toast), 4px (icon background) 

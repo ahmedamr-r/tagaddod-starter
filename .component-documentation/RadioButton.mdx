@@ -1,0 +1,805 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as RadioButtonStories from './RadioButton.stories';
+import { RadioGroup, RadioButtonItem } from './RadioButton';
+
+<Meta of={RadioButtonStories} />
+
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 20-42)
+- Basic import pattern with RadioGroup and RadioButtonItem
+- Component structure explanation
+- Props documentation for both components
+
+🎯 BASIC USAGE (Lines 43-57)
+- Default implementation with RadioGroup container
+- RadioButtonItem configuration
+
+🎯 SINGLE RADIO BUTTON (Lines 59-74)
+- Individual RadioButtonItem with all props
+- ID and label configuration
+
+📝 HELP TEXT (Lines 76-106)
+- Descriptive help text for options
+- showHelpText prop usage
+
+🔄 STATES (Lines 107-151)
+- Disabled State (Lines 110-128): Individual and group disable
+- Hidden Label (Lines 130-151): Screen reader accessibility
+
+🔄 CONTROLLED VS UNCONTROLLED (Lines 153-193)
+- Uncontrolled Mode (Lines 155-164): defaultValue pattern
+- Controlled Mode (Lines 166-193): State management with React
+
+⚡ EVENT HANDLING (Lines 195-210)
+- onValueChange callback implementation
+- Selection change processing
+
+📝 FORM INTEGRATION (Lines 212-259)
+- React Hook Form integration
+- Native HTML form support
+- FormData handling
+
+🌍 INTERNATIONALIZATION (Lines 261-289)
+- RTL language support
+- Arabic text examples
+- Layout direction adjustment
+
+💼 COMMON USE CASES (Lines 291-388)
+- Settings Options (Lines 293-318): Privacy controls
+- Checkout Form Options (Lines 320-351): Shipping methods
+- Survey Questions (Lines 353-388): Rating scales
+
+🎯 BEST PRACTICES (Lines 390-399)
+- Clear labeling and logical ordering
+- Help text usage guidelines
+- Default selection recommendations
+
+♿ ACCESSIBILITY (Lines 400-414)
+- ARIA roles and states
+- Keyboard navigation (Tab, Space, Arrow keys)
+- Screen reader support
+
+⚙️ TECHNICAL DETAILS (Lines 415-514)
+- CSS Variables (Lines 417-437): Design token reference
+- Customizing Style (Lines 439-469): CSS overrides
+- Technical Architecture (Lines 471-488): Radix UI foundation
+- Performance Considerations (Lines 489-495): Optimization notes
+- Browser Support (Lines 496-507): Compatibility matrix
+
+🔗 RELATED COMPONENTS (Lines 508-514)
+- Component alternatives and use cases
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic group: Lines 52-56
+- With help text: Lines 83-105
+- Controlled state: Lines 177-185
+- Form integration: Lines 228-241
+- RTL support: Lines 273-288
+- Settings options: Lines 298-317
+
+⚠️ STRUCTURE NOTE:
+RadioButton requires both RadioGroup (container) and RadioButtonItem (individual buttons). Use RadioGroup for state management and RadioButtonItem for each option.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all RadioButton component capabilities and patterns.
+
+
+# RadioButton Component
+
+The RadioButton component allows users to select a single option from a set of mutually exclusive choices. This component is built on Radix UI's RadioGroup primitive and follows Tagaddod's design system specifications.
+
+## Overview
+
+RadioButtons are used when users need to select exactly one option from a list of related options. They're organized in groups where only one option can be selected at a time. When a user selects a new option, the previously selected option is automatically deselected.
+
+RadioButtons should be used when:
+- Only one choice can be selected from a list of options
+- All options need to be visible to help users make an informed decision
+- There are 2-7 options (use a dropdown for more options)
+
+## Import
+
+```jsx
+import { RadioGroup, RadioButtonItem } from '@tagaddod/react';
+```
+
+## Component Structure
+
+The RadioButton component consists of two parts:
+
+1. **RadioGroup**: Container that manages the state and grouping of radio buttons
+2. **RadioButtonItem**: Individual radio button with label and optional help text
+
+## Props
+
+### RadioGroup Props
+
+<ArgTypes of={RadioGroup} />
+
+### RadioButtonItem Props
+
+<ArgTypes of={RadioButtonItem} />
+
+## Basic Usage
+
+The most common implementation of RadioButton with a default selected value:
+
+<Canvas of={RadioButtonStories.Default} />
+
+```jsx
+import { RadioGroup, RadioButtonItem } from '@tagaddod/react';
+
+<RadioGroup defaultValue="option1">
+  <RadioButtonItem value="option1" id="option1" label="Option 1" />
+  <RadioButtonItem value="option2" id="option2" label="Option 2" />
+  <RadioButtonItem value="option3" id="option3" label="Option 3" />
+</RadioGroup>
+```
+
+## Single Radio Button
+
+An individual RadioButtonItem can be used with all available props:
+
+<Canvas of={RadioButtonStories.SingleRadioButton} />
+
+```jsx
+<RadioGroup defaultValue="option1">
+  <RadioButtonItem 
+    value="option1" 
+    id="radio1" 
+    label="Radio option" 
+    helpText="This is help text for the radio button"
+  />
+</RadioGroup>
+```
+
+## RadioButton with Help Text
+
+Add descriptive help text to provide more context for each option:
+
+<Canvas of={RadioButtonStories.WithHelpText} />
+
+```jsx
+<RadioGroup defaultValue="notification1">
+  <RadioButtonItem 
+    value="notification1" 
+    id="notification1" 
+    label="All new messages" 
+    helpText="Get notified about all messages" 
+    showHelpText={true}
+  />
+  <RadioButtonItem 
+    value="notification2" 
+    id="notification2" 
+    label="Direct messages and mentions" 
+    helpText="Only get notified when you're mentioned" 
+    showHelpText={true}
+  />
+  <RadioButtonItem 
+    value="notification3" 
+    id="notification3" 
+    label="Nothing" 
+    helpText="Don't receive any notifications" 
+    showHelpText={true}
+  />
+</RadioGroup>
+```
+
+## States
+
+### Disabled State
+
+Disable individual radio buttons or the entire group:
+
+<Canvas of={RadioButtonStories.Disabled} />
+
+```jsx
+// Disable individual radio button
+<RadioGroup defaultValue="option1">
+  <RadioButtonItem value="option1" id="disabled1" label="Enabled option" />
+  <RadioButtonItem value="option2" id="disabled2" label="Disabled option" disabled />
+</RadioGroup>
+
+// Disable entire group
+<RadioGroup defaultValue="option1" disabled>
+  <RadioButtonItem value="option1" id="groupDisabled1" label="Option 1" />
+  <RadioButtonItem value="option2" id="groupDisabled2" label="Option 2" />
+</RadioGroup>
+```
+
+### Hidden Label
+
+Visually hide the label while keeping it accessible for screen readers:
+
+<Canvas of={RadioButtonStories.HiddenLabel} />
+
+```jsx
+<RadioGroup defaultValue="hidden1">
+  <RadioButtonItem 
+    value="hidden1" 
+    id="hidden1" 
+    label="Visible label" 
+    hideLabel={false}
+  />
+  <RadioButtonItem 
+    value="hidden2" 
+    id="hidden2" 
+    label="Hidden label (still accessible)" 
+    hideLabel={true}
+  />
+</RadioGroup>
+```
+
+## Controlled vs Uncontrolled
+
+### Uncontrolled Mode
+
+Use `defaultValue` to set an initial selection without managing state:
+
+```jsx
+<RadioGroup defaultValue="option1">
+  <RadioButtonItem value="option1" id="uncontrolled1" label="Option 1" />
+  <RadioButtonItem value="option2" id="uncontrolled2" label="Option 2" />
+</RadioGroup>
+```
+
+### Controlled Mode
+
+Manage the selection with React state:
+
+```jsx
+import { useState } from 'react';
+
+function ControlledRadioGroup() {
+  const [selectedValue, setSelectedValue] = useState('option1');
+  
+  return (
+    <div>
+      <RadioGroup 
+        value={selectedValue} 
+        onValueChange={setSelectedValue}
+      >
+        <RadioButtonItem value="option1" id="controlled1" label="Option 1" />
+        <RadioButtonItem value="option2" id="controlled2" label="Option 2" />
+        <RadioButtonItem value="option3" id="controlled3" label="Option 3" />
+      </RadioGroup>
+      
+      <div style={{ marginTop: '1rem' }}>
+        Selected value: {selectedValue}
+      </div>
+    </div>
+  );
+}
+```
+
+## Event Handling
+
+Handle selection changes using the `onValueChange` callback:
+
+```jsx
+<RadioGroup 
+  defaultValue="option1"
+  onValueChange={(value) => {
+    console.log(`Selected value: ${value}`);
+    // Perform actions based on selection
+  }}
+>
+  <RadioButtonItem value="option1" id="event1" label="Option 1" />
+  <RadioButtonItem value="option2" id="event2" label="Option 2" />
+</RadioGroup>
+```
+
+## Form Integration
+
+RadioButton components work well with form libraries and the native HTML form API:
+
+```jsx
+// With React Hook Form
+import { useForm } from 'react-hook-form';
+
+function FormExample() {
+  const { register, handleSubmit, watch } = useForm({
+    defaultValues: { subscription: 'monthly' }
+  });
+  
+  const subscription = watch('subscription');
+  
+  return (
+    <form onSubmit={handleSubmit(data => console.log(data))}>
+      <RadioGroup 
+        value={subscription} 
+        onValueChange={(value) => {
+          // Update the form value
+          register('subscription').onChange({ target: { name: 'subscription', value } });
+        }}
+      >
+        <RadioButtonItem value="monthly" id="sub1" label="Monthly" />
+        <RadioButtonItem value="yearly" id="sub2" label="Yearly" helpText="Save 16%" />
+      </RadioGroup>
+      
+      <button type="submit">Subscribe</button>
+    </form>
+  );
+}
+
+// With native HTML form
+<form onSubmit={(e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  console.log(formData.get('plan'));
+}}>
+  <RadioGroup name="plan" defaultValue="basic">
+    <RadioButtonItem value="basic" id="plan1" label="Basic Plan" />
+    <RadioButtonItem value="pro" id="plan2" label="Pro Plan" />
+    <RadioButtonItem value="enterprise" id="plan3" label="Enterprise Plan" />
+  </RadioGroup>
+  
+  <button type="submit">Continue</button>
+</form>
+```
+
+## Internationalization and RTL Support
+
+The RadioButton component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout alignment, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, RadioGroup, RadioButtonItem } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <RadioGroup defaultValue="privacy2">
+        <RadioButtonItem 
+          value="privacy1" 
+          id="privacy1" 
+          label="عام" 
+          helpText="يمكن لأي شخص مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="privacy2" 
+          id="privacy2" 
+          label="خاص" 
+          helpText="يمكنك فقط مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="privacy3" 
+          id="privacy3" 
+          label="مشترك" 
+          helpText="يمكنك ومن تختارهم فقط مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the RadioButton component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts alignment and spacing for RTL text flow
+3. **Radio Button Position**: Places the radio button on the right side in RTL mode
+4. **Line Height**: Applies appropriate line height for Arabic text rendering
+5. **Help Text Positioning**: Correctly aligns help text in RTL contexts
+
+### Form Controls in RTL
+
+The RadioButton component handles Arabic form controls with proper styling:
+
+<Canvas of={RadioButtonStories.RTL} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function PrivacySettings() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'إعدادات الخصوصية' : 'Privacy Settings'}</h3>
+      <RadioGroup defaultValue="private">
+        <RadioButtonItem 
+          value="public" 
+          id="privacy1" 
+          label={isRTL ? "عام" : "Public"} 
+          helpText={isRTL ? "يمكن لأي شخص مشاهدة هذا المحتوى" : "Anyone can see this content"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="private" 
+          id="privacy2" 
+          label={isRTL ? "خاص" : "Private"} 
+          helpText={isRTL ? "يمكنك فقط مشاهدة هذا المحتوى" : "Only you can see this content"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="shared" 
+          id="privacy3" 
+          label={isRTL ? "مشترك" : "Shared"} 
+          helpText={isRTL ? "يمكنك ومن تختارهم فقط مشاهدة هذا المحتوى" : "Only you and people you choose can see this content"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### Language Preference in RTL
+
+For language selection interfaces in RTL:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function LanguagePreferences() {
+  const { isRTL } = useTheme();
+  const [selectedLanguage, setSelectedLanguage] = useState('ar');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'اختر لغة العرض' : 'Choose Display Language'}</h3>
+      <RadioGroup 
+        value={selectedLanguage} 
+        onValueChange={setSelectedLanguage}
+        name="language"
+      >
+        <RadioButtonItem 
+          value="ar" 
+          id="lang-ar" 
+          label={isRTL ? "العربية" : "Arabic"} 
+          helpText={isRTL ? "عرض التطبيق باللغة العربية" : "Display the app in Arabic"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="en" 
+          id="lang-en" 
+          label={isRTL ? "الإنجليزية" : "English"} 
+          helpText={isRTL ? "عرض التطبيق باللغة الإنجليزية" : "Display the app in English"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### Payment Method Selection in RTL
+
+For e-commerce interfaces with RTL support:
+
+```jsx
+function PaymentMethods() {
+  const { isRTL } = useTheme();
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'طريقة الدفع' : 'Payment Method'}</h3>
+      <RadioGroup 
+        value={paymentMethod} 
+        onValueChange={setPaymentMethod}
+        name="payment"
+      >
+        <RadioButtonItem 
+          value="card" 
+          id="payment-card" 
+          label={isRTL ? "بطاقة ائتمان" : "Credit Card"} 
+          helpText={isRTL ? "ادفع باستخدام بطاقتك الائتمانية" : "Pay using your credit card"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="cash" 
+          id="payment-cash" 
+          label={isRTL ? "الدفع عند الاستلام" : "Cash on Delivery"} 
+          helpText={isRTL ? "ادفع عند وصول الطلب" : "Pay when the order arrives"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="bank" 
+          id="payment-bank" 
+          label={isRTL ? "تحويل بنكي" : "Bank Transfer"} 
+          helpText={isRTL ? "ادفع عن طريق التحويل البنكي" : "Pay via bank transfer"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### Survey Questions in RTL
+
+For feedback forms and surveys in RTL:
+
+```jsx
+function SatisfactionSurvey() {
+  const { isRTL } = useTheme();
+  const [satisfaction, setSatisfaction] = useState('');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'كيف تقيم تجربتك؟' : 'How would you rate your experience?'}</h3>
+      <RadioGroup 
+        value={satisfaction} 
+        onValueChange={setSatisfaction}
+        name="satisfaction"
+      >
+        <RadioButtonItem 
+          value="very-satisfied" 
+          id="rating1" 
+          label={isRTL ? "راضي جداً" : "Very Satisfied"} 
+        />
+        <RadioButtonItem 
+          value="satisfied" 
+          id="rating2" 
+          label={isRTL ? "راضي" : "Satisfied"} 
+        />
+        <RadioButtonItem 
+          value="neutral" 
+          id="rating3" 
+          label={isRTL ? "محايد" : "Neutral"} 
+        />
+        <RadioButtonItem 
+          value="dissatisfied" 
+          id="rating4" 
+          label={isRTL ? "غير راضي" : "Dissatisfied"} 
+        />
+        <RadioButtonItem 
+          value="very-dissatisfied" 
+          id="rating5" 
+          label={isRTL ? "غير راضي إطلاقاً" : "Very Dissatisfied"} 
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider form layout** - radio buttons appear on the right in RTL
+5. **Test help text display** to ensure proper alignment in RTL layouts
+6. **Validate fieldset structure** with Arabic legends and labels
+7. **Test keyboard navigation** to ensure it works intuitively in RTL mode
+
+## Common Use Cases
+
+### Settings Options
+
+Use RadioButtons for mutually exclusive settings:
+
+```jsx
+<RadioGroup defaultValue="privacy2">
+  <RadioButtonItem 
+    value="privacy1" 
+    id="privacy1" 
+    label="Public" 
+    helpText="Anyone can see this content" 
+  />
+  <RadioButtonItem 
+    value="privacy2" 
+    id="privacy2" 
+    label="Private" 
+    helpText="Only you can see this content" 
+  />
+  <RadioButtonItem 
+    value="privacy3" 
+    id="privacy3" 
+    label="Shared" 
+    helpText="Only you and people you choose can see this content" 
+  />
+</RadioGroup>
+```
+
+### Checkout Form Options
+
+Select shipping or payment methods:
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <fieldset>
+    <legend>Shipping Method</legend>
+    <RadioGroup defaultValue="standard" name="shipping">
+      <RadioButtonItem 
+        value="standard" 
+        id="shipping1" 
+        label="Standard Shipping" 
+        helpText="3-5 business days (Free)" 
+      />
+      <RadioButtonItem 
+        value="expedited" 
+        id="shipping2" 
+        label="Expedited Shipping" 
+        helpText="2 business days ($9.99)" 
+      />
+      <RadioButtonItem 
+        value="overnight" 
+        id="shipping3" 
+        label="Overnight Shipping" 
+        helpText="Next business day ($19.99)" 
+      />
+    </RadioGroup>
+  </fieldset>
+  <button type="submit">Continue</button>
+</form>
+```
+
+### Survey Questions
+
+Gather feedback with a single selection from a range of options:
+
+```jsx
+<div>
+  <h3>How would you rate your experience?</h3>
+  <RadioGroup defaultValue="satisfied" name="satisfaction">
+    <RadioButtonItem 
+      value="very-satisfied" 
+      id="rating1" 
+      label="Very Satisfied" 
+    />
+    <RadioButtonItem 
+      value="satisfied" 
+      id="rating2" 
+      label="Satisfied" 
+    />
+    <RadioButtonItem 
+      value="neutral" 
+      id="rating3" 
+      label="Neutral" 
+    />
+    <RadioButtonItem 
+      value="dissatisfied" 
+      id="rating4" 
+      label="Dissatisfied" 
+    />
+    <RadioButtonItem 
+      value="very-dissatisfied" 
+      id="rating5" 
+      label="Very Dissatisfied" 
+    />
+  </RadioGroup>
+</div>
+```
+
+## Best Practices
+
+1. **Provide clear labels**: Each radio button should have a concise, descriptive label
+2. **Use help text for clarification**: Add help text when options need more explanation
+3. **Default selection**: When appropriate, set a default value to help users make decisions
+4. **Logical ordering**: Arrange options in a meaningful order (alphabetical, numerical, etc.)
+5. **Visual consistency**: Maintain consistent spacing between radio button items
+6. **Limit options**: If you have more than 7 options, consider using a dropdown instead
+7. **Group related options**: Use fieldset and legend for semantic grouping in forms
+
+## Accessibility
+
+The RadioButton component follows accessibility best practices:
+
+- Uses proper ARIA roles and states (`role="radiogroup"`, `aria-checked`)
+- Each radio button has a unique ID that connects it to its label
+- Visual states have sufficient color contrast (WCAG AA compliance)
+- Supports keyboard navigation:
+  - `Tab`: Move focus to the radio group
+  - `Space`: Select the focused radio button
+  - `Arrow keys`: Navigate between radio buttons in a group
+- Help text is properly associated with radio buttons
+- Hidden labels are visually hidden but still accessible to screen readers
+- Focus states are clearly visible for keyboard navigation
+
+## Implementation Details
+
+### CSS Variables
+
+The RadioButton component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-size-*` | Radio button dimensions |
+| `--t-border-width-25` | Border width |
+| `--t-color-border-*` | Border colors |
+| `--t-color-fill-*` | Background colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-font-family-primary` | Font family |
+| `--t-font-size-*` | Font sizes |
+| `--t-font-weight-*` | Font weights |
+| `--t-duration-fast` | Animation duration |
+| `--t-easing-in-out` | Animation timing function |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Customizing Style
+
+You can customize the appearance of RadioButtons using CSS:
+
+```css
+/* Target the radio button */
+.your-class .RadioButtonItem {
+  /* Custom styles */
+}
+
+/* Target the label */
+.your-class .Label {
+  /* Custom styles */
+}
+
+/* Target the help text */
+.your-class .HelpText {
+  /* Custom styles */
+}
+```
+
+Or use the className prop for specific component instances:
+
+```jsx
+<RadioGroup className="custom-radio-group">
+  <RadioButtonItem 
+    value="option1" 
+    className="custom-radio-item"
+    label="Customized Radio" 
+  />
+</RadioGroup>
+```
+
+### Technical Architecture
+
+The RadioButton component is built on Radix UI's RadioGroup primitive, providing:
+
+- Proper keyboard navigation
+- ARIA attribute management
+- Focus handling
+- Selection state management
+
+The Tagaddod implementation extends this with:
+
+- Design system token integration
+- Help text support
+- RTL language support
+- Hidden label support
+- Disabled state styling
+- Dynamic line-height adjustment for different languages
+
+### Performance Considerations
+
+- The component uses CSS transitions for smooth state changes
+- DOM structure is minimal to ensure good performance
+- State changes are efficiently handled by React's state management
+- RTL detection happens once per render
+
+### Browser Support
+
+The RadioButton component is compatible with all modern browsers:
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Android Chrome)
+
+RTL language support works across all supported browsers.
+
+## Related Components
+
+- **Checkbox**: Use when multiple selections are allowed
+- **Switch**: Use for single toggle options (on/off)
+- **Select/Dropdown**: Use when there are many options or limited space
+- **SegmentedControl**: Use for immediate visual selection between a few options

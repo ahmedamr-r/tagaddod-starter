@@ -1,0 +1,792 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ListboxStories from './Listbox.stories';
+import { Listbox } from './Listbox';
+import { IconSquareCheck, IconSquare } from '@tabler/icons-react';
+
+<Meta of={ListboxStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-41)
+- Default implementation with options array
+- selectedValue and onSelect handling
+
+🎨 WITH ICONS (Lines 43-75)
+- Prefix icons for options
+- Suffix content (counts, badges)
+
+📝 WITH HELP TEXT (Lines 77-105)
+- Descriptive text for options
+- helpText prop usage
+
+🔢 MULTIPLE SELECTION (Lines 107-165)
+- Checkbox integration pattern
+- Multi-select state management
+
+🚫 DISABLED OPTIONS (Lines 167-184)
+- Individual option disabling
+
+📏 WITH DIVIDERS (Lines 186-238)
+- Separator component integration
+- spacing="none" for tight lists
+- Spacing comparison examples
+
+🎛️ CUSTOM PADDING (Lines 240-264)
+- itemPaddingVertical and itemPaddingHorizontal
+- Pixel value configuration
+
+📋 IN POPOVER (Lines 266-318)
+- Dropdown menu implementation
+- PopoverRoot integration
+- inPopover prop usage
+
+🌍 INTERNATIONALIZATION (Lines 320-342)
+- RTL language support
+- Arabic text examples
+
+🎨 CUSTOM CONTENT (Lines 344-392)
+- customContent prop for complex layouts
+- Custom tags and formatting
+
+📊 MAX VISIBLE OPTIONS (Lines 394-413)
+- maxVisibleOptions prop
+- Scrolling behavior
+
+💼 USE CASES (Lines 415-479)
+- Dropdown Menus (Lines 417-437): Action menus
+- Filter Selections (Lines 439-462): Task filtering
+- Checkbox Lists (Lines 464-479): Permission selection
+
+♿ ACCESSIBILITY (Lines 481-490)
+- WAI-ARIA listbox pattern
+- Keyboard navigation support
+
+⚙️ TECHNICAL DETAILS (Lines 492-528)
+- CSS Variables (Lines 494-510): Design token reference
+- Architecture (Lines 512-524): Component structure
+- Browser Support (Lines 526-528): Compatibility
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic listbox: Lines 31-40
+- With icons: Lines 53-74
+- Multiple selection: Lines 121-162
+- In popover: Lines 296-316
+- RTL support: Lines 331-341
+- Custom padding: Lines 247-257
+
+⚠️ INTEGRATION NOTE:
+Listbox works seamlessly with Popover component using inPopover prop. Use with Checkbox component for accessible multi-selection patterns.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Listbox component capabilities and patterns.
+
+
+# Listbox Component
+
+The Listbox component displays a list of selectable options, supporting both single and multiple selection modes.
+
+## Overview
+
+Listboxes are used to present a list of options for users to select from. They're commonly used in dropdowns, menus, and selection contexts. The Listbox component supports rich features like icons, help text, dividers, and multi-select behavior.
+
+## Import
+
+```jsx
+import { Listbox } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Listbox} />
+
+## Basic Usage
+
+<Canvas of={ListboxStories.Basic} />
+
+```jsx
+<Listbox
+  options={[
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+    { label: 'Option 4', value: 'option4' },
+  ]}
+  selectedValue="option1"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## With Icons
+
+You can add icons before options (prefix) and additional content after options (suffix).
+
+<Canvas of={ListboxStories.WithIcons} />
+
+```jsx
+import { IconCheck, IconTag, IconStar } from '@tabler/icons-react';
+
+<Listbox
+  options={[
+    { 
+      label: 'Selected Option', 
+      value: 'selected',
+      prefix: <IconCheck size={16} />
+    },
+    { 
+      label: 'Tagged Items', 
+      value: 'tagged',
+      prefix: <IconTag size={16} />,
+      suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>12</span>
+    },
+    { 
+      label: 'Favorites', 
+      value: 'favorites',
+      prefix: <IconStar size={16} />,
+      suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>5</span>
+    },
+  ]}
+  selectedValue="selected"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## With Help Text
+
+The Listbox supports adding descriptive help text to options.
+
+<Canvas of={ListboxStories.WithHelpText} />
+
+```jsx
+<Listbox
+  options={[
+    { 
+      label: 'Product Settings', 
+      value: 'product',
+      helpText: 'Manage product inventory and variations'
+    },
+    { 
+      label: 'User Accounts', 
+      value: 'users',
+      helpText: 'Modify user permissions and access'
+    },
+    { 
+      label: 'Payment Options', 
+      value: 'payment',
+      helpText: 'Configure available payment methods'
+    },
+  ]}
+  selectedValue="product"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## Multiple Selection
+
+The Listbox can be configured to allow multiple selections. This example uses the Checkbox component for a more accessible and consistent experience.
+
+<Canvas of={ListboxStories.MultiSelect} />
+
+```jsx
+import { useState } from 'react';
+import { Checkbox } from '@tagaddod/react';
+
+function MultiSelectExample() {
+  const [selected, setSelected] = useState(['option1', 'option3']);
+  
+  return (
+    <Listbox
+      options={[
+        { 
+          label: 'Option 1', 
+          value: 'option1',
+          prefix: (
+            <Checkbox
+              checked={selected.includes('option1')}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelected([...selected, 'option1']);
+                } else {
+                  setSelected(selected.filter(v => v !== 'option1'));
+                }
+              }}
+              hideLabel={true}
+            />
+          )
+        },
+        { 
+          label: 'Option 2', 
+          value: 'option2',
+          prefix: (
+            <Checkbox
+              checked={selected.includes('option2')}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelected([...selected, 'option2']);
+                } else {
+                  setSelected(selected.filter(v => v !== 'option2'));
+                }
+              }}
+              hideLabel={true}
+            />
+          )
+        },
+        // ... other options
+      ]}
+      selectedValue={selected}
+      multiple={true}
+      onMultiSelect={setSelected}
+    />
+  );
+}
+```
+
+## Disabled Options
+
+Individual options can be disabled.
+
+<Canvas of={ListboxStories.WithDisabledOptions} />
+
+```jsx
+<Listbox
+  options={[
+    { label: 'Available Option', value: 'available' },
+    { label: 'Disabled Option', value: 'disabled', disabled: true },
+    { label: 'Another Available', value: 'another' },
+    { label: 'Currently Unavailable', value: 'unavailable', disabled: true },
+  ]}
+  selectedValue="available"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## With Dividers
+
+Add dividers to visually separate groups of options using the Separator component. Use `spacing="none"` to prevent excessive vertical spacing in list contexts.
+
+<Canvas of={ListboxStories.WithDividers} />
+
+```jsx
+import { Separator } from '@tagaddod/react';
+
+<Listbox
+  options={[
+    { label: 'Recent', value: 'recent' },
+    { 
+      label: '', 
+      value: 'separator1', 
+      disabled: true,
+      customContent: <Separator decorative={true} spacing="none" />
+    },
+    { label: 'Yesterday', value: 'yesterday' },
+    { label: 'Last Week', value: 'lastWeek' },
+    { 
+      label: '', 
+      value: 'separator2', 
+      disabled: true,
+      customContent: <Separator decorative={true} spacing="none" />
+    },
+    { label: 'Last Month', value: 'lastMonth' },
+    { label: 'Older', value: 'older' },
+  ]}
+  selectedValue="yesterday"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+### Separator Spacing Options
+
+The Separator component supports different spacing options when used in lists:
+
+<Canvas of={ListboxStories.SeparatorSpacingComparison} />
+
+```jsx
+// No spacing - perfect for tight lists
+<Separator decorative={true} spacing="none" />
+
+// Compact spacing - reduced margins
+<Separator decorative={true} spacing="compact" />
+
+// Custom spacing - specify pixels
+<Separator decorative={true} spacing={8} />
+
+// Default spacing - standard margins (same as not providing spacing prop)
+<Separator decorative={true} spacing="default" />
+```
+
+## Custom Padding
+
+The Listbox supports custom padding for list items, allowing you to control vertical and horizontal spacing.
+
+<Canvas of={ListboxStories.WithCustomPadding} />
+
+```jsx
+<Listbox
+  options={[
+    { label: 'Compact Item 1', value: '1' },
+    { label: 'Compact Item 2', value: '2' },
+    { label: 'Compact Item 3', value: '3' },
+  ]}
+  itemPaddingVertical={8}
+  itemPaddingHorizontal={12}
+  selectedValue="1"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+The padding props accept pixel values:
+- `itemPaddingVertical`: Controls top and bottom padding
+- `itemPaddingHorizontal`: Controls left and right padding
+
+This is useful for creating compact lists, spacious interfaces, or custom layouts that match your design requirements.
+
+## In Popover
+
+The Listbox component can be used inside a Popover for dropdown menus.
+
+<Canvas of={ListboxStories.InPopover} />
+
+```jsx
+import { useState } from 'react';
+import { 
+  Popover, 
+  PopoverContent, 
+  PopoverTrigger, 
+  PopoverRoot 
+} from '@tagaddod/react';
+import { IconChevronDown } from '@tabler/icons-react';
+
+function DropdownExample() {
+  const [selectedOption, setSelectedOption] = useState('filter1');
+  const [open, setOpen] = useState(false);
+  
+  const options = [
+    { label: 'Filter by Date', value: 'filter1' },
+    { label: 'Filter by Status', value: 'filter2' },
+    { label: 'Filter by Category', value: 'filter3' },
+    { label: 'Filter by Priority', value: 'filter4' },
+    { label: 'Filter by Assignee', value: 'filter5' },
+  ];
+  
+  const selectedLabel = options.find(opt => opt.value === selectedOption)?.label || 'Select...';
+  
+  return (
+    <PopoverRoot open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button className="dropdown-button">
+          {selectedLabel}
+          <IconChevronDown size={16} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Listbox
+          options={options}
+          selectedValue={selectedOption}
+          onSelect={(value) => {
+            setSelectedOption(value.toString());
+            setOpen(false);
+          }}
+          inPopover={true}
+        />
+      </PopoverContent>
+    </PopoverRoot>
+  );
+}
+```
+
+## Internationalization and RTL Support
+
+The Listbox component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout alignment, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Listbox } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Listbox
+        options={[
+          { label: 'الخيار الأول', value: 'option1', helpText: 'نص توضيحي مساعد' },
+          { label: 'الخيار الثاني', value: 'option2' },
+          { label: 'الخيار الثالث', value: 'option3' },
+        ]}
+        selectedValue="option1"
+        onSelect={(value) => console.log('Selected:', value)}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Listbox component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts alignment and spacing for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Icon Positioning**: Properly positions prefix and suffix icons for RTL
+5. **Help Text Alignment**: Ensures help text displays correctly in RTL mode
+
+### Arabic Options with Help Text
+
+The Listbox component handles Arabic content with proper styling:
+
+<Canvas of={ListboxStories.ArabicRTL} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function MenuOptions() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Listbox
+      options={[
+        { 
+          label: isRTL ? 'الصفحة الرئيسية' : 'Home Page', 
+          value: 'home',
+          helpText: isRTL ? 'انتقل إلى الصفحة الرئيسية' : 'Go to the main page'
+        },
+        { 
+          label: isRTL ? 'الملف الشخصي' : 'Profile', 
+          value: 'profile',
+          helpText: isRTL ? 'إدارة معلوماتك الشخصية' : 'Manage your personal information'
+        },
+        { 
+          label: isRTL ? 'الإعدادات' : 'Settings', 
+          value: 'settings',
+          helpText: isRTL ? 'تخصيص تفضيلات التطبيق' : 'Customize app preferences'
+        },
+      ]}
+      selectedValue="home"
+      onSelect={(value) => console.log('Selected:', value)}
+    />
+  );
+}
+```
+
+### Listbox with Icons in RTL
+
+For options with icons, the component automatically handles RTL icon positioning:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconHome, IconUser, IconSettings } from '@tabler/icons-react';
+
+function NavigationMenu() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Listbox
+      options={[
+        { 
+          label: isRTL ? 'الرئيسية' : 'Home', 
+          value: 'home',
+          prefix: <IconHome size={16} />,
+          suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}>5</span>
+        },
+        { 
+          label: isRTL ? 'الملف الشخصي' : 'Profile', 
+          value: 'profile',
+          prefix: <IconUser size={16} />
+        },
+        { 
+          label: isRTL ? 'الإعدادات' : 'Settings', 
+          value: 'settings',
+          prefix: <IconSettings size={16} />,
+          suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}>New</span>
+        },
+      ]}
+      selectedValue="home"
+      onSelect={(value) => console.log('Selected:', value)}
+    />
+  );
+}
+```
+
+### Multi-Select in RTL
+
+Multi-select functionality with checkboxes works seamlessly in RTL:
+
+```jsx
+import { useState } from 'react';
+import { useTheme, Checkbox } from 'tagaddod-design-react';
+
+function MultiSelectRTL() {
+  const { isRTL } = useTheme();
+  const [selected, setSelected] = useState(['permission1']);
+  
+  const permissions = [
+    { id: 'permission1', name: isRTL ? 'قراءة' : 'Read' },
+    { id: 'permission2', name: isRTL ? 'كتابة' : 'Write' },
+    { id: 'permission3', name: isRTL ? 'حذف' : 'Delete' },
+    { id: 'permission4', name: isRTL ? 'مشاركة' : 'Share' },
+  ];
+  
+  return (
+    <Listbox
+      options={permissions.map(perm => ({
+        label: perm.name,
+        value: perm.id,
+        prefix: (
+          <Checkbox
+            checked={selected.includes(perm.id)}
+            onCheckedChange={(checked) => {
+              if (checked) {
+                setSelected([...selected, perm.id]);
+              } else {
+                setSelected(selected.filter(v => v !== perm.id));
+              }
+            }}
+            hideLabel={true}
+          />
+        )
+      }))}
+      selectedValue={selected}
+      multiple={true}
+      onMultiSelect={setSelected}
+    />
+  );
+}
+```
+
+### Scrollable Lists in RTL
+
+Long lists with scrolling maintain proper RTL behavior:
+
+```jsx
+function ScrollableRTLList() {
+  const { isRTL } = useTheme();
+  
+  const cities = isRTL ? [
+    'الرياض', 'جدة', 'مكة المكرمة', 'المدينة المنورة', 'الدمام', 
+    'الطائف', 'تبوك', 'بريدة', 'الخبر', 'حفر الباطن',
+    'الجبيل', 'الإحساء', 'ينبع', 'نجران', 'الباحة'
+  ] : [
+    'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix',
+    'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose',
+    'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte'
+  ];
+  
+  return (
+    <Listbox
+      options={cities.map((city, index) => ({
+        label: city,
+        value: `city-${index}`,
+        helpText: isRTL ? `المدينة رقم ${index + 1}` : `City #${index + 1}`
+      }))}
+      maxVisibleOptions={6}
+      selectedValue="city-0"
+      onSelect={(value) => console.log('Selected city:', value)}
+    />
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider scrolling behavior** in RTL mode - scrollbars appear on the left
+5. **Test multi-select patterns** with Arabic content for proper checkbox alignment
+6. **Verify icon positioning** - prefix/suffix icons adjust automatically in RTL
+7. **Test help text display** to ensure proper alignment in RTL layouts
+
+## Custom Content
+
+You can use the `customContent` prop to provide completely custom content for list options:
+
+```jsx
+<Listbox
+  options={[
+    { 
+      label: "Custom Option", // Required but not shown
+      value: "custom1", 
+      customContent: (
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          padding: '4px 0'
+        }}>
+          <span style={{ fontWeight: 'bold' }}>Custom Option</span>
+          <div style={{ 
+            display: 'flex', 
+            gap: '8px', 
+            alignItems: 'center',
+            marginTop: '4px' 
+          }}>
+            <span style={{ 
+              background: '#e8f6ff', 
+              padding: '2px 6px', 
+              borderRadius: '4px',
+              fontSize: '12px'
+            }}>
+              Tag 1
+            </span>
+            <span style={{ 
+              background: '#fff0e8', 
+              padding: '2px 6px', 
+              borderRadius: '4px',
+              fontSize: '12px'
+            }}>
+              Tag 2
+            </span>
+          </div>
+        </div>
+      )
+    },
+    // More options...
+  ]}
+  selectedValue="custom1"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## Max Visible Options
+
+You can limit the number of visible options with the `maxVisibleOptions` prop:
+
+```jsx
+<Listbox
+  options={[
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+    { label: 'Option 4', value: 'option4' },
+    { label: 'Option 5', value: 'option5' },
+    { label: 'Option 6', value: 'option6' },
+    { label: 'Option 7', value: 'option7' },
+  ]}
+  selectedValue="option1"
+  maxVisibleOptions={3}
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+## Use Cases
+
+### Dropdown Menus
+
+```jsx
+<PopoverRoot>
+  <PopoverTrigger>
+    <Button>Open Menu</Button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <Listbox
+      options={[
+        { label: 'Edit', value: 'edit', prefix: <IconEdit size={16} /> },
+        { label: 'Duplicate', value: 'duplicate', prefix: <IconCopy size={16} /> },
+        { label: 'Archive', value: 'archive', prefix: <IconArchive size={16} /> },
+        { label: 'Delete', value: 'delete', prefix: <IconTrash size={16} /> },
+      ]}
+      onSelect={handleMenuAction}
+      inPopover={true}
+    />
+  </PopoverContent>
+</PopoverRoot>
+```
+
+### Filter Selections
+
+```jsx
+<Listbox
+  options={[
+    { 
+      label: 'All Tasks', 
+      value: 'all',
+      helpText: 'Show tasks from all projects'
+    },
+    { 
+      label: 'My Tasks', 
+      value: 'my',
+      helpText: 'Only show tasks assigned to me'
+    },
+    { 
+      label: 'Completed', 
+      value: 'completed',
+      helpText: 'Show only completed tasks'
+    },
+  ]}
+  selectedValue={filterValue}
+  onSelect={setFilterValue}
+/>
+```
+
+### Checkbox Lists
+
+```jsx
+<Listbox
+  options={permissions.map(perm => ({
+    label: perm.name,
+    value: perm.id,
+    helpText: perm.description,
+    prefix: selectedPermissions.includes(perm.id) ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+  }))}
+  selectedValue={selectedPermissions}
+  multiple={true}
+  onMultiSelect={setSelectedPermissions}
+/>
+```
+
+## Accessibility
+
+- The component follows WAI-ARIA listbox pattern with proper roles and attributes
+- Uses `role="listbox"` and `aria-multiselectable` for multiple selection
+- Each option has `role="option"` and appropriate `aria-selected` state
+- Supports keyboard navigation (arrow keys, Home/End, Enter)
+- Provides accessible focus management
+- Maintains a logical tab order
+- Uses proper ARIA attributes for selected state
+
+## Implementation Details
+
+### CSS Variables
+
+The Listbox component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-font-family-body` | Text font |
+| `--t-font-size-body-*` | Font sizes |
+| `--t-font-weight-*` | Font weights |
+| `--t-border-radius-200` | Border radius |
+| `--t-color-border-focus` | Focus outline color |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The Listbox component consists of two main parts:
+
+1. **Listbox**: The container component that manages the list options, selection state, and keyboard navigation
+2. **ListboxOption**: The individual option component that renders each selectable item
+
+This architecture provides:
+
+- Clean separation of concerns
+- Flexible option configuration
+- Proper event handling
+- Accessibility compliance
+
+### Browser Support
+
+The Listbox component is compatible with all modern browsers and includes RTL language support.

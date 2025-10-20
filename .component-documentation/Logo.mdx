@@ -1,0 +1,450 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as LogoStories from './Logo.stories';
+
+<Meta of={LogoStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+🎯 FEATURES (Lines 10-19)
+- Multiple sizes and custom dimensions
+- Color variants and clickable functionality
+- Accessibility and RTL support
+- Aspect ratio preservation
+
+📖 USAGE (Lines 21-46)
+- Basic usage patterns
+- Predefined and custom sizes
+- Clickable logo implementation
+
+📋 EXAMPLES (Lines 48-78)
+- Default Logo (Line 50): Basic implementation
+- Size Variants (Line 54): All predefined sizes
+- Custom Size Examples (Lines 58-70): Dimension control
+- Color Variants (Line 72): Primary, white, inherit
+- Clickable Logo (Line 76): Interactive functionality
+
+🎛️ CUSTOM SIZE FEATURE (Lines 80-93)
+- Both Width and Height (Lines 84-85): Exact dimensions
+- Single Dimension (Lines 87-88): Automatic aspect ratio
+- Supported Units (Lines 90-93): Numbers and CSS units
+
+📋 PROPS (Lines 94-159)
+- Complete props table with types and descriptions
+- Interactive Controls
+
+🔧 ASPECTRATIO INTEGRATION (Lines 161-170)
+- AspectRatio component usage
+- Automatic proportion maintenance
+- Original logo ratio: 8.05:1
+
+♿ ACCESSIBILITY (Lines 172-177)
+- ARIA labels and keyboard navigation
+- High contrast mode support
+
+🎨 DESIGN GUIDELINES (Lines 179-185)
+- Color variant recommendations
+- Size guidelines and spacing
+
+⚙️ TECHNICAL NOTES (Lines 187-194)
+- SVG implementation details
+- Design token usage
+- RTL support and theme compatibility
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic logo: Line 27
+- With size/color: Line 30
+- Custom dimensions: Lines 33-39
+- Clickable: Line 45
+- Custom width only: Line 36
+- Custom height only: Line 38
+
+⚠️ CUSTOM SIZE NOTE:
+When using size="custom", provide width and/or height. AspectRatio component automatically maintains 8.05:1 ratio when only one dimension is specified.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Logo component capabilities and patterns.
+
+
+# Logo
+
+The Logo component displays the Tagaddod brand logo with various size and color options. It supports both static display and clickable functionality.
+
+## Features
+
+- **Multiple sizes**: Small, medium, large, and custom variants
+- **Custom dimensions**: Specify exact width and/or height with automatic aspect ratio preservation
+- **Color variants**: Primary, white, and inherit options
+- **Clickable**: Can be rendered as a button with onClick handler
+- **Accessibility**: Proper ARIA labels and keyboard navigation
+- **RTL Support**: Works correctly in right-to-left layouts
+- **Responsive**: Scales appropriately across different screen sizes
+- **Aspect ratio preservation**: Automatically maintains logo proportions when using custom sizes
+
+## Usage
+
+```tsx
+import { Logo } from 'tagaddod-design-react';
+
+// Basic usage
+<Logo />
+
+// With predefined size and color
+<Logo size="large" color="white" />
+
+// Custom size with both dimensions
+<Logo size="custom" width={200} height={50} />
+
+// Custom size with only width (height auto-calculated)
+<Logo size="custom" width={300} />
+
+// Custom size with only height (width auto-calculated)
+<Logo size="custom" height={60} />
+
+// Custom size with string units
+<Logo size="custom" width="15rem" height="3rem" />
+
+// Clickable logo
+<Logo clickable onClick={() => console.log('Logo clicked!')} />
+```
+
+## Examples
+
+### Default Logo
+
+<Canvas of={LogoStories.Default} />
+
+### Size Variants
+
+<Canvas of={LogoStories.AllSizes} />
+
+### Custom Size Examples
+
+#### Custom Size with Both Dimensions
+
+<Canvas of={LogoStories.CustomSize} />
+
+#### Custom Width Only (Auto Height)
+
+<Canvas of={LogoStories.CustomWidthOnly} />
+
+#### Custom Height Only (Auto Width)
+
+<Canvas of={LogoStories.CustomHeightOnly} />
+
+### Color Variants
+
+<Canvas of={LogoStories.ColorVariants} />
+
+### Clickable Logo
+
+<Canvas of={LogoStories.Clickable} />
+
+## Custom Size Feature
+
+The custom size feature allows you to specify exact dimensions for the logo while maintaining its aspect ratio:
+
+### Both Width and Height
+When both `width` and `height` are specified, the logo uses the exact dimensions provided.
+
+### Single Dimension
+When only `width` or `height` is specified, the component automatically calculates the other dimension to maintain the logo's original aspect ratio (161:20 = 8.05) using the AspectRatio component.
+
+### Supported Units
+- **Numbers**: Treated as pixels (e.g., `width={200}` = 200px)
+- **Strings**: Any valid CSS unit (e.g., `width="15rem"`, `height="3em"`, `width="50%"`)
+
+## Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'small' | 'medium' | 'large' | 'custom'</code></td>
+      <td><code>'medium'</code></td>
+      <td>Size variant for the logo. Use 'custom' to specify exact dimensions.</td>
+    </tr>
+    <tr>
+      <td><code>width</code></td>
+      <td><code>number | string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom width for the logo. Only used when <code>size</code> is 'custom'. Numbers are treated as pixels, strings can use any CSS unit.</td>
+    </tr>
+    <tr>
+      <td><code>height</code></td>
+      <td><code>number | string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom height for the logo. Only used when <code>size</code> is 'custom'. Numbers are treated as pixels, strings can use any CSS unit.</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>'primary' | 'white' | 'inherit'</code></td>
+      <td><code>'primary'</code></td>
+      <td>Color variant for the logo.</td>
+    </tr>
+    <tr>
+      <td><code>clickable</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Whether the logo should be clickable (renders as button).</td>
+    </tr>
+    <tr>
+      <td><code>onClick</code></td>
+      <td><code>() => void</code></td>
+      <td><code>undefined</code></td>
+      <td>Callback when the logo is clicked. Only used when <code>clickable</code> is true.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code></td>
+      <td><code>string</code></td>
+      <td><code>'Tagaddod'</code></td>
+      <td>Accessible label for the logo.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom class name for the logo container.</td>
+    </tr>
+  </tbody>
+</table>
+
+### Interactive Controls
+
+<Controls of={LogoStories.Default} />
+
+## AspectRatio Component Integration
+
+The Logo component internally uses the **AspectRatio component** to maintain proper proportions when using custom sizes with only one dimension specified:
+
+- **When both `width` and `height` are provided**: The logo uses exact dimensions without AspectRatio
+- **When only `width` is provided**: AspectRatio automatically calculates the height based on the logo's original ratio (8.05:1)
+- **When only `height` is provided**: AspectRatio automatically calculates the width based on the logo's original ratio (8.05:1)
+- **When neither is provided with custom size**: The logo falls back to auto sizing
+
+This ensures the logo always maintains its visual integrity and proportions, regardless of how you specify the custom dimensions.
+
+## Internationalization and RTL Support
+
+The Logo component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes proper positioning, font switching for custom labels, and RTL-aware layouts.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Logo } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Logo 
+        size="large" 
+        color="primary" 
+        clickable 
+        onClick={() => window.location.href = '/'}
+        aria-label="شعار تكادود"
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Logo component automatically:
+
+1. **Layout Direction**: Maintains proper positioning in RTL layouts
+2. **Clickable States**: Preserves proper focus and interaction states
+3. **ARIA Labels**: Supports Arabic labels for accessibility
+4. **Aspect Ratio**: Maintains correct proportions regardless of text direction
+5. **Custom Sizing**: Works seamlessly with RTL layout calculations
+
+### Logo in RTL Navigation
+
+The Logo component integrates properly with RTL navigation layouts:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function Navigation() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <nav style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      padding: '16px',
+      direction: isRTL ? 'rtl' : 'ltr'
+    }}>
+      <Logo 
+        size="medium" 
+        color="primary" 
+        clickable 
+        onClick={() => window.location.href = '/'}
+        aria-label={isRTL ? "شعار تكادود - الصفحة الرئيسية" : "Tagaddod Logo - Home"}
+      />
+      <div style={{ 
+        marginRight: isRTL ? 'auto' : '24px',
+        marginLeft: isRTL ? '24px' : 'auto'
+      }}>
+        {/* Navigation items */}
+      </div>
+    </nav>
+  );
+}
+```
+
+### Header Layout with RTL
+
+For header layouts that adapt to RTL:
+
+```jsx
+function HeaderWithLogo() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <header style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '16px 24px',
+      direction: isRTL ? 'rtl' : 'ltr'
+    }}>
+      {/* Logo always appears on the appropriate side based on reading direction */}
+      <Logo 
+        size="medium" 
+        clickable 
+        onClick={() => window.location.href = '/'}
+        aria-label={isRTL ? "تكادود" : "Tagaddod"}
+      />
+      
+      {/* User actions on the opposite side */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <button>{isRTL ? 'تسجيل الدخول' : 'Login'}</button>
+        <button>{isRTL ? 'إنشاء حساب' : 'Sign Up'}</button>
+      </div>
+    </header>
+  );
+}
+```
+
+### Footer Placement in RTL
+
+For footer layouts with proper RTL alignment:
+
+```jsx
+function FooterWithLogo() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <footer style={{
+      display: 'flex',
+      flexDirection: isRTL ? 'row-reverse' : 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '32px 24px',
+      borderTop: '1px solid var(--t-color-border-subtle)'
+    }}>
+      <div>
+        <Logo size="small" color="inherit" />
+        <p style={{ 
+          margin: '8px 0 0',
+          fontSize: '14px',
+          color: 'var(--t-color-text-subtle)',
+          direction: isRTL ? 'rtl' : 'ltr',
+          textAlign: isRTL ? 'right' : 'left'
+        }}>
+          {isRTL ? '© 2024 تكادود. جميع الحقوق محفوظة.' : '© 2024 Tagaddod. All rights reserved.'}
+        </p>
+      </div>
+      
+      <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+        {/* Footer links */}
+      </div>
+    </footer>
+  );
+}
+```
+
+### Custom Size with RTL Layouts
+
+Custom sizing works perfectly in RTL contexts:
+
+```jsx
+function CustomSizeRTL() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center',
+      direction: isRTL ? 'rtl' : 'ltr',
+      gap: '16px' 
+    }}>
+      {/* Responsive logo that maintains proportions */}
+      <Logo 
+        size="custom" 
+        width={isRTL ? "12rem" : "200px"}
+        color="primary"
+        clickable
+        onClick={() => console.log('Logo clicked')}
+      />
+      <span style={{ 
+        fontSize: '18px', 
+        fontWeight: 600,
+        color: 'var(--t-color-text-primary)'
+      }}>
+        {isRTL ? 'نظام إدارة التصميم' : 'Design System'}
+      </span>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and layout direction
+2. **Provide Arabic ARIA labels** when in RTL mode for accessibility
+3. **Test clickable functionality** to ensure proper interaction in RTL
+4. **Consider logo placement** - typically starts from the reading direction
+5. **Test custom sizing** with different units in RTL layouts
+6. **Maintain aspect ratio** regardless of text direction
+7. **Use semantic HTML** with proper `dir` attributes when needed
+
+## Accessibility
+
+- Uses proper ARIA labels for screen readers
+- Supports keyboard navigation when clickable
+- Maintains sufficient color contrast in all variants
+- Compatible with high contrast mode
+- Supports Arabic language accessibility attributes
+
+## Design Guidelines
+
+- Use the primary color variant for most applications
+- Use the white variant on dark backgrounds
+- The medium size is recommended for most use cases
+- For custom sizes, maintain reasonable proportions for readability
+- Ensure adequate spacing around the logo for visual clarity
+
+## Technical Notes
+
+- The logo is implemented as an inline SVG for optimal scalability
+- Uses CSS custom properties (design tokens) for theming
+- Supports RTL layouts with appropriate line-height adjustments
+- Optimized for both light and dark themes
+- Custom sizes leverage the AspectRatio component for automatic proportion maintenance
+- Original logo aspect ratio: 161:20 (8.05:1)

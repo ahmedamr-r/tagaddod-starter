@@ -1,0 +1,109 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ScrollAreaStories from './ScrollArea.stories';
+
+<Meta of={ScrollAreaStories} />
+
+# ScrollArea
+
+The ScrollArea component provides native scroll functionality with custom, cross-browser styling. It enhances the default browser scrollbars while maintaining native scrolling behavior and accessibility features.
+
+## Overview
+
+<Canvas of={ScrollAreaStories.Default} />
+
+## Usage
+
+```jsx
+import { ScrollArea } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ScrollArea height="200px" width="300px">
+      <div style={{ padding: '16px' }}>
+        {/* Your scrollable content here */}
+        <p>Long content that requires scrolling...</p>
+      </div>
+    </ScrollArea>
+  );
+}
+```
+
+## Props
+
+<ArgTypes of={ScrollAreaStories} />
+
+## Examples
+
+### Scrollbar Types
+
+The `type` prop controls when scrollbars are visible:
+
+<Canvas of={ScrollAreaStories.Types} />
+
+### Horizontal Scrolling
+
+Enable horizontal scrolling for wide content:
+
+<Canvas of={ScrollAreaStories.HorizontalScrolling} />
+
+### Both Scrollbars
+
+When content overflows both horizontally and vertically:
+
+<Canvas of={ScrollAreaStories.BothScrollbars} />
+
+### Different Sizes
+
+ScrollArea can be sized to fit your layout needs:
+
+<Canvas of={ScrollAreaStories.Sizes} />
+
+### RTL Support
+
+The component supports Right-to-Left languages:
+
+<Canvas of={ScrollAreaStories.RTLSupport} />
+
+### Custom Content
+
+ScrollArea works with any type of content:
+
+<Canvas of={ScrollAreaStories.CustomContent} />
+
+## Features
+
+- **Native scrolling**: Uses browser's native scroll behavior for optimal performance and accessibility
+- **Custom styling**: Replaces default scrollbars with design system themed versions
+- **Cross-browser**: Consistent appearance across different browsers
+- **RTL support**: Proper handling of right-to-left text direction
+- **Accessibility**: Maintains keyboard navigation and screen reader support
+- **Flexible sizing**: Customizable width and height
+- **Multiple orientations**: Support for vertical, horizontal, or both scrollbars
+
+## Design Tokens
+
+The component uses the following design tokens:
+
+- `--t-border-radius-md` - Rounded corners
+- `--t-color-fill-primary` - Background color
+- `--t-color-border-secondary` - Border color
+- `--t-color-fill-secondary` - Scrollbar track color
+- `--t-color-fill-brand` - Scrollbar thumb color
+- `--t-space-300` - Scrollbar width/height (12px)
+- `--t-motion-duration-fast` - Transition timing
+
+## Accessibility
+
+- Preserves native keyboard scrolling behavior
+- Maintains focus management
+- Supports screen readers
+- Follows WAI-ARIA best practices
+- High contrast mode support
+
+## Best Practices
+
+1. **Set appropriate dimensions**: Always specify width and height for predictable layout
+2. **Consider content padding**: Add padding inside the scrollable area for better readability
+3. **Use hover type for most cases**: The 'hover' type provides good UX without visual clutter
+4. **Test with keyboard navigation**: Ensure scrollable areas are keyboard accessible
+5. **Handle both orientations carefully**: Only enable horizontal scrolling when necessary

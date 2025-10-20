@@ -1,0 +1,106 @@
+/* Import Tagaddod Design System styles FIRST */
+@import 'tagaddod-design-react/styles.css';
+
+/* Root CSS custom properties for enhanced theming */
+:root {
+  /* Application-specific overrides (optional) */
+  --app-max-width: 1200px;
+  --app-padding: 1rem;
+
+  /* RTL-enhanced root variables */
+  --rtl-text-align: left;
+  --rtl-flex-direction: row;
+  --rtl-margin-start: 0;
+  --rtl-margin-end: auto;
+}
+
+[dir="rtl"] {
+  --rtl-text-align: right;
+  --rtl-flex-direction: row-reverse;
+  --rtl-margin-start: auto;
+  --rtl-margin-end: 0;
+}
+
+/* Global reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--t-font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--t-color-surface-background, #ffffff);
+  color: var(--t-color-text-primary, #000000);
+  font-family: var(--t-font-family-primary);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Enhanced focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--t-color-border-focus, #007AFF);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Application container styles */
+.app-container {
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  padding: var(--app-padding);
+}
+
+/* Utility classes for common patterns */
+.text-balance {
+  text-wrap: balance;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Arabic numeral support */
+[dir="rtl"] .arabic-numerals {
+  font-feature-settings: "numr" 1;
+}
+
+[dir="rtl"] .hindi-numerals {
+  font-feature-settings: "hngl" 1;
+}
+
+/* Print styles */
+@media print {
+  * {
+    background-color: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+}

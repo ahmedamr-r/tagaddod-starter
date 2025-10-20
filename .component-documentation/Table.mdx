@@ -1,0 +1,301 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TableStories from './Table.stories';
+import { Table } from './Table';
+
+<Meta of={TableStories} />
+
+---
+
+## 🤖 AI AGENT INSTRUCTION: COMPREHENSIVE IMPLEMENTATION GUIDES
+
+**ATTENTION AI AGENTS:** Before implementing the Table component, you MUST read these comprehensive documentation files located in the same directory as this MDX file:
+
+### 📖 REQUIRED READING #1: `Table-AI-AGENT-GUIDE.mdx`
+
+**File Location:** `packages/react/src/components/Table/Table-AI-AGENT-GUIDE.mdx`
+
+This comprehensive guide (~6,500 tokens) contains CRITICAL implementation details:
+
+**YOU MUST READ THIS FILE IF YOU NEED TO:**
+- Implement pagination (client-side or server-side)
+- Add filtering (**CRITICAL:** Table only provides filter UI, YOU must implement filtering logic)
+- Implement search functionality (client-side or server-side)
+- Create tabbed tables
+- Configure columns (ordering, resizing, pinning)
+- Handle table states (loading, error, empty, notFound)
+- Support RTL/Arabic text
+- Troubleshoot common issues
+
+**Key Sections:**
+- Import & Basic Setup (Lines 30-150)
+- Pagination Implementation (Lines 151-250) - Client vs Server-side
+- **Filtering System (Lines 334-805) - COMPLETE GUIDE TO 6 FILTER TYPES**
+  - **Filter Types Reference (Lines 418-708)** - When to use each type, UI behavior, Popover display
+  - **Filter Type Comparison Chart (Line 709)** - Quick decision guide
+  - **YOU MUST IMPLEMENT FILTERING LOGIC** - Table provides UI only
+- Search Implementation (Lines 806-900)
+- Tabbed Tables (Lines 901-1000)
+- Column Configuration (Lines 1001-1100)
+- Table States (Lines 1101-1200)
+- RTL & Internationalization (Lines 1201-1300)
+- Troubleshooting (Lines 1401-1500)
+
+---
+
+### 🎨 REQUIRED READING #2: `Table-CELL-VARIANTS-GUIDE.mdx`
+
+**File Location:** `packages/react/src/components/Table/Table-CELL-VARIANTS-GUIDE.mdx`
+
+This comprehensive guide (~8,000 tokens) contains complete cell customization details:
+
+**YOU MUST READ THIS FILE IF YOU NEED TO:**
+- Use QuickColumns helper functions (fastest way to create columns)
+- Use any of the 13 pre-built cell variants
+- Create custom cell components
+- Implement interactive cells (checkboxes, selects, text inputs)
+- Add action buttons or dropdowns
+- Handle cell state management
+- Ensure proper RTL support in cells
+
+**Key Sections:**
+- QuickColumns Quick Start (Lines 30-200)
+- Available Cell Variants (Lines 201-450) - All 13 types with data structures
+- Custom Cell Creation (Lines 451-750) - 4 methods from simple to complex
+- Real-World Examples (Lines 751-1100) - E-commerce, user management, etc.
+- RTL & Accessibility (Lines 1301-1400)
+
+---
+
+## ⚠️ CRITICAL NOTES FOR AI AGENTS
+
+1. **Filtering Logic:** The Table component provides the filter UI but does NOT filter data automatically. You MUST implement filtering logic yourself and pass filtered data to the component.
+
+2. **Search Logic:** The Table component provides the search UI but does NOT search data automatically. You MUST implement search logic yourself and pass searched data to the component.
+
+3. **Pagination:** For server-side pagination, you MUST set `isServerSide: true` in the pagination config.
+
+4. **Cell Variants:** Use `QuickColumns` for standard cases. Read the Cell Variants Guide for custom implementations.
+
+5. **RTL Support:** All custom cells MUST include RTL line-height adjustments. See guides for implementation.
+
+---
+
+# Table Component
+
+The Table component is a powerful, feature-rich data display component built on TanStack Table, offering extensive customization options including sorting, filtering, pagination, tabbed interfaces, column ordering, and column resizing.
+
+## Overview
+
+The Tagaddod Table component provides an intuitive way to display structured data with advanced features:
+
+- **Pagination** - Client-side and server-side support
+- **Filtering** - Progressive disclosure with 5+ filter types
+- **Search** - Debounced search with server/client modes
+- **Column Management** - Ordering, resizing, and pinning
+- **Tabbed Interfaces** - Multiple data views in one table
+- **Cell Variants** - 13+ pre-built cell types + custom cells
+- **Table States** - Loading, error, empty, and not found states
+- **RTL Support** - Full Arabic language and RTL layout support
+- **Customization** - Striped rows, grid cells, scrollable areas
+
+## Import
+
+```jsx
+import { Table } from 'tagaddod-design-react';
+
+// For cell variants
+import { QuickColumns } from 'tagaddod-design-react';
+```
+
+## Props
+
+<ArgTypes of={Table} />
+
+---
+
+## Interactive Playground
+
+Use the controls below to explore all table features:
+
+<Canvas of={TableStories.Playground} />
+
+---
+
+## Example Stories
+
+Explore specific features through these examples:
+
+- **[Cell Variants](/?path=/story/components-table--cell-variants)** - Pre-built cell types
+- **[Column Management](/?path=/story/components-table--column-management)** - Ordering & resizing
+- **[Advanced Filters](/?path=/story/components-table--advanced-filters)** - Complete filtering system
+- **[Tabbed Table](/?path=/story/components-table--tabbed-table)** - Multiple data views
+- **[Table States](/?path=/story/components-table--table-states)** - Loading, error, empty states
+- **[Striped Table](/?path=/story/components-table--striped-table)** - Alternating row colors
+- **[Grid Table](/?path=/story/components-table--grid-table)** - Cell borders
+- **[Pinned Columns](/?path=/story/components-table--pinned-columns)** - Pin columns during scroll
+- **[Client-Side Search](/?path=/story/components-table--client-side-search)** - Search implementation
+- **[Server-Side Search](/?path=/story/components-table--server-side-search)** - Server search
+- **[With ScrollArea](/?path=/story/components-table--with-scroll-area)** - Custom scrolling
+
+---
+
+## Quick Start
+
+### Basic Table
+
+```tsx
+import { Table } from 'tagaddod-design-react';
+
+const columns = [
+  { accessorKey: 'id', header: 'ID', size: 80 },
+  { accessorKey: 'name', header: 'Name', size: 200 },
+  { accessorKey: 'price', header: 'Price', size: 120 },
+];
+
+const data = [
+  { id: 1, name: 'Product A', price: 29.99 },
+  { id: 2, name: 'Product B', price: 39.99 },
+];
+
+<Table data={data} columns={columns} title="Products" />
+```
+
+### With QuickColumns
+
+```tsx
+import { Table, QuickColumns } from 'tagaddod-design-react';
+
+const columns = [
+  QuickColumns.number('id', 'ID', 80),
+  QuickColumns.text('name', 'Product Name', 200),
+  QuickColumns.number('price', 'Price', 120),
+  QuickColumns.badge('status', 'Status', 100),
+];
+
+<Table data={data} columns={columns} title="Products" />
+```
+
+### With Pagination
+
+```tsx
+const [page, setPage] = useState(0);
+
+<Table
+  data={data}
+  columns={columns}
+  pagination={{
+    pageIndex: page,
+    pageSize: 10,
+    pageCount: Math.ceil(data.length / 10),
+    onPageChange: setPage,
+  }}
+/>
+```
+
+**For complete implementation examples**, see:
+- **Pagination**: `Table-AI-AGENT-GUIDE.mdx` (Lines 151-250)
+- **Filtering**: `Table-AI-AGENT-GUIDE.mdx` (Lines 250-380)
+- **Search**: `Table-AI-AGENT-GUIDE.mdx` (Lines 381-450)
+- **Cell Variants**: `Table-CELL-VARIANTS-GUIDE.mdx`
+
+---
+
+## Key Features Reference
+
+### Pagination
+- **Client-side**: Automatic data slicing
+- **Server-side**: Manual pagination with `isServerSide: true`
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 151-250)
+
+### Filtering
+- **6 Filter Types**: All displayed in Popover component
+  - `select`: Simple dropdown (3-10 options, single selection)
+  - `radioGroup`: Radio buttons (2-6 options, visual emphasis)
+  - `popoverListbox`: Enhanced listbox (10+ options, searchable)
+  - `checkboxGroup`: Multiple selection (3-8 options)
+  - `rangeSlider`: Numeric ranges with dual-thumb slider
+  - `currentFilters`: Read-only display of active filters
+- **Progressive Disclosure**: First 5 in filter bar, rest in drawer
+- **YOU implement logic**: Table provides UI only
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 418-805) for complete filter type guide
+
+### Search
+- **Debounced**: 300ms default, configurable
+- **Client/Server**: Both modes supported
+- **YOU implement logic**: Table provides UI only
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 381-450)
+
+### Column Management
+- **Ordering**: Drag-drop reordering (disabled by default)
+- **Resizing**: Interactive width adjustment (disabled by default)
+- **Pinning**: Pin columns to left/right
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 551-650)
+
+### Cell Variants
+- **13 Pre-built Types**: Text, badges, numbers, interactive, actions
+- **QuickColumns**: Fastest way to create columns
+- **Custom Cells**: 4 methods from simple to complex
+- See `Table-CELL-VARIANTS-GUIDE.mdx`
+
+### Table States
+- **normal**: Default state
+- **loading**: Shows spinner
+- **empty**: No data message
+- **error**: Error message
+- **notFound**: Search/filter results empty
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 651-720)
+
+### RTL Support
+- **Automatic Detection**: From `document.dir`
+- **Line Heights**: Proper Arabic text rendering
+- **Layout**: Flipped column ordering, drawer position
+- See `Table-AI-AGENT-GUIDE.mdx` (Lines 721-800)
+
+---
+
+## Accessibility
+
+- Semantic HTML table structure
+- ARIA labels for interactive elements
+- Keyboard navigation support
+- Screen reader friendly
+- Focus management
+
+---
+
+## Technical Details
+
+### Architecture
+- Built on **TanStack Table v8**
+- Column ordering via **@dnd-kit**
+- Design tokens for theming
+- CSS Modules for styling
+
+### Performance
+- Memoized columns and cells recommended for large datasets
+- Pagination for 100+ rows
+- Virtual scrolling support via ScrollArea
+- Optimized re-renders
+
+### Browser Support
+- Modern browsers (Chrome, Firefox, Safari, Edge)
+- IE11 not supported
+- Mobile and touch device support
+
+---
+
+## Dependencies
+
+- `@tanstack/react-table` - Table core logic
+- `@dnd-kit/core` + `@dnd-kit/sortable` - Column ordering (if enabled)
+- Design system components: Button, Select, Checkbox, RadioButton, Badge, Drawer, Pagination, etc.
+
+---
+
+## Need More Help?
+
+**AI Agents**: Read the comprehensive guides:
+- `Table-AI-AGENT-GUIDE.mdx` for table features
+- `Table-CELL-VARIANTS-GUIDE.mdx` for cell customization
+
+**Developers**: Use the interactive playground above and explore the example stories via the links.

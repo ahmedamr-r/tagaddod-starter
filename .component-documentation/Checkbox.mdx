@@ -1,0 +1,552 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as CheckboxStories from './Checkbox.stories';
+import { Checkbox } from './Checkbox';
+
+<Meta of={CheckboxStories} />
+
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-31)
+- Default checkbox implementation
+
+⚡ STATES (Lines 33-71)
+- Checked (Lines 35-41): True state
+- Indeterminate (Lines 43-51): Partial selection
+- Disabled (Lines 53-59): Unavailable state
+- Disabled and Checked (Lines 61-71): Combined states
+
+✅ VALIDATION & INFO (Lines 73-112)
+- With Help Text (Lines 75-86): Supplementary info
+- With Error (Lines 88-99): Validation failures
+- Required (Lines 101-112): Mandatory fields with asterisk
+
+🏷️ LABEL VARIATIONS (Lines 114-143)
+- Default Label (Lines 116-120): Standard labeling
+- No Label (Lines 122-130): Label-less checkbox
+- Hidden Label (Lines 132-143): Visually hidden but accessible
+
+🌍 INTERNATIONALIZATION (Lines 145-175)
+- RTL Language Support (Lines 147-162): Arabic text
+- RTL with Error (Lines 164-175): Error states in RTL
+
+🎛️ CONTROLLED USAGE (Lines 177-195)
+- State management with React hooks
+- onChange handling
+
+📋 FORM INTEGRATION (Lines 197-210)
+- Radix UI foundation
+- Form submission handling
+
+♿ ACCESSIBILITY (Lines 212-220)
+- Unique IDs and label connection
+- Keyboard navigation support
+- Screen reader compatibility
+
+💼 COMMON USE CASES (Lines 222-302)
+- Terms Acceptance (Lines 224-231): Legal agreements
+- Preference Toggles (Lines 233-241): Settings management
+- Multi-select Lists (Lines 243-252): Multiple choices
+- Tristate/Hierarchical (Lines 254-302): Parent-child selections
+
+⚙️ TECHNICAL DETAILS (Lines 304-338)
+- CSS Variables (Lines 306-324): Design tokens
+- Architecture (Lines 326-334): Radix UI foundation
+- Browser Support (Lines 336-338)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic checkbox: Line 30
+- Checked state: Line 40
+- Indeterminate: Line 50
+- With error: Lines 95-98
+- Required field: Lines 108-111
+- Controlled: Lines 188-193
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Checkbox component capabilities and patterns.
+
+
+# Checkbox Component
+
+The Checkbox component allows users to select one or multiple items from a set or toggle a single option on or off.
+
+## Overview
+
+Checkboxes are form controls that let users make binary choices (checked or unchecked) and can also represent an indeterminate state. They're commonly used in forms, settings, and lists where multiple selections are allowed.
+
+## Import
+
+```jsx
+import { Checkbox } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Checkbox} />
+
+## Basic Usage
+
+<Canvas of={CheckboxStories.Default} />
+
+```jsx
+<Checkbox label="Label" />
+```
+
+## States
+
+### Checked
+
+<Canvas of={CheckboxStories.Checked} />
+
+```jsx
+<Checkbox label="Label" checked={true} />
+```
+
+### Indeterminate
+
+The indeterminate state is useful for representing partially checked states, often used in hierarchical selections.
+
+<Canvas of={CheckboxStories.Indeterminate} />
+
+```jsx
+<Checkbox label="Label" checked="indeterminate" />
+```
+
+### Disabled
+
+<Canvas of={CheckboxStories.Disabled} />
+
+```jsx
+<Checkbox label="Label" disabled={true} />
+```
+
+### Disabled and Checked
+
+<Canvas of={CheckboxStories.DisabledChecked} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  disabled={true} 
+  checked={true} 
+/>
+```
+
+## Validation and Information
+
+### With Help Text
+
+Add supplementary information below the checkbox with the `helpText` prop.
+
+<Canvas of={CheckboxStories.WithHelpText} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  helpText="Help text" 
+/>
+```
+
+### With Error
+
+Display error messages when validation fails.
+
+<Canvas of={CheckboxStories.WithError} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  error="Error message" 
+/>
+```
+
+### Required
+
+Required checkboxes display a red asterisk (*) next to the label.
+
+<Canvas of={CheckboxStories.Required} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  required={true} 
+/>
+```
+
+## Label Variations
+
+### Default Label
+
+Labels describe the purpose of the checkbox.
+
+<Canvas of={CheckboxStories.Default} />
+
+### No Label
+
+Checkboxes can be displayed without a label.
+
+<Canvas of={CheckboxStories.WithoutLabel} />
+
+```jsx
+<Checkbox />
+```
+
+### Hidden Label
+
+For visual layout purposes, you may want to hide the label visually while keeping it accessible to screen readers.
+
+<Canvas of={CheckboxStories.HiddenLabel} />
+
+```jsx
+<Checkbox 
+  label="Hidden Label" 
+  hideLabel={true} 
+/>
+```
+
+## Internationalization and RTL Support
+
+The Checkbox component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout alignment, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Checkbox } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Checkbox 
+        label="أوافق على الشروط والأحكام"
+        helpText="يرجى قراءة الشروط بعناية قبل الموافقة"
+        required
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Checkbox component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts alignment and spacing for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Help Text Positioning**: Correctly positions help text and error messages
+5. **Label Alignment**: Maintains proper checkbox-to-label relationship in RTL mode
+
+### Form Controls in RTL
+
+The Checkbox component handles Arabic form labels with proper styling:
+
+<Canvas of={CheckboxStories.RTL} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function PreferencesForm() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Checkbox 
+        label={isRTL ? "إشعارات البريد الإلكتروني" : "Email notifications"}
+        helpText={isRTL ? "استقبال التحديثات عبر البريد" : "Receive updates via email"}
+      />
+      <Checkbox 
+        label={isRTL ? "إشعارات الرسائل النصية" : "SMS notifications"}
+        helpText={isRTL ? "استقبال التنبيهات النصية" : "Receive text alerts"}
+      />
+      <Checkbox 
+        label={isRTL ? "إشعارات التطبيق" : "Push notifications"}
+        helpText={isRTL ? "تنبيهات فورية من التطبيق" : "Instant app alerts"}
+      />
+    </div>
+  );
+}
+```
+
+### Error States in RTL
+
+Error messages and validation work seamlessly in RTL mode:
+
+<Canvas of={CheckboxStories.RTLError} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function TermsAcceptance() {
+  const { isRTL } = useTheme();
+  const [accepted, setAccepted] = useState(false);
+  const [showError, setShowError] = useState(false);
+  
+  const handleSubmit = () => {
+    if (!accepted) {
+      setShowError(true);
+      return;
+    }
+    // Process form...
+  };
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Checkbox 
+        label={isRTL ? "أوافق على الشروط والأحكام" : "I agree to the terms and conditions"}
+        checked={accepted}
+        onCheckedChange={(checked) => {
+          setAccepted(checked === true);
+          if (checked) setShowError(false);
+        }}
+        error={showError ? (isRTL ? "يجب الموافقة على الشروط للمتابعة" : "You must accept the terms to continue") : undefined}
+        required
+      />
+    </div>
+  );
+}
+```
+
+### Required Fields in RTL
+
+Required field indicators work properly in both directions:
+
+```jsx
+function RequiredForm() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Checkbox 
+        label={isRTL ? "الموافقة مطلوبة" : "Approval required"}
+        required
+        helpText={isRTL ? "هذا الحقل إجباري" : "This field is mandatory"}
+      />
+    </div>
+  );
+}
+```
+
+### Hierarchical Checkboxes in RTL
+
+For parent-child checkbox relationships in RTL:
+
+```jsx
+function HierarchicalSelection() {
+  const { isRTL } = useTheme();
+  const [parentChecked, setParentChecked] = useState('indeterminate');
+  const [permissions, setPermissions] = useState({
+    read: true,
+    write: false,
+    delete: false
+  });
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Checkbox 
+        label={isRTL ? "جميع الصلاحيات" : "All Permissions"}
+        checked={parentChecked}
+        onCheckedChange={handleParentChange}
+      />
+      <div style={{ marginRight: isRTL ? '0' : '24px', marginLeft: isRTL ? '24px' : '0' }}>
+        <Checkbox 
+          label={isRTL ? "قراءة" : "Read"}
+          checked={permissions.read}
+          onCheckedChange={(checked) => updatePermission('read', checked)}
+        />
+        <Checkbox 
+          label={isRTL ? "كتابة" : "Write"}
+          checked={permissions.write}
+          onCheckedChange={(checked) => updatePermission('write', checked)}
+        />
+        <Checkbox 
+          label={isRTL ? "حذف" : "Delete"}
+          checked={permissions.delete}
+          onCheckedChange={(checked) => updatePermission('delete', checked)}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider form layout** - error messages and help text align properly in RTL
+5. **Test nested checkboxes** to ensure proper indentation in RTL mode
+6. **Validate required field indicators** appear correctly in both directions
+
+## Controlled Usage
+
+You can control the checkbox state and handle changes:
+
+```jsx
+import { useState } from 'react';
+
+function MyForm() {
+  const [isChecked, setIsChecked] = useState(false);
+  
+  return (
+    <Checkbox 
+      label="I agree to the terms" 
+      checked={isChecked}
+      onCheckedChange={setIsChecked}
+    />
+  );
+}
+```
+
+## Form Integration
+
+Checkbox is built on Radix UI's Checkbox component, making it compatible with forms:
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <Checkbox 
+    name="terms" 
+    required={true} 
+    label="I agree to the terms and conditions"
+  />
+  <button type="submit">Submit</button>
+</form>
+```
+
+## Accessibility
+
+- Each checkbox has a unique ID that connects it to its label
+- Required checkboxes use both the `required` attribute and visual indication
+- Error states are clearly communicated visually and to assistive technologies
+- Focus states are clearly visible for keyboard navigation
+- Supports keyboard navigation (space to toggle)
+- The `hideLabel` prop maintains accessibility even when labels are visually hidden
+- Help text and error messages are properly associated with the checkbox
+
+## Common Use Cases
+
+### Terms Acceptance
+
+```jsx
+<Checkbox 
+  label="I accept the Terms of Service and Privacy Policy" 
+  required={true} 
+/>
+```
+
+### Preference Toggles
+
+```jsx
+<div>
+  <Checkbox label="Email notifications" />
+  <Checkbox label="SMS notifications" />
+  <Checkbox label="Push notifications" />
+</div>
+```
+
+### Multi-select Lists
+
+```jsx
+<div>
+  <Checkbox label="Apple" />
+  <Checkbox label="Orange" />
+  <Checkbox label="Banana" />
+  <Checkbox label="Strawberry" />
+</div>
+```
+
+### Tristate for Hierarchical Selection
+
+```jsx
+const [parentChecked, setParentChecked] = useState('indeterminate');
+const [child1Checked, setChild1Checked] = useState(true);
+const [child2Checked, setChild2Checked] = useState(false);
+
+// Update parent state based on children
+useEffect(() => {
+  if (child1Checked && child2Checked) {
+    setParentChecked(true);
+  } else if (!child1Checked && !child2Checked) {
+    setParentChecked(false);
+  } else {
+    setParentChecked('indeterminate');
+  }
+}, [child1Checked, child2Checked]);
+
+// Update children based on parent
+const handleParentChange = (newState) => {
+  setParentChecked(newState);
+  if (newState !== 'indeterminate') {
+    setChild1Checked(newState);
+    setChild2Checked(newState);
+  }
+};
+
+return (
+  <div>
+    <Checkbox 
+      label="Select All" 
+      checked={parentChecked}
+      onCheckedChange={handleParentChange}
+    />
+    <div style={{ marginLeft: '24px' }}>
+      <Checkbox 
+        label="Option 1" 
+        checked={child1Checked}
+        onCheckedChange={setChild1Checked}
+      />
+      <Checkbox 
+        label="Option 2" 
+        checked={child2Checked}
+        onCheckedChange={setChild2Checked}
+      />
+    </div>
+  </div>
+);
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Checkbox uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-size-*` | Checkbox dimensions |
+| `--t-space-*` | Padding and spacing |
+| `--t-typography-*` | Typography tokens |
+| `--t-color-fill-*` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-icon-*` | Icon colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-border-width-*` | Border width |
+| `--t-duration-*` | Animation duration |
+| `--t-easing-*` | Animation timing |
+| `--t-line-height-*` | Line height for different languages |
+
+### Architecture
+
+The component is built on Radix UI's Checkbox component, which provides accessibility and state management. The custom implementation adds:
+
+1. Label, help text, and error message handling
+2. Visual styling through CSS modules
+3. RTL support with appropriate text and layout adjustments
+4. Indeterminate state visualization
+5. Required field indication
+
+### Browser Support
+
+The Checkbox component is compatible with all modern browsers and includes RTL language support.

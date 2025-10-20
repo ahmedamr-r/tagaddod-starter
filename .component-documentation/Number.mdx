@@ -1,0 +1,679 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as NumberStories from './Number.stories';
+import { Number } from './Number';
+import { IconCurrencyDollar, IconPercentage, IconRuler, IconCalculator } from '@tabler/icons-react';
+
+<Meta of={NumberStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-30)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 31-55)
+- Default implementation
+- Value handling
+- Event handling patterns
+
+📏 SIZES (Lines 56-85)
+- All five sizes: xLarge (56px), Large (48px), Medium (40px), Small (32px), xSmall (28px)
+- Auto-sizing stepper buttons and icons
+
+⚙️ BEHAVIOR & CONTROLS (Lines 86-185)
+- Stepper controls (Lines 89-105): Increment/decrement buttons
+- Min/Max constraints (Lines 107-120): Value boundaries
+- Step increments (Lines 122-135): Custom step values
+- Clearable (Lines 137-150): Optional clear button
+- Hide steppers (Lines 152-165): Text-only input mode
+- Keyboard controls (Lines 167-185): Arrow keys, Home, End, wheel
+
+🎨 FORMATTING OPTIONS (Lines 186-255)
+- Currency formatting (Lines 190-205): USD, EUR, etc.
+- Percentage formatting (Lines 207-220): 0-100% or 0-1 decimal
+- Decimal precision (Lines 222-235): Fraction digits control
+- Prefix/Suffix (Lines 237-255): Icons and text additions
+
+⚡ STATES & VALIDATION (Lines 256-320)
+- Disabled state (Lines 260-275): Unavailable input
+- Read-only state (Lines 277-290): Display-only mode
+- Error handling (Lines 292-307): Validation messages
+- Required fields (Lines 309-320): Form validation
+
+🔧 LAYOUT & INTERACTION (Lines 321-375)
+- Full width (Lines 325-340): Container-wide inputs
+- Controlled state (Lines 342-375): External value management
+
+🌍 INTERNATIONALIZATION & RTL (Lines 376-510)
+- ThemeProvider integration (Lines 382-405)
+- Automatic RTL adjustments (Lines 407-420)
+- Directional icon handling (Lines 422-510)
+- Arabic text support and font switching
+
+♿ ACCESSIBILITY (Lines 511-525)
+- Screen reader support, ARIA attributes
+- Keyboard navigation
+
+💼 COMMON USE CASES (Lines 526-615)
+- Quantity selectors (Lines 530-545)
+- Price inputs (Lines 547-565)
+- Form integration (Lines 567-585)
+- Dashboard metrics (Lines 587-605)
+- Order calculators (Lines 607-615)
+
+🔧 IMPLEMENTATION DETAILS (Lines 616-665)
+- CSS variables and customization
+- Browser support and performance
+- Technical considerations
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic number input: Line 45
+- With min/max: Line 115
+- Currency format: Line 197
+- Percentage format: Line 214
+- With steppers: Line 96
+- Clearable input: Line 144
+- Full controlled: Line 355
+- RTL with Arabic: Line 397
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above,
+read the ENTIRE document from start to finish to ensure complete
+understanding of all Number component capabilities and patterns.
+
+
+# Number Component
+
+The Number component is a sophisticated numeric input with stepper controls, comprehensive formatting options, and full accessibility support. It handles currency, percentages, decimals, and provides intuitive increment/decrement controls with keyboard support.
+
+## Import
+
+```jsx
+import { Number } from 'tagaddod-design-react';
+```
+
+## Component Structure
+
+The Number component combines a text input with optional stepper buttons, prefix/suffix content, and comprehensive number formatting capabilities.
+
+## Props
+
+<ArgTypes of={Number} />
+
+## Basic Usage
+
+<Canvas of={NumberStories.Default} />
+
+```jsx
+import { Number } from 'tagaddod-design-react';
+
+// Basic number input
+<Number
+  label="Quantity"
+  placeholder="Enter a number"
+/>
+
+// With default value
+<Number
+  label="Amount"
+  defaultValue={42}
+  helpText="Enter the desired amount"
+/>
+```
+
+## Sizes
+
+The Number component supports five sizes with automatic stepper button and icon scaling:
+
+<Canvas of={NumberStories.Sizes} />
+
+```jsx
+<Number size="xlarge" label="X-Large" defaultValue={10} />
+<Number size="large" label="Large" defaultValue={20} />
+<Number size="medium" label="Medium" defaultValue={30} />
+<Number size="small" label="Small" defaultValue={40} />
+<Number size="xsmall" label="X-Small" defaultValue={50} />
+```
+
+| Size | Height | Icon Size | Stepper Size |
+|------|--------|-----------|--------------|
+| xLarge | 56px | 20×20px | 20×20px |
+| large | 48px | 18×18px | 18×18px |
+| medium | 40px | 16×16px | 16×16px |
+| small | 32px | 14×14px | 14×14px |
+| xSmall | 28px | 12×12px | 12×12px |
+
+## Behavior & Controls
+
+### Stepper Controls
+
+Use the increment/decrement buttons for precise value adjustments:
+
+<Canvas of={NumberStories.WithValue} />
+
+```jsx
+<Number
+  label="Quantity"
+  defaultValue={10}
+  min={0}
+  max={100}
+  step={5}
+/>
+```
+
+### Min/Max Constraints
+
+Set boundaries for valid input values:
+
+<Canvas of={NumberStories.WithMinMax} />
+
+```jsx
+<Number
+  label="Age"
+  min={0}
+  max={120}
+  defaultValue={25}
+  helpText="Enter your age (0-120)"
+/>
+```
+
+### Step Increments
+
+Control the increment/decrement step size:
+
+<Canvas of={NumberStories.WithStep} />
+
+```jsx
+<Number
+  label="Temperature"
+  min={-10}
+  max={50}
+  step={0.5}
+  defaultValue={22.5}
+  helpText="Adjust in 0.5 degree increments"
+/>
+```
+
+### Clearable Input
+
+Allow users to clear the input value:
+
+<Canvas of={NumberStories.Clearable} />
+
+```jsx
+<Number
+  label="Optional Value"
+  defaultValue={50}
+  clearable={true}
+  optional={true}
+  helpText="This field can be cleared"
+/>
+```
+
+### Hide Steppers
+
+Remove stepper buttons for manual input only:
+
+<Canvas of={NumberStories.NoSteppers} />
+
+```jsx
+<Number
+  label="Manual Input Only"
+  hideSteppers={true}
+  defaultValue={100}
+  helpText="Stepper buttons are hidden"
+/>
+```
+
+### Keyboard Controls
+
+The Number component supports comprehensive keyboard interaction:
+
+- **Arrow Up/Down**: Increment/decrement by step value
+- **Home**: Jump to minimum value (if set)
+- **End**: Jump to maximum value (if set)
+- **Mouse Wheel**: Increment/decrement when focused (unless disabled)
+- **Tab**: Standard focus navigation
+
+## Formatting Options
+
+### Currency Formatting
+
+Format numbers as currency with proper locale support:
+
+<Canvas of={NumberStories.Currency} />
+
+```jsx
+import { IconCurrencyDollar } from '@tabler/icons-react';
+
+<Number
+  label="Price"
+  defaultValue={99.99}
+  min={0}
+  step={0.01}
+  formatOptions={{
+    style: 'currency',
+    currency: 'USD',
+  }}
+  prefix={<IconCurrencyDollar size={16} />}
+  helpText="Enter the product price"
+/>
+```
+
+### Percentage Formatting
+
+Display values as percentages with automatic conversion:
+
+<Canvas of={NumberStories.Percentage} />
+
+```jsx
+import { IconPercentage } from '@tabler/icons-react';
+
+<Number
+  label="Discount"
+  defaultValue={0.15}
+  min={0}
+  max={1}
+  step={0.01}
+  formatOptions={{
+    style: 'percent',
+  }}
+  prefix={<IconPercentage size={16} />}
+  helpText="Enter discount percentage (0-100%)"
+/>
+```
+
+### Decimal Precision
+
+Control the number of decimal places displayed:
+
+<Canvas of={NumberStories.WithDecimals} />
+
+```jsx
+<Number
+  label="Weight"
+  defaultValue={75.5}
+  min={0}
+  step={0.1}
+  formatOptions={{
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 2,
+  }}
+  suffix="kg"
+  helpText="Enter weight in kilograms"
+/>
+```
+
+### Prefix and Suffix
+
+Add icons or text before and after the input:
+
+<Canvas of={NumberStories.WithPrefixSuffix} />
+
+```jsx
+import { IconRuler } from '@tabler/icons-react';
+
+<Number
+  label="Length"
+  defaultValue={100}
+  prefix={<IconRuler size={16} />}
+  suffix="cm"
+  helpText="Enter length in centimeters"
+/>
+```
+
+## States & Validation
+
+### Disabled State
+
+Prevent user interaction while maintaining visual context:
+
+<Canvas of={NumberStories.Disabled} />
+
+```jsx
+<Number
+  label="Disabled Field"
+  value={42}
+  disabled={true}
+  helpText="This field is disabled"
+/>
+```
+
+### Read-Only State
+
+Display values without allowing modification:
+
+<Canvas of={NumberStories.ReadOnly} />
+
+```jsx
+<Number
+  label="Read-Only Field"
+  value={100}
+  readOnly={true}
+  helpText="This field is read-only"
+/>
+```
+
+### Error Handling
+
+Display validation errors with appropriate styling:
+
+<Canvas of={NumberStories.WithError} />
+
+```jsx
+<Number
+  label="Quantity"
+  defaultValue={150}
+  min={0}
+  max={100}
+  errorMessage="Value must be between 0 and 100"
+/>
+```
+
+### Required Fields
+
+Mark essential form fields:
+
+<Canvas of={NumberStories.Required} />
+
+```jsx
+<Number
+  label="Required Field"
+  required={true}
+  helpText="This field is required"
+/>
+```
+
+## Layout & Interaction
+
+### Full Width
+
+Stretch the input to fill its container:
+
+<Canvas of={NumberStories.FullWidth} />
+
+```jsx
+<Number
+  label="Full Width Number"
+  fullWidth={true}
+  defaultValue={50}
+  helpText="This input takes the full width of its container"
+/>
+```
+
+### Controlled State
+
+Manage the component's value externally:
+
+<Canvas of={NumberStories.Controlled} />
+
+```jsx
+import { useState } from 'react';
+
+function ControlledExample() {
+  const [value, setValue] = useState<number | null>(10);
+
+  return (
+    <div>
+      <Number
+        label="Controlled Number"
+        value={value}
+        onChange={setValue}
+        min={0}
+        max={100}
+        step={5}
+      />
+      <p>Current value: {value ?? 'null'}</p>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button onClick={() => setValue(0)}>Set to 0</button>
+        <button onClick={() => setValue(50)}>Set to 50</button>
+        <button onClick={() => setValue(100)}>Set to 100</button>
+        <button onClick={() => setValue(null)}>Clear</button>
+      </div>
+    </div>
+  );
+}
+```
+
+## Internationalization and RTL Support
+
+The Number component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Number } from 'tagaddod-design-react';
+import { IconCalculator } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Number prefix={<IconCalculator />}>
+        رقم عربي
+      </Number>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Number component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts icon placement for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
+6. **Stepper Position**: Maintains proper stepper button positioning
+
+<Canvas of={NumberStories.RTLSupport} />
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalComponent() {
+  const { isRTL } = useTheme();
+
+  const ArrowIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+  return (
+    <Number suffixIcon={<ArrowIcon />}>
+      {isRTL ? 'التالي' : 'Next'}
+    </Number>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Action
+```jsx
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<Number variant="primary" suffixIcon={<NextIcon />}>
+  {isRTL ? 'التالي' : 'Next'}
+</Number>
+```
+
+#### "Back" Action
+```jsx
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<Number variant="outlined" prefixIcon={<BackIcon />}>
+  {isRTL ? 'رجوع' : 'Back'}
+</Number>
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+
+## Accessibility
+
+The Number component includes comprehensive accessibility features:
+
+- **ARIA attributes**: Proper `role="spinbutton"`, `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`
+- **Screen reader support**: Clear labels, help text, and error message associations
+- **Keyboard navigation**: Full keyboard support with arrow keys, Home, End
+- **Focus management**: Proper focus styles and tab order
+- **Error states**: Clear error indication and announcements
+- **Semantic markup**: Uses proper form controls with Radix UI Form primitives
+
+## Common Use Cases
+
+### Quantity Selectors
+
+Perfect for shopping cart quantity inputs:
+
+```jsx
+function QuantitySelector({ item, onQuantityChange }) {
+  return (
+    <Number
+      label="Quantity"
+      value={item.quantity}
+      onChange={(value) => onQuantityChange(item.id, value)}
+      min={1}
+      max={item.stockLimit}
+      step={1}
+      size="small"
+    />
+  );
+}
+```
+
+### Price Inputs
+
+Handle currency inputs with proper formatting:
+
+```jsx
+import { IconCurrencyDollar } from '@tabler/icons-react';
+
+<Number
+  label="Product Price"
+  formatOptions={{
+    style: 'currency',
+    currency: 'USD',
+  }}
+  prefix={<IconCurrencyDollar />}
+  min={0}
+  step={0.01}
+  required
+/>
+```
+
+### Form Integration
+
+Integrate with form libraries and validation:
+
+```jsx
+function ProductForm() {
+  const [formData, setFormData] = useState({
+    price: null,
+    quantity: 1,
+    discount: 0
+  });
+
+  return (
+    <form>
+      <Number
+        label="Price"
+        value={formData.price}
+        onChange={(value) => setFormData(prev => ({ ...prev, price: value }))}
+        formatOptions={{ style: 'currency', currency: 'USD' }}
+        required
+      />
+
+      <Number
+        label="Quantity"
+        value={formData.quantity}
+        onChange={(value) => setFormData(prev => ({ ...prev, quantity: value }))}
+        min={1}
+        step={1}
+      />
+
+      <Number
+        label="Discount"
+        value={formData.discount}
+        onChange={(value) => setFormData(prev => ({ ...prev, discount: value }))}
+        formatOptions={{ style: 'percent' }}
+        min={0}
+        max={1}
+        step={0.01}
+      />
+    </form>
+  );
+}
+```
+
+### Dashboard Metrics
+
+Display and edit metric values:
+
+```jsx
+function MetricInput({ metric }) {
+  return (
+    <Number
+      label={metric.label}
+      value={metric.value}
+      onChange={metric.onChange}
+      suffix={metric.unit}
+      formatOptions={metric.formatting}
+      readOnly={!metric.editable}
+      size="large"
+    />
+  );
+}
+```
+
+### Order Calculators
+
+<Canvas of={NumberStories.ComplexExample} />
+
+## Implementation Details
+
+### CSS Variables
+
+The Number component uses these design token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-100/200/300/400/500` | Input padding and spacing |
+| `--t-font-family-primary/arabic` | Font families for different languages |
+| `--t-line-height-english/arabic` | Language-specific line heights |
+| `--t-color-fill-*` | Background colors for states |
+| `--t-color-text-*` | Text colors for different states |
+| `--t-color-border-*` | Border colors |
+| `--t-border-radius-200` | Corner radius |
+| `--t-size-*` | Height and width dimensions |
+
+### Browser Support
+
+The Number component is compatible with all modern browsers and includes:
+
+- Progressive enhancement for advanced features
+- Fallback support for older browsers
+- RTL language support
+- Touch-friendly stepper controls
+- Accessibility compliance across browsers
+
+### Performance Considerations
+
+- Efficient number parsing and formatting with memoization
+- Debounced formatting updates to prevent unnecessary renders
+- Minimal re-renders through careful state management
+- Optimized icon rendering with size-based scaling

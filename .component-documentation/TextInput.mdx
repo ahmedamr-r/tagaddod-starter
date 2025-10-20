@@ -1,0 +1,618 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TextInputStories from './TextInput.stories';
+import { TextInput } from './TextInput';
+import { IconSearch, IconMail } from '@tabler/icons-react';
+
+<Meta of={TextInputStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-25)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-35)
+- Default implementation with label and placeholder
+
+🏷️ LABELS & HELP TEXT (Lines 37-85)
+- Standard Label (Lines 39-43): Basic labeling
+- Optional Fields (Lines 45-57): "(Optional)" indicator
+- Required Fields (Lines 59-71): Default required state
+- Help Text (Lines 73-85): Supplementary information
+
+✅ VALIDATION STATES (Lines 87-130)
+- Error State (Lines 89-102): Validation failures
+- Disabled State (Lines 104-116): Prevent interaction
+- Read-Only State (Lines 118-130): Display-only mode
+
+📏 SIZES (Lines 132-156)
+- Three sizes: micro (20px), medium (32px), large (40px)
+- Size-specific implementations
+
+🎭 SPECIAL FEATURES (Lines 158-260)
+- Prefix and Suffix (Lines 160-230):
+  * Prefix Examples (Lines 164-186): Icons and text
+  * Sizes with Prefix (Lines 188-201): Icon sizing
+  * Suffix (Lines 203-215): Right-side elements
+  * Combined (Lines 217-230): Both prefix and suffix
+- Clearable Input (Lines 232-245): Clear button functionality
+- Password Input (Lines 247-260): Visibility toggle
+
+📐 LAYOUT OPTIONS (Lines 262-281)
+- Standard Width (Lines 264-267): Container-defined
+- Full Width (Lines 269-281): 100% container width
+
+💼 COMMON USE CASES (Lines 283-324)
+- Search, Email, Amount inputs (Lines 287-312)
+- Password with visibility toggle (Lines 314-324)
+
+🌍 INTERNATIONALIZATION & RTL (Lines 326-475)
+- RTL Overview (Lines 328-340): ThemeProvider integration
+- Automatic Adjustments (Lines 342-360): Font, icons, alignment
+- Directional Icons (Lines 362-390): Icon selection patterns
+- RTL Best Practices (Lines 392-420): Implementation guidelines
+- Usage Examples (Lines 422-475): Practical RTL implementations
+
+♿ ACCESSIBILITY (Lines 477-485)
+- Unique IDs and label connections
+- ARIA attributes for states
+- Screen reader support
+
+📋 FORM INTEGRATION (Lines 487-508)
+- Radix UI Form foundation
+- Form library compatibility
+
+⚙️ TECHNICAL DETAILS (Lines 510-560)
+- CSS Variables (Lines 512-531): Design tokens table
+- Input Type Handling (Lines 533-538): Password detection
+- Controlled vs Uncontrolled (Lines 540-557): State management
+- Browser Support (Lines 559-560)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic input: Lines 31-34
+- With prefix icon: Lines 174-178
+- With error: Lines 96-101
+- Password type: Lines 254-258
+- Clearable: Lines 239-244
+- RTL Arabic: Lines 467-474
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all TextInput component capabilities and patterns.
+
+
+# TextInput Component
+
+The TextInput component is a form element for collecting user text input with support for various states, sizes, and visual treatments.
+
+## Overview
+
+TextInput is a fundamental component for forms and data collection, offering a rich set of features including various states (error, disabled, read-only), prefix and suffix elements, password visibility toggle, and clear functionality.
+
+## Import
+
+```jsx
+import { TextInput } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={TextInput} />
+
+## Basic Usage
+
+<Canvas of={TextInputStories.Default} />
+
+```jsx
+<TextInput 
+  label="Name"
+  placeholder="Enter your name"
+/>
+```
+
+## Labels and Help Text
+
+### Standard Label
+
+Labels describe the purpose of the input field.
+
+<Canvas of={TextInputStories.Default} />
+
+### Optional Fields
+
+Mark non-required fields with the "optional" flag to display "(Optional)" next to the label.
+
+<Canvas of={TextInputStories.Optional} />
+
+```jsx
+<TextInput 
+  label="Phone Number"
+  placeholder="Enter your phone number"
+  optional={true}
+/>
+```
+
+### Required Fields
+
+All fields are required by default. Use the `optional` prop to mark fields as optional.
+
+<Canvas of={TextInputStories.Required} />
+
+```jsx
+<TextInput 
+  label="Username"
+  placeholder="Enter your username"
+  required={true}
+/>
+```
+
+### Help Text
+
+Add supplementary information below the input with the `helpText` prop.
+
+<Canvas of={TextInputStories.WithHelpText} />
+
+```jsx
+<TextInput 
+  label="Email"
+  placeholder="Enter your email"
+  helpText="We will never share your email with anyone else."
+/>
+```
+
+## Validation States
+
+### Error State
+
+Display error messages when validation fails.
+
+<Canvas of={TextInputStories.WithError} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+  errorMessage="Password must be at least 8 characters long"
+/>
+```
+
+### Disabled State
+
+Prevent interaction with disabled inputs.
+
+<Canvas of={TextInputStories.Disabled} />
+
+```jsx
+<TextInput 
+  label="Disabled Input"
+  placeholder="You cannot edit this field"
+  disabled={true}
+/>
+```
+
+### Read-Only State
+
+Display information that cannot be edited but should remain visible.
+
+<Canvas of={TextInputStories.ReadOnly} />
+
+```jsx
+<TextInput 
+  label="Read-only Input"
+  value="This is read-only text"
+  readOnly={true}
+/>
+```
+
+## Sizes
+
+TextInput comes in three sizes to fit different UI contexts.
+
+<Canvas of={TextInputStories.Sizes} />
+
+```jsx
+<TextInput 
+  label="Micro (20px)"
+  placeholder="Micro input"
+  size="micro"
+/>
+
+<TextInput 
+  label="Medium (32px)"
+  placeholder="Medium input"
+  size="medium"
+/>
+
+<TextInput 
+  label="Large (40px)"
+  placeholder="Large input"
+  size="large"
+/>
+```
+
+## Special Features
+
+### Prefix and Suffix
+
+Add icons or text before or after the input text.
+
+#### Prefix Examples
+
+Different types of prefixes including icons and text.
+
+<Canvas of={TextInputStories.PrefixExamples} />
+
+```jsx
+import { IconMail, IconSearch } from '@tabler/icons-react';
+
+// Icon prefix
+<TextInput 
+  label="Email"
+  placeholder="Enter your email address"
+  prefix={<IconMail size={18} />}
+/>
+
+// Text prefix
+<TextInput 
+  label="Amount"
+  placeholder="0.00"
+  prefix="$"
+/>
+```
+
+#### Sizes with Prefix
+
+Prefixes adapt to different input sizes with appropriate icon sizing.
+
+<Canvas of={TextInputStories.SizesWithPrefix} />
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+// Different sizes with appropriate icon sizing
+<TextInput size="micro" prefix={<IconSearch size={14} />} />
+<TextInput size="medium" prefix={<IconSearch size={18} />} />
+<TextInput size="large" prefix={<IconSearch size={22} />} />
+```
+
+#### Suffix
+
+<Canvas of={TextInputStories.WithSuffix} />
+
+```jsx
+import { IconCurrencyDollar } from '@tabler/icons-react';
+
+<TextInput 
+  label="Amount"
+  placeholder="Enter amount"
+  suffix={<IconCurrencyDollar size={18} />}
+/>
+```
+
+#### Combined Prefix and Suffix
+
+<Canvas of={TextInputStories.WithPrefixAndSuffix} />
+
+```jsx
+import { IconMail } from '@tabler/icons-react';
+
+<TextInput 
+  label="Email"
+  placeholder="username"
+  prefix={<IconMail size={18} />}
+  suffix={<span>@example.com</span>}
+/>
+```
+
+### Clearable Input
+
+Add a clear button that appears when the input has a value.
+
+<Canvas of={TextInputStories.Clearable} />
+
+```jsx
+<TextInput 
+  label="Clearable Input"
+  placeholder="Type something to show clear button"
+  defaultValue="Clear me"
+  clearable={true}
+/>
+```
+
+### Password Input
+
+Password inputs automatically include a visibility toggle.
+
+<Canvas of={TextInputStories.Password} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+/>
+```
+
+## Layout Options
+
+### Standard Width
+
+By default, TextInput has a width defined by its container.
+
+<Canvas of={TextInputStories.Default} />
+
+### Full Width
+
+Set `fullWidth` to true to make the input take 100% of its container width.
+
+<Canvas of={TextInputStories.FullWidth} />
+
+```jsx
+<TextInput 
+  label="Full Width Input"
+  placeholder="This input takes full width"
+  fullWidth={true}
+/>
+```
+
+## Common Use Cases
+
+The most common input patterns are demonstrated in the `PrefixExamples` story:
+
+<Canvas of={TextInputStories.PrefixExamples} />
+
+```jsx
+import { IconSearch, IconMail } from '@tabler/icons-react';
+
+// Search input
+<TextInput 
+  label="Search"
+  placeholder="Search for something"
+  prefix={<IconSearch size={18} />}
+/>
+
+// Email input
+<TextInput 
+  label="Email"
+  placeholder="Enter your email address"
+  prefix={<IconMail size={18} />}
+/>
+
+// Amount input
+<TextInput 
+  label="Amount"
+  placeholder="0.00"
+  prefix="$"
+/>
+```
+
+### Password Input with Visibility Toggle
+
+<Canvas of={TextInputStories.Password} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+/>
+```
+
+## Internationalization and RTL Support
+
+The TextInput component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, line height adjustments, and directional text handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, TextInput } from 'tagaddod-design-react';
+import { IconSearch } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <TextInput 
+        label="البحث"
+        placeholder="ابحث هنا..."
+        prefix={<IconSearch />}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the TextInput component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font family
+2. **Icon Positioning**: Adjusts prefix/suffix icon placement for RTL text flow - prefix icons appear on the right side in RTL
+3. **Line Height**: Applies appropriate line height for Arabic text rendering (1.2 for Arabic vs 1.5 for English)
+4. **Text Alignment**: Switches text alignment to right for RTL languages
+5. **Placeholder Direction**: Ensures placeholder text renders correctly in RTL
+6. **Error Messages**: Positions error icons and messages appropriately for RTL reading flow
+7. **Clear Button**: Positions the clear button (when `clearable={true}`) on the correct side for RTL
+8. **Password Toggle**: Adjusts password visibility toggle positioning for RTL layouts
+
+### Directional Icon Handling
+
+**Important**: When using directional icons with TextInput (like arrow icons for search actions), choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight, IconSearch, IconSend } from '@tabler/icons-react';
+
+function SearchInput() {
+  const { isRTL } = useTheme();
+  
+  // Use appropriate action icon based on direction
+  const SubmitIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  
+  return (
+    <TextInput
+      label={isRTL ? 'البحث' : 'Search'}
+      placeholder={isRTL ? 'ابحث هنا...' : 'Search here...'}
+      prefix={<IconSearch />}
+      suffix={<SubmitIcon />}
+    />
+  );
+}
+```
+
+### RTL Best Practices for TextInput
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Test with Arabic placeholder text** to ensure proper text rendering and line height
+3. **Position icons appropriately** - prefix icons appear at the start of reading direction (right side in RTL)
+4. **Use `useTheme` hook** to access RTL state and adapt content accordingly
+5. **Consider input validation messages** - ensure error messages render properly in RTL with correct icon positioning
+6. **Test clearable inputs** - verify clear button appears on the correct side in RTL
+7. **Validate password inputs** - ensure visibility toggle button positions correctly in RTL
+8. **Use proper Arabic typography** - component automatically applies Arabic line height and font family
+
+### RTL Input Examples
+
+#### Basic RTL Input with Search
+
+<Canvas of={TextInputStories.RTLExample} />
+
+```jsx
+<div dir="rtl">
+  <TextInput 
+    label="البحث" 
+    placeholder="ابحث عن المنتجات..."
+    prefix={<IconSearch size={18} />}
+    clearable={true}
+  />
+</div>
+```
+
+#### RTL Email Input with Validation
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconMail, IconExclamationCircle } from '@tabler/icons-react';
+
+function RTLEmailInput() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <TextInput
+      label={isRTL ? 'البريد الإلكتروني' : 'Email Address'}
+      placeholder={isRTL ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
+      type="email"
+      prefix={<IconMail size={18} />}
+      errorMessage={isRTL ? 'البريد الإلكتروني غير صحيح' : 'Invalid email address'}
+      helpText={isRTL ? 'نحن لن نشارك بريدك مع أي شخص آخر' : 'We will never share your email with anyone else'}
+    />
+  );
+}
+```
+
+#### RTL Password Input
+
+```jsx
+function RTLPasswordInput() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <TextInput
+      label={isRTL ? 'كلمة المرور' : 'Password'}
+      placeholder={isRTL ? 'أدخل كلمة المرور' : 'Enter your password'}
+      type="password"
+      errorMessage={isRTL ? 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' : 'Password must be at least 8 characters long'}
+    />
+  );
+}
+```
+
+## Accessibility
+
+- Each input has a unique ID that connects it to its label, help text, and error message
+- Required fields use the `required` attribute (all fields are required by default unless marked optional)
+- Error states use `aria-invalid` and connect error messages with `aria-describedby`
+- Interactive elements (clear button, password toggle) have appropriate `aria-label` values
+- Focus states are clearly visible for keyboard navigation
+- Screen readers can access help text and error messages through proper ARIA attributes
+
+## Form Integration
+
+TextInput is built on Radix UI's Form components, making it suitable for form libraries and validation:
+
+```jsx
+import { Form } from '@radix-ui/react-form';
+
+<Form onSubmit={handleSubmit}>
+  <TextInput
+    name="email"
+    label="Email Address"
+    required={true}
+  />
+  <TextInput
+    name="password"
+    label="Password"
+    type="password"
+    required={true}
+  />
+  <button type="submit">Sign In</button>
+</Form>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The TextInput uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-font-family-primary` | Text font |
+| `--t-font-size-*` | Font sizes for different elements |
+| `--t-font-weight-*` | Font weights |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-fill-*` | Focus and error colors |
+| `--t-color-icon-*` | Icon colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-size-*` | Height dimensions |
+| `--t-duration-*` | Animation duration |
+| `--t-easing-*` | Animation timing |
+| `--t-line-height-*` | Line height for different languages |
+
+### Handling Different Input Types
+
+1. The component detects `type="password"` and renders a toggle button
+2. For other input types, standard HTML behavior applies
+3. Clearable inputs apply to all input types
+
+### Controlled vs Uncontrolled
+
+TextInput works in both controlled and uncontrolled modes:
+
+```jsx
+// Uncontrolled with default value
+<TextInput 
+  defaultValue="Initial value" 
+  name="myInput"
+/>
+
+// Controlled with state
+const [value, setValue] = useState('');
+<TextInput 
+  value={value} 
+  onChange={(e) => setValue(e.target.value)}
+/>
+```
+
+### Browser Support
+
+The TextInput component is compatible with all modern browsers and includes RTL language support.

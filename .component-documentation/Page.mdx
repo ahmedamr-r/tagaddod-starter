@@ -1,0 +1,46 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as PageStories from './Page.stories';
+
+<Meta of={PageStories} />
+
+# Page Component
+
+A comprehensive layout orchestrator that automatically handles responsive breakpoints.
+
+## Features
+
+- 5 Responsive Breakpoints
+- Smart Container Logic
+- Integrated Sidebar and TopBar
+- RTL Support
+- Mobile Optimization
+
+## Basic Usage
+
+<Canvas of={PageStories.Default} />
+
+## Responsive Breakpoints
+
+### XL Breakpoint
+
+<Canvas of={PageStories.XLBreakpoint} />
+
+### L Breakpoint
+
+<Canvas of={PageStories.LBreakpoint} />
+
+### MD Breakpoint
+
+<Canvas of={PageStories.MDBreakpoint} />
+
+### SM Breakpoint
+
+<Canvas of={PageStories.SMBreakpoint} />
+
+### XS Breakpoint
+
+<Canvas of={PageStories.XSBreakpoint} />
+
+## RTL Support
+
+<Canvas of={PageStories.RTLSupport} />

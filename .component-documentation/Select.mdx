@@ -1,0 +1,1335 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as SelectStories from './Select.stories';
+import { Select } from './Select';
+
+<Meta of={SelectStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 32-41)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 42-73)
+- Default implementation with options array
+- Label and placeholder setup
+
+📏 SIZES (Lines 75-113)
+- Micro Size (Lines 79-89): Compact contexts
+- Medium Size (Lines 91-101): Default size
+- Large Size (Lines 103-113): Prominent contexts
+
+⚡ STATES & FEATURES (Lines 115-199)
+- With Prefix Icon (Lines 118-140): Icon support with RTL
+- With Help Text (Lines 141-152): Supplementary information
+- Component States (Lines 154-199): Required/optional/error/disabled
+
+🔍 ADVANCED FEATURES (Lines 201-303)
+- Searchable Select (Lines 203-238): Long option lists with RTL search
+- Width Control (Lines 239-274): Min/max/full width options
+- Long Option Lists (Lines 276-286): Performance for many options
+- Disabled Options (Lines 288-303): Individual option control
+
+💼 REAL-WORLD EXAMPLES (Lines 305-375)
+- Contact Form (Lines 307-339): Multi-select form
+- User Profile Setup (Lines 341-375): Complex layout with grid
+
+🎛️ CONTROLLED VS UNCONTROLLED (Lines 377-405)
+- Uncontrolled (Lines 379-392): Default value approach
+- Controlled (Lines 394-405): Value prop approach
+
+♿ ACCESSIBILITY (Lines 407-466)
+- Keyboard Navigation (Lines 513-519): Space/Enter/Arrows/Escape
+- Screen Reader Support (Lines 521-527): ARIA attributes
+- Best Practices (Lines 529-558): Clear labels and errors
+- ARIA Attributes (Lines 560-566): Technical details
+
+🌍 INTERNATIONALIZATION & RTL SUPPORT (Lines 567-833)
+- Using with ThemeProvider (Lines 573-597): Full RTL setup with font switching
+- Automatic RTL Adjustments (Lines 599-609): 7-point feature list
+- RTL Basic Usage (Lines 611-626): Arabic implementation
+- RTL with Prefix Icons (Lines 628-659): Icon positioning and spacing
+- RTL Searchable Select (Lines 661-688): Search with RTL direction
+- RTL with Error States (Lines 690-711): Error and help text
+- RTL Width Control (Lines 713-740): Layout and responsive
+- Directional Icon Handling (Lines 742-767): Custom directional icons
+- RTL in Modal Contexts (Lines 769-800): Modal integration
+- RTL Best Practices (Lines 802-810): 7-point implementation guide
+- RTL Feature Checklist (Lines 812-832): Technical implementation details
+
+🎨 STYLING & CUSTOMIZATION (Lines 834-887)
+- CSS Variables (Lines 836-849): Design tokens table
+- Custom Styling (Lines 851-872): Classes and CSS
+- Theme Support (Lines 874-887): Tagaddod/GreenPan themes
+
+🔧 ADVANCED USAGE PATTERNS (Lines 889-1026)
+- Form Integration (Lines 891-918): React Hook Form
+- Dynamic Options (Lines 920-939): Async loading
+- Grouped Options (Lines 941-957): Visual grouping
+- Using in Modals (Lines 959-1026): Z-index management and portal
+
+📋 API REFERENCE (Lines 1028-1120)
+- Select Props Interface (Lines 1030-1104): Complete prop list
+- SelectOption Interface (Lines 1106-1110): Option structure
+- Constants (Lines 1112-1120): Available sizes
+
+🧪 TESTING (Lines 1122-1234)
+- Unit Testing Examples (Lines 1124-1203): Render/interaction tests
+- Integration Testing (Lines 1205-1234): Form submission tests
+
+⚡ PERFORMANCE & SUPPORT (Lines 1236-1255)
+- Performance Considerations (Lines 1236-1242): Optimization notes
+- Browser Support (Lines 1244-1255): Compatibility table
+
+🚀 RECENT IMPROVEMENTS (Lines 1257-1280)
+- Layout Optimization (Lines 1261-1265): Grouped prefix/value
+- Searchable Functionality (Lines 1266-1270): RTL-aware search
+- Internationalization (Lines 1271-1275): Localized labels
+- Technical Improvements (Lines 1276-1280): Portal direction
+
+📈 MIGRATION GUIDE (Lines 1282-1328)
+- From HTML Select (Lines 1284-1301): Basic migration
+- From Other Libraries (Lines 1303-1322): Ant Design example
+- Upgrading (Lines 1324-1328): Version upgrade steps
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic select: Lines 147-158
+- With prefix icon: Lines 225-232
+- Searchable: Lines 310-328
+- RTL with ThemeProvider: Lines 577-597
+- RTL Basic Usage: Lines 614-626
+- RTL Searchable: Lines 664-681
+- In modal: Lines 804-821
+- Form integration: Lines 891-918
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Select component capabilities and patterns.
+
+
+# Select Component
+
+The Select component provides a dropdown interface for users to choose one option from a list. It's built on top of Radix UI's Select primitive and follows the Tagaddod Design System conventions for consistency and accessibility.
+
+## Overview
+
+The Select component is ideal when you have 4 or more options to avoid cluttering the interface with radio buttons. It supports various states (hover, focus, error, disabled), multiple sizes, and full RTL support for Arabic interfaces. Fields are treated as required by default, with optional fields explicitly marked when needed.
+
+**Key Features:**
+- Built with Radix UI Select primitives for accessibility
+- Support for both controlled and uncontrolled modes
+- Multiple size variants (micro, medium, large)
+- Full RTL support with proper text rendering and icon positioning
+- Error states with validation messages
+- Help text support
+- Fields required by default, optional when specified
+- Prefix icon support with proper RTL handling
+- Searchable select functionality with RTL-aware search input
+- Keyboard navigation and screen reader support
+- Theme support for both Tagaddod and GreenPan brands
+- Width control with maxWidth and minWidth props
+- Optimized layout with grouped prefix/value positioning
+- Automatic z-index management with real-time modal detection
+- Portal container support for complex layouts and modal integration
+
+## Import
+
+```jsx
+import { Select } from 'tagaddod-design-react';
+```
+
+## Props
+
+<ArgTypes of={Select} />
+
+## Basic Usage
+
+<Canvas of={SelectStories.Default} />
+
+```jsx
+// Basic select with options
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+
+<Select
+  label="Favorite Fruit"
+  placeholder="Select a fruit..."
+  options={options}
+/>
+```
+
+## Usage Examples
+
+The Select component displays a clean interface with labels above the field. All fields are required by default unless explicitly marked as optional.
+
+<Canvas of={SelectStories.Default} />
+
+```jsx
+<Select
+  label="Country"
+  placeholder="Select your country..."
+  options={countryOptions}
+/>
+```
+
+## Sizes
+
+The Select component comes in three sizes to match different interface contexts.
+
+### Micro Size
+
+<Canvas of={SelectStories.Sizes} />
+
+```jsx
+<Select
+  size="micro"
+  label="Size"
+  options={options}
+/>
+```
+
+### Medium Size (Default)
+
+<Canvas of={SelectStories.Sizes} />
+
+```jsx
+<Select
+  size="medium"
+  label="Size"
+  options={options}
+/>
+```
+
+### Large Size
+
+<Canvas of={SelectStories.Sizes} />
+
+```jsx
+<Select
+  size="large"
+  label="Size"
+  options={options}
+/>
+```
+
+## States
+
+
+### With Prefix Icon
+
+<Canvas of={SelectStories.PrefixAndSearch} />
+
+The Select component supports prefix icons that are properly positioned in both LTR and RTL layouts. The icon is grouped with the value text and maintains a consistent 4px gap.
+
+```jsx
+import { IconUser } from '@tabler/icons-react';
+
+<Select
+  label="User Type"
+  prefix={<IconUser size={18} />}
+  placeholder="Select user type..."
+  options={userTypeOptions}
+/>
+```
+
+**Prefix Icon Features:**
+- Automatically positions correctly in RTL mode (icon appears before text in reading order)
+- Maintains consistent 4px spacing between icon and text
+- Supports any React node as prefix (icons, text, etc.)
+- Properly grouped with value text for optimal layout
+
+### With Help Text
+
+<Canvas of={SelectStories.States} />
+
+```jsx
+<Select
+  label="Country"
+  placeholder="Select your country..."
+  helpText="This helps us provide location-specific features."
+  options={countryOptions}
+/>
+```
+
+### Component States
+
+<Canvas of={SelectStories.States} />
+
+The States story demonstrates all component states. Remember that fields are required by default without any visual indicators:
+
+```jsx
+// Default field (required by default - no asterisk needed)
+<Select
+  label="Selection"
+  placeholder="Please select an option..."
+  options={options}
+/>
+
+// Optional field (explicitly marked)
+<Select
+  label="Optional Selection"
+  placeholder="Select if you want..."
+  optional
+  options={options}
+/>
+
+// Error state
+<Select
+  label="Field with Error"
+  placeholder="Please select an option..."
+  errorMessage="This field is required."
+  options={options}
+/>
+
+// Disabled state
+<Select
+  label="Disabled Select"
+  placeholder="Cannot select..."
+  disabled
+  options={options}
+/>
+
+// With help text
+<Select
+  label="Field with Help"
+  placeholder="Select an option..."
+  helpText="This is helpful information about the field."
+  options={options}
+/>
+```
+
+## Advanced Features
+
+### Searchable Select
+
+<Canvas of={SelectStories.PrefixAndSearch} />
+
+The Select component supports searchable functionality for long option lists. The search input automatically adapts to RTL/LTR text direction.
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+<Select
+  label="Search Countries"
+  placeholder="Search countries..."
+  searchable
+  searchPlaceholder="Type to search..."
+  options={countryOptions}
+/>
+
+// Searchable with prefix icon
+<Select
+  label="Search Users"
+  prefix={<IconSearch size={16} />}
+  placeholder="Search users..."
+  searchable
+  searchPlaceholder="Type to filter users..."
+  options={userOptions}
+/>
+```
+
+**Searchable Features:**
+- Real-time filtering as you type
+- Search input with proper RTL support (search icon positions correctly)
+- Custom search placeholder text
+- Combines with prefix icons seamlessly
+- Keyboard navigation works with filtered results
+- "No options found" message when no matches
+
+### Width Control
+
+<Canvas of={SelectStories.WidthControl} />
+
+```jsx
+// Default width
+<Select
+  label="Default Width"
+  placeholder="Default width..."
+  options={options}
+/>
+
+// Minimum width
+<Select
+  label="Min Width (200px)"
+  placeholder="Has minimum width..."
+  minWidth={200}
+  options={options}
+/>
+
+// Maximum width
+<Select
+  label="Max Width (300px)"
+  placeholder="Has maximum width..."
+  maxWidth={300}
+  options={options}
+/>
+
+// Full width
+<Select
+  label="Full Width Select"
+  placeholder="Takes full container width..."
+  fullWidth
+  options={options}
+/>
+```
+
+### Long Option Lists
+
+<Canvas of={SelectStories.AdvancedFeatures} />
+
+```jsx
+<Select
+  label="Many Options"
+  placeholder="Select from many options..."
+  options={longOptionsList}
+/>
+```
+
+### Disabled Options
+
+<Canvas of={SelectStories.AdvancedFeatures} />
+
+```jsx
+const optionsWithDisabled = [
+  { value: 'available1', label: 'Available Option 1' },
+  { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
+  { value: 'available2', label: 'Available Option 2' },
+];
+
+<Select
+  label="Select with Some Disabled Options"
+  options={optionsWithDisabled}
+/>
+```
+
+## Real-World Examples
+
+### Contact Form
+
+<Canvas of={SelectStories.ContactForm} />
+
+```jsx
+const ContactForm = () => (
+  <div style={{ maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Select
+      label="How did you hear about us?"
+      placeholder="Select one..."
+      options={[
+        { value: 'search', label: 'Search Engine' },
+        { value: 'social', label: 'Social Media' },
+        { value: 'friend', label: 'Friend/Colleague' },
+        { value: 'advertisement', label: 'Advertisement' },
+        { value: 'other', label: 'Other' },
+      ]}
+      helpText="This helps us understand our reach better."
+    />
+    
+    <Select
+      label="Priority Level"
+      options={[
+        { value: 'low', label: 'Low' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'high', label: 'High' },
+        { value: 'urgent', label: 'Urgent' },
+      ]}
+      required
+    />
+  </div>
+);
+```
+
+### User Profile Setup
+
+<Canvas of={SelectStories.UserProfile} />
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+const UserProfile = () => (
+  <div style={{ maxWidth: '500px' }}>
+    <Select
+      label="Country"
+      size="large"
+      prefix={<IconSearch size={20} />}
+      placeholder="Search and select your country..."
+      options={countryOptions}
+      fullWidth
+      helpText="We'll use this to show relevant content and pricing."
+    />
+    
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '20px' }}>
+      <Select
+        label="Time Zone"
+        options={timezoneOptions}
+        optional
+      />
+      
+      <Select
+        label="Language"
+        options={languageOptions}
+        defaultValue="en"
+      />
+    </div>
+  </div>
+);
+```
+
+## Controlled vs Uncontrolled
+
+### Uncontrolled (Default Value)
+
+```jsx
+const [selectedValue, setSelectedValue] = useState();
+
+<Select
+  label="Uncontrolled Select"
+  defaultValue="banana"
+  options={options}
+  onValueChange={(value) => {
+    console.log('Selected:', value);
+  }}
+/>
+```
+
+### Controlled (Value Prop)
+
+```jsx
+const [selectedValue, setSelectedValue] = useState('');
+
+<Select
+  label="Controlled Select"
+  value={selectedValue}
+  options={options}
+  onValueChange={setSelectedValue}
+/>
+```
+
+## Accessibility
+
+<Canvas of={SelectStories.States} />
+
+The Select component is built with accessibility in mind, using Radix UI's Select primitive which provides:
+
+### Keyboard Navigation
+
+- **Space/Enter**: Opens the select dropdown
+- **Arrow Up/Down**: Navigate through options
+- **Escape**: Closes the dropdown
+- **Tab**: Moves focus to next focusable element
+- **Shift+Tab**: Moves focus to previous focusable element
+
+### Screen Reader Support
+
+- Proper ARIA attributes are automatically applied
+- Selected values are announced correctly
+- Error states are properly communicated
+- Required fields are indicated to screen readers
+
+### Best Practices
+
+```jsx
+// Always provide clear labels (fields are required by default)
+<Select
+  label="Country of Residence"
+  options={countryOptions}
+/>
+
+// Mark optional fields explicitly
+<Select
+  label="Preferred Contact Method"
+  helpText="How would you like us to reach you?"
+  options={contactOptions}
+  optional
+/>
+
+// Provide clear error messages
+<Select
+  label="Selection Required"
+  errorMessage="Please select an option to continue."
+  options={options}
+/>
+
+// Use descriptive option labels
+const options = [
+  { value: 'email', label: 'Email (Recommended)' },
+  { value: 'phone', label: 'Phone Call' },
+  { value: 'sms', label: 'Text Message' },
+];
+```
+
+### ARIA Attributes Used
+
+- `aria-invalid`: Indicates error states
+- `aria-describedby`: Links to help text and error messages
+- `aria-required`: Indicates required fields
+- `role`: Proper semantic roles for dropdown components
+
+## Internationalization and RTL Support
+
+<Canvas of={SelectStories.RTLSupport} />
+
+The Select component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper dropdown alignment, text direction handling, and directional icon positioning for Arabic interfaces.
+
+### Using with ThemeProvider
+
+For full RTL support with automatic font switching and proper text rendering, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Select } from 'tagaddod-design-react';
+import { IconUser } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Select 
+        label="نوع المستخدم"
+        placeholder="اختر نوع المستخدم..."
+        prefix={<IconUser size={18} />}
+        options={[
+          { value: "admin", label: "مدير النظام" },
+          { value: "user", label: "مستخدم عادي" },
+          { value: "guest", label: "زائر" }
+        ]}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider or document direction, the Select component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font family
+2. **Line Height Optimization**: Applies proper line height for Arabic text rendering (1.2 vs 1.5 for English)
+3. **Dropdown Positioning**: Positions dropdown menu correctly for RTL reading direction
+4. **Icon Positioning**: Adjusts prefix icons and dropdown chevron placement for RTL layout
+5. **Text Alignment**: Switches text alignment to right for RTL languages
+6. **Search Input Direction**: Ensures searchable dropdown input adapts to RTL automatically
+7. **Localized Labels**: Shows "اختياري" instead of "(Optional)" for optional fields
+
+### RTL Basic Usage
+
+```jsx
+<div dir="rtl">
+  <Select
+    label="اختر الفاكهة المفضلة"
+    placeholder="اختر فاكهة..."
+    options={[
+      { value: 'apple', label: 'تفاح' },
+      { value: 'banana', label: 'موز' },
+      { value: 'cherry', label: 'كرز' },
+      { value: 'orange', label: 'برتقال' }
+    ]}
+  />
+</div>
+```
+
+### RTL with Prefix Icons
+
+```jsx
+import { IconUser, IconBuilding, IconMail } from '@tabler/icons-react';
+
+<div dir="rtl">
+  <Select
+    label="نوع المستخدم"
+    prefix={<IconUser size={18} />}
+    placeholder="اختر نوع المستخدم..."
+    options={[
+      { value: "admin", label: "مدير النظام" },
+      { value: "user", label: "مستخدم عادي" },
+      { value: "guest", label: "زائر" }
+    ]}
+  />
+  
+  <Select
+    label="نوع الشركة"
+    prefix={<IconBuilding size={18} />}
+    placeholder="اختر نوع الشركة..."
+    options={companyTypes}
+    optional
+  />
+</div>
+```
+
+**Prefix Icon RTL Features:**
+- Icons automatically position before text in RTL reading order
+- Maintains consistent 4px spacing between icon and text
+- Works with all icon types (Tabler icons, custom SVGs, etc.)
+- Properly grouped with value text for optimal layout
+
+### RTL Searchable Select
+
+```jsx
+import { IconSearch, IconMapPin } from '@tabler/icons-react';
+
+<div dir="rtl">
+  <Select
+    label="البحث في البلدان"
+    prefix={<IconMapPin size={16} />}
+    placeholder="البحث في البلدان..."
+    searchable
+    searchPlaceholder="اكتب اسم البلد للبحث..."
+    options={[
+      { value: 'sa', label: 'المملكة العربية السعودية' },
+      { value: 'ae', label: 'الإمارات العربية المتحدة' },
+      { value: 'eg', label: 'جمهورية مصر العربية' },
+      { value: 'jo', label: 'المملكة الأردنية الهاشمية' }
+    ]}
+  />
+</div>
+```
+
+**Searchable RTL Features:**
+- Search input automatically adapts to RTL text direction
+- Search icon positions correctly (right side in RTL)
+- Real-time filtering works with Arabic text
+- "No options found" message respects RTL layout
+- Keyboard navigation works properly in RTL context
+
+### RTL with Error States
+
+<Canvas of={SelectStories.RTLSupport} />
+
+```jsx
+<div dir="rtl">
+  <Select
+    label="حقل مطلوب"
+    placeholder="يرجى اختيار خيار..."
+    errorMessage="هذا الحقل مطلوب لإتمام العملية."
+    options={arabicOptions}
+  />
+  
+  <Select
+    label="حقل اختياري مع مساعدة"
+    placeholder="اختر إذا رغبت..."
+    helpText="هذا الحقل اختياري ويمكن تركه فارغاً."
+    optional
+    options={arabicOptions}
+  />
+</div>
+```
+
+### RTL Width Control and Layout
+
+```jsx
+<div dir="rtl" style={{ padding: '20px' }}>
+  <Select
+    label="عرض كامل"
+    placeholder="يأخذ العرض الكامل للحاوي..."
+    fullWidth
+    options={options}
+  />
+  
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '20px' }}>
+    <Select
+      label="عرض محدود"
+      placeholder="عرض أدنى 200px..."
+      minWidth={200}
+      options={options}
+    />
+    
+    <Select
+      label="عرض أقصى"
+      placeholder="عرض أقصى 300px..."
+      maxWidth={300}
+      options={options}
+    />
+  </div>
+</div>
+```
+
+### Directional Icon Handling
+
+**Important**: When using directional icons with Select (like navigation arrows), the component handles most iconography automatically, but for custom directional icons, consider the reading direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconChevronLeft, IconChevronRight, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalSelect() {
+  const { isRTL } = useTheme();
+  
+  // For custom directional icons in prefix
+  const getDirectionalIcon = () => {
+    return isRTL ? <IconArrowLeft size={16} /> : <IconArrowRight size={16} />;
+  };
+  
+  return (
+    <Select
+      label={isRTL ? 'انتقال إلى الصفحة التالية' : 'Navigate to next page'}
+      placeholder={isRTL ? 'اختر الصفحة...' : 'Choose page...'}
+      prefix={getDirectionalIcon()}
+      options={pageOptions}
+    />
+  );
+}
+```
+
+### RTL in Modal Contexts
+
+RTL Select components work seamlessly in modal contexts with proper z-index management:
+
+```jsx
+import { Modal, Select } from 'tagaddod-design-react';
+
+const RTLModalWithSelect = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div dir="rtl">
+      <Modal 
+        open={isOpen} 
+        onOpenChange={setIsOpen}
+        trigger={<Button>فتح النافذة المنبثقة</Button>}
+        title="اختيار الخيارات"
+      >
+        <div style={{ padding: '16px' }}>
+          <Select
+            label="اختر خياراً من القائمة"
+            placeholder="اختر خياراً..."
+            searchable
+            searchPlaceholder="ابحث في الخيارات..."
+            options={arabicOptions}
+          />
+        </div>
+      </Modal>
+    </div>
+  );
+};
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Test with long Arabic labels** to ensure proper text wrapping and spacing
+3. **Verify dropdown positioning** doesn't get cut off in RTL layouts
+4. **Use semantically appropriate icons** that make sense in RTL context
+5. **Consider option ordering** - maintain logical order that follows RTL reading patterns
+6. **Test searchable functionality** with Arabic text to ensure proper filtering
+7. **Validate form behavior** in RTL context, especially error message positioning
+
+### RTL Feature Checklist
+
+When implementing RTL Select components, ensure:
+
+- [ ] **Font Family**: Arabic text uses Tajawal font automatically
+- [ ] **Line Height**: Arabic text has proper line height (1.2) for readability
+- [ ] **Text Alignment**: Text aligns to the right in RTL mode
+- [ ] **Icon Positioning**: Prefix icons appear before text in reading order
+- [ ] **Dropdown Direction**: Dropdown content respects RTL text direction
+- [ ] **Search Input**: Searchable dropdown input adapts to RTL direction
+- [ ] **Optional Labels**: Display "اختياري" instead of "(Optional)"
+- [ ] **Error Messages**: Error text aligns properly in RTL layout
+- [ ] **Help Text**: Assistance text follows RTL alignment rules
+- [ ] **Modal Integration**: Works correctly when used inside RTL modals
+
+**RTL Technical Implementation:**
+- Automatic detection via `document.dir` or `document.documentElement.dir`
+- Dynamic line height adjustment using CSS custom properties
+- Portal container direction inheritance for dropdown positioning
+- Real-time direction updates without requiring page refresh
+- All component states (error, disabled, optional) work correctly in RTL mode
+
+## Styling and Customization
+
+### CSS Variables
+
+The Select component uses the following design tokens:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `--t-color-surface-primary` | Background color | Theme-dependent |
+| `--t-color-border-secondary` | Border color | Theme-dependent |
+| `--t-color-text-primary` | Text color | Theme-dependent |
+| `--t-color-fill-brand` | Focus border color | Theme-dependent |
+| `--t-space-*` | Spacing values | Token values |
+| `--t-font-family-primary` | Font family | Token value |
+| `--t-border-radius-200` | Border radius | Token value |
+
+### Custom Styling
+
+```jsx
+// Using className for additional styling
+<Select
+  className="custom-select"
+  label="Custom Styled Select"
+  options={options}
+/>
+```
+
+```css
+/* Custom CSS */
+.custom-select {
+  /* Custom styles that work with design tokens */
+  --t-color-fill-brand: #custom-brand-color;
+}
+
+/* Target specific parts if needed */
+.custom-select [data-radix-select-trigger] {
+  /* Custom trigger styles */
+}
+```
+
+### Theme Support
+
+The component automatically adapts to both Tagaddod and GreenPan themes:
+
+```jsx
+// The component will automatically use the correct theme
+<ThemeProvider theme="tagaddod">
+  <Select label="Tagaddod Theme" options={options} />
+</ThemeProvider>
+
+<ThemeProvider theme="greenpan">
+  <Select label="GreenPan Theme" options={options} />
+</ThemeProvider>
+```
+
+## Advanced Usage Patterns
+
+### Form Integration
+
+```jsx
+import { useForm, Controller } from 'react-hook-form';
+
+const MyForm = () => {
+  const { control, handleSubmit } = useForm();
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="country"
+        control={control}
+        rules={{ required: 'Please select a country' }}
+        render={({ field, fieldState }) => (
+          <Select
+            label="Country"
+            value={field.value}
+            onValueChange={field.onChange}
+            options={countryOptions}
+            errorMessage={fieldState.error?.message}
+          />
+        )}
+      />
+    </form>
+  );
+};
+```
+
+### Dynamic Options
+
+```jsx
+const [options, setOptions] = useState([]);
+const [loading, setLoading] = useState(false);
+
+const loadOptions = async () => {
+  setLoading(true);
+  const data = await fetchOptions();
+  setOptions(data);
+  setLoading(false);
+};
+
+<Select
+  label="Dynamic Options"
+  options={options}
+  disabled={loading}
+  placeholder={loading ? 'Loading...' : 'Select an option...'}
+/>
+```
+
+### Grouped Options
+
+```jsx
+// While this component doesn't support groups natively,
+// you can achieve grouping by organizing your options
+const organizedOptions = [
+  // Fruits group
+  { value: 'fruits-divider', label: '--- Fruits ---', disabled: true },
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  
+  // Vegetables group  
+  { value: 'vegetables-divider', label: '--- Vegetables ---', disabled: true },
+  { value: 'carrot', label: 'Carrot' },
+  { value: 'lettuce', label: 'Lettuce' },
+];
+```
+
+### Using Select in Modals
+
+The Select component automatically detects when it's used inside a modal and adjusts its z-index accordingly to ensure the dropdown appears above the modal overlay.
+
+```jsx
+import { Modal, Select } from 'tagaddod-design-react';
+
+const ModalWithSelect = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
+
+  return (
+    <>
+      <Modal 
+        open={isOpen} 
+        onOpenChange={setIsOpen}
+        trigger={<Button>Open Modal with Select</Button>}
+        title="Select Options"
+      >
+        <div style={{ padding: '16px' }}>
+          <Select
+            label="Choose an option"
+            placeholder="Select an option..."
+            options={options}
+            value={selectedValue}
+            onValueChange={setSelectedValue}
+          />
+        </div>
+      </Modal>
+    </>
+  );
+};
+```
+
+**Modal Integration Features:**
+- **Automatic Z-Index Management**: The Select dropdown automatically uses maximum z-index (`2147483647`) when inside a modal to ensure it appears above modal overlays
+- **Portal Container Support**: Use the `portalContainer` prop to specify where the dropdown should render
+- **Modal Detection**: Uses `MutationObserver` to automatically detect when inside a Radix Dialog, role="dialog", or data-modal element
+- **Real-Time Detection**: Dynamically adjusts z-index when modals are opened/closed without requiring page refresh
+- **No Configuration Required**: Works out of the box without any additional setup
+
+#### Custom Portal Container
+
+For complex layouts or when you need more control over dropdown rendering:
+
+```jsx
+const ModalWithCustomPortal = () => {
+  const [portalContainer, setPortalContainer] = useState(null);
+
+  return (
+    <Modal open={isOpen} onOpenChange={setIsOpen}>
+      <div ref={setPortalContainer}>
+        <Select
+          label="Custom Portal Select"
+          options={options}
+          portalContainer={portalContainer}
+        />
+      </div>
+    </Modal>
+  );
+};
+```
+
+## Component API Reference
+
+### Select Props
+
+```typescript
+interface SelectProps {
+  /** Text label for the select */
+  label?: string;
+  
+
+  
+  /** Help text displayed below the select */
+  helpText?: string;
+  
+  /** Error message displayed below the select */
+  errorMessage?: string;
+  
+  /** Size of the select field */
+  size?: 'micro' | 'medium' | 'large';
+  
+  /** Whether the select should take full width of its container */
+  fullWidth?: boolean;
+  
+  /** Whether to hide the label visually (still accessible to screen readers) */
+  hideLabel?: boolean;
+  
+  /** Mark the field as optional, displaying "(Optional)" or "اختياري" text next to label */
+  optional?: boolean;
+  
+  /** Placeholder text when no option is selected */
+  placeholder?: string;
+  
+  /** Array of options to display in the select */
+  options: SelectOption[];
+  
+  /** Current selected value */
+  value?: string;
+  
+  /** Default selected value (uncontrolled) */
+  defaultValue?: string;
+  
+  /** Callback when selection changes */
+  onValueChange?: (value: string) => void;
+  
+  /** Whether the select is disabled */
+  disabled?: boolean;
+  
+  /** Whether the field is required (true by default) */
+  required?: boolean;
+  
+  /** Maximum width of the select component */
+  maxWidth?: string | number;
+  
+  /** Minimum width of the select component */
+  minWidth?: string | number;
+  
+  /** Content to display before the select value (icon or text) */
+  prefix?: React.ReactNode;
+  
+  /** Whether to show search input for long lists */
+  searchable?: boolean;
+  
+  /** Placeholder text for search input */
+  searchPlaceholder?: string;
+  
+  /** Additional class names */
+  className?: string;
+  
+  /** ID for the select */
+  id?: string;
+  
+  /** Name attribute for form submission */
+  name?: string;
+  
+  /** Portal container for the dropdown (useful for modals) */
+  portalContainer?: HTMLElement | null;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+```
+
+### Constants
+
+```jsx
+import { selectSizes } from 'tagaddod-design-react';
+
+// Available sizes: ['micro', 'medium', 'large']
+console.log(selectSizes);
+```
+
+## Testing
+
+### Unit Testing Examples
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Select } from 'tagaddod-design-react';
+
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+];
+
+test('renders select with label', () => {
+  render(
+    <Select
+      label="Favorite Fruit"
+      options={options}
+    />
+  );
+  
+  expect(screen.getByText('Favorite Fruit')).toBeInTheDocument();
+});
+
+test('displays placeholder when no value selected', () => {
+  render(
+    <Select
+      label="Fruit"
+      placeholder="Choose a fruit..."
+      options={options}
+    />
+  );
+  
+  expect(screen.getByText('Choose a fruit...')).toBeInTheDocument();
+});
+
+test('calls onValueChange when option is selected', async () => {
+  const handleChange = jest.fn();
+  const user = userEvent.setup();
+  
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      onValueChange={handleChange}
+    />
+  );
+  
+  // Open dropdown
+  await user.click(screen.getByRole('combobox'));
+  
+  // Select option
+  await user.click(screen.getByText('Apple'));
+  
+  expect(handleChange).toHaveBeenCalledWith('apple');
+});
+
+test('shows error message when provided', () => {
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      errorMessage="This is required"
+    />
+  );
+  
+  expect(screen.getByText('This is required')).toBeInTheDocument();
+});
+
+test('disables select when disabled prop is true', () => {
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      disabled
+    />
+  );
+  
+  expect(screen.getByRole('combobox')).toBeDisabled();
+});
+```
+
+### Integration Testing
+
+```jsx
+test('works within a form', async () => {
+  const handleSubmit = jest.fn();
+  
+  render(
+    <form onSubmit={handleSubmit}>
+      <Select
+        name="fruit"
+        label="Favorite Fruit"
+        options={options}
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+  
+  // Submit form without selection should prevent submission
+  fireEvent.click(screen.getByText('Submit'));
+  expect(handleSubmit).not.toHaveBeenCalled();
+  
+  // Select option and submit
+  await userEvent.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByText('Apple'));
+  fireEvent.click(screen.getByText('Submit'));
+  
+  expect(handleSubmit).toHaveBeenCalled();
+});
+```
+
+## Performance Considerations
+
+- The component uses Radix UI's Select primitive which is optimized for performance
+- Virtual scrolling is handled automatically for long option lists
+- Re-renders are minimized through proper prop checking
+- CSS-in-JS is avoided in favor of CSS modules for better performance
+
+## Browser Support
+
+- **Chrome**: 88+
+- **Firefox**: 78+
+- **Safari**: 14+
+- **Edge**: 88+
+
+**Features used:**
+- CSS Custom Properties (CSS Variables)
+- CSS Grid and Flexbox
+- Modern JavaScript (ES2020)
+- Radix UI primitives
+
+## Recent Improvements
+
+This Select component has been enhanced with several key improvements:
+
+### Layout Optimization
+- **Grouped Prefix/Value Layout**: Prefix icons and text are now properly grouped together with consistent 4px spacing
+- **Improved RTL Support**: Prefix icons automatically position correctly in RTL mode (before text in reading order)
+- **Better Text Alignment**: Enhanced text positioning and alignment for both LTR and RTL layouts
+
+### Searchable Functionality
+- **RTL-Aware Search**: Search input within dropdown properly adapts to document direction
+- **Consistent Icon Positioning**: Search icons position correctly (left in LTR, right in RTL)
+- **Seamless Integration**: Search functionality works seamlessly with prefix icons
+
+### Internationalization
+- **Localized Optional Labels**: Shows "اختياري" in RTL mode instead of "(Optional)"
+- **Enhanced Arabic Support**: Improved font rendering and spacing for Arabic text
+- **Direction-Aware Components**: All sub-components properly inherit text direction
+
+### Technical Improvements
+- **Portal Direction Inheritance**: Dropdown content properly inherits document direction
+- **Re-render Optimization**: Components correctly update when direction changes
+- **Accessibility Enhancements**: Improved screen reader support for RTL layouts
+
+## Migration Guide
+
+### From HTML Select
+
+```jsx
+// HTML select
+<select name="fruit">
+  <option value="apple">Apple</option>
+  <option value="banana">Banana</option>
+</select>
+
+// Tagaddod Select
+<Select
+  name="fruit"
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+  ]}
+/>
+```
+
+### From Other Libraries
+
+**From Ant Design:**
+```jsx
+// Ant Design
+<Select placeholder="Select option" onChange={handleChange}>
+  <Option value="apple">Apple</Option>
+  <Option value="banana">Banana</Option>
+</Select>
+
+// Tagaddod
+<Select
+  placeholder="Select option"
+  onValueChange={handleChange}
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+  ]}
+/>
+```
+
+### Upgrading
+
+When upgrading from previous versions:
+1. Update import statements to use the new package name
+2. Replace any deprecated props with their new equivalents
+3. Update option data structure if using object-based options
+4. Test RTL support if supporting Arabic interfaces

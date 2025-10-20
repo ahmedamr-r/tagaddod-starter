@@ -1,0 +1,687 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as AspectRatioStories from './AspectRatio.stories';
+import { AspectRatio } from './AspectRatio';
+
+<Meta of={AspectRatioStories} />
+
+<
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-43)
+- Default 1:1 ratio implementation
+- Basic content styling
+
+📐 COMMON RATIOS (Lines 45-85)
+- 1:1 Square (Lines 47-55)
+- 16:9 Widescreen (Lines 57-65): Video/media content
+- 4:3 Standard (Lines 67-75): Traditional format
+- 2:3 Portrait (Lines 77-85): Vertical content
+
+💼 USE CASES (Lines 87-167)
+- Images with Consistent Ratios (Lines 89-105)
+- Cards with Media (Lines 107-134): Card layouts
+- Videos and Embeds (Lines 136-151): YouTube, video content
+- Maps (Lines 153-167): Embedded maps
+
+🔧 CUSTOMIZATION (Lines 169-185)
+- Custom classes and styling
+- Container styling options
+
+♿ ACCESSIBILITY (Lines 187-191)
+- Alt text requirements
+- ARIA attributes for content
+
+⚙️ TECHNICAL DETAILS (Lines 193-223)
+- CSS Variables (Lines 195-203)
+- Browser Compatibility (Lines 205-212): Modern vs legacy
+- Implementation Details (Lines 214-223): Runtime detection
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic square: Line 30 (ratio={1})
+- Widescreen: Line 62 (ratio={16/9})
+- With image: Lines 94-104
+- Card layout: Lines 112-133
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all AspectRatio component capabilities and patterns.
+>
+
+# AspectRatio Component
+
+The AspectRatio component maintains a consistent width-to-height ratio for its children, regardless of the container's dimensions.
+
+## Overview
+
+The AspectRatio component is useful for maintaining consistent proportions for content like images, videos, maps, or embedded content. It ensures that content maintains its shape as its container resizes.
+
+## Import
+
+```jsx
+import { AspectRatio } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={AspectRatio} />
+
+## Basic Usage
+
+<Canvas of={AspectRatioStories.Default} />
+
+```jsx
+<AspectRatio ratio={1}>
+  <div style={{
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'var(--t-color-fill-brand)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--t-color-text-on-fill)',
+  }}>
+    1:1
+  </div>
+</AspectRatio>
+```
+
+## Common Ratios
+
+### 1:1 (Square)
+
+<Canvas of={AspectRatioStories.Default} />
+
+```jsx
+<AspectRatio ratio={1}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 16:9 (Widescreen)
+
+<Canvas of={AspectRatioStories.Widescreen} />
+
+```jsx
+<AspectRatio ratio={16/9}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 4:3 (Standard)
+
+<Canvas of={AspectRatioStories.WithImage} />
+
+```jsx
+<AspectRatio ratio={4/3}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 2:3 (Portrait)
+
+<Canvas of={AspectRatioStories.Portrait} />
+
+```jsx
+<AspectRatio ratio={2/3}>
+  {/* Content */}
+</AspectRatio>
+```
+
+## Use Cases
+
+### Images with Consistent Ratios
+
+<Canvas of={AspectRatioStories.WithImage} />
+
+```jsx
+<AspectRatio ratio={4/3}>
+  <img 
+    src="https://placekitten.com/800/600" 
+    alt="A kitten" 
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      objectFit: 'cover' 
+    }} 
+  />
+</AspectRatio>
+```
+
+### Cards with Media
+
+<Canvas of={AspectRatioStories.CardExample} />
+
+```jsx
+<div style={{
+  maxWidth: '400px',
+  border: '1px solid var(--t-color-border-primary)',
+  borderRadius: 'var(--t-border-radius-300)',
+  overflow: 'hidden'
+}}>
+  <AspectRatio ratio={16/9}>
+    <img 
+      src="https://placekitten.com/1600/900" 
+      alt="A cute kitten" 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        objectFit: 'cover' 
+      }} 
+    />
+  </AspectRatio>
+  <div style={{ padding: 'var(--t-space-300)' }}>
+    <h3>Card with AspectRatio</h3>
+    <p>This card uses the AspectRatio component to maintain a consistent 16:9 ratio for the image.</p>
+  </div>
+</div>
+```
+
+### Videos and Embeds
+
+```jsx
+<AspectRatio ratio={16/9}>
+  <iframe 
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+    title="Video"
+    allowFullScreen
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      border: 'none' 
+    }}
+  />
+</AspectRatio>
+```
+
+### Maps
+
+```jsx
+<AspectRatio ratio={4/3}>
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6998.575412963273!2d31.233882!3d30.044409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458409d7064e783%3A0x5eeb83030d45206!2sCairo%2C%20Egypt!5e0!3m2!1sen!2sus!4v1652813095591!5m2!1sen!2sus" 
+    title="Map"
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      border: 'none' 
+    }}
+  />
+</AspectRatio>
+```
+
+## Customization
+
+The AspectRatio component accepts standard HTML div attributes such as `className` and `style` for customization.
+
+```jsx
+<AspectRatio 
+  ratio={16/9}
+  className="custom-container"
+  style={{ 
+    maxWidth: '600px',
+    boxShadow: 'var(--t-shadow-200)',
+    borderRadius: 'var(--t-border-radius-200)'
+  }}
+>
+  {/* Content */}
+</AspectRatio>
+```
+
+## Internationalization and RTL Support
+
+The AspectRatio component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. While being primarily a layout component, it ensures proper content display and maintains consistent ratios in RTL contexts.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, AspectRatio } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <AspectRatio ratio={16/9}>
+        <img 
+          src="/arabic-content-image.jpg" 
+          alt="صورة محتوى عربي" 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        />
+      </AspectRatio>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the AspectRatio component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font for any text content
+2. **Layout Direction**: Maintains proper aspect ratios while respecting RTL content flow
+3. **Content Positioning**: Ensures proper positioning of child elements in RTL contexts
+4. **Line Height**: Applies appropriate line height for Arabic text within the ratio container
+5. **Text Alignment**: Supports right-aligned text for Arabic content
+
+### Media Content in RTL
+
+For images and videos with Arabic captions or overlays:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function RTLMediaContent() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr', maxWidth: '600px' }}>
+      <AspectRatio ratio={16/9}>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <img 
+            src="https://picsum.photos/800/450" 
+            alt={isRTL ? 'صورة توضيحية للمحتوى' : 'Illustrative content image'} 
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+          />
+          <div style={{
+            position: 'absolute',
+            bottom: '16px',
+            [isRTL ? 'right' : 'left']: '16px',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+            lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+          }}>
+            {isRTL ? 'عنوان الصورة العربي' : 'English Image Caption'}
+          </div>
+        </div>
+      </AspectRatio>
+    </div>
+  );
+}
+```
+
+### Card Layouts in RTL
+
+For card components with proper RTL layout:
+
+```jsx
+function RTLCardLayout() {
+  const { isRTL } = useTheme();
+  
+  const cardData = isRTL ? [
+    { title: 'تطوير الويب الحديث', description: 'تعلم أحدث تقنيات تطوير المواقع والتطبيقات', image: '/web-dev-ar.jpg' },
+    { title: 'التصميم التفاعلي', description: 'مبادئ التصميم وتجربة المستخدم المتقدمة', image: '/design-ar.jpg' },
+    { title: 'الذكاء الاصطناعي', description: 'مقدمة شاملة في مجال الذكاء الاصطناعي', image: '/ai-ar.jpg' }
+  ] : [
+    { title: 'Modern Web Development', description: 'Learn the latest web and app development techniques', image: '/web-dev-en.jpg' },
+    { title: 'Interactive Design', description: 'Advanced design principles and user experience', image: '/design-en.jpg' },
+    { title: 'Artificial Intelligence', description: 'Comprehensive introduction to AI field', image: '/ai-en.jpg' }
+  ];
+  
+  return (
+    <div style={{ 
+      direction: isRTL ? 'rtl' : 'ltr',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      gap: '20px'
+    }}>
+      {cardData.map((card, index) => (
+        <div key={index} style={{
+          border: '1px solid var(--t-color-border-primary)',
+          borderRadius: 'var(--t-border-radius-300)',
+          overflow: 'hidden',
+          backgroundColor: 'var(--t-color-surface-primary)'
+        }}>
+          <AspectRatio ratio={4/3}>
+            <img 
+              src={card.image || "https://picsum.photos/400/300?random=" + index} 
+              alt={card.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            />
+          </AspectRatio>
+          <div style={{ padding: 'var(--t-space-300)' }}>
+            <h3 style={{
+              margin: '0 0 8px 0',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {card.title}
+            </h3>
+            <p style={{
+              margin: 0,
+              color: 'var(--t-color-text-subtle)',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {card.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Video Embeds in RTL
+
+For embedded videos with Arabic titles and controls:
+
+```jsx
+function RTLVideoEmbed() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr', maxWidth: '800px' }}>
+      <h2 style={{
+        fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+        lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+        textAlign: isRTL ? 'right' : 'left',
+        marginBottom: '16px'
+      }}>
+        {isRTL ? 'فيديو تعليمي: مقدمة في البرمجة' : 'Tutorial Video: Introduction to Programming'}
+      </h2>
+      
+      <AspectRatio ratio={16/9}>
+        <iframe 
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+          title={isRTL ? 'فيديو تعليمي' : 'Tutorial video'}
+          allowFullScreen
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            border: 'none',
+            borderRadius: 'var(--t-border-radius-200)'
+          }}
+        />
+      </AspectRatio>
+      
+      <p style={{
+        marginTop: '12px',
+        fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+        lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+        textAlign: isRTL ? 'right' : 'left',
+        color: 'var(--t-color-text-subtle)'
+      }}>
+        {isRTL ? 'هذا فيديو تعليمي يشرح أساسيات البرمجة للمبتدئين' : 'This tutorial video explains programming basics for beginners'}
+      </p>
+    </div>
+  );
+}
+```
+
+### Maps Integration in RTL
+
+For map embeds with Arabic labels and proper RTL positioning:
+
+```jsx
+function RTLMapEmbed() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        maxWidth: '600px'
+      }}>
+        <div>
+          <h3 style={{
+            fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+            lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+            textAlign: isRTL ? 'right' : 'left',
+            margin: '0 0 8px 0'
+          }}>
+            {isRTL ? 'موقعنا على الخريطة' : 'Our Location'}
+          </h3>
+          
+          <AspectRatio ratio={4/3}>
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.789!2d31.233882!3d30.044409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzM5LjkiTiAzMcKwMTQnMDIuMCJF!5e0!3m2!1sen!2seg!4v1234567890" 
+              title={isRTL ? 'خريطة الموقع' : 'Location map'}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                border: 'none',
+                borderRadius: 'var(--t-border-radius-200)'
+              }}
+            />
+          </AspectRatio>
+          
+          <div style={{
+            marginTop: '12px',
+            padding: '12px',
+            backgroundColor: 'var(--t-color-surface-secondary)',
+            borderRadius: 'var(--t-border-radius-200)',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            <p style={{
+              margin: '0 0 8px 0',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              fontWeight: 600
+            }}>
+              {isRTL ? 'العنوان:' : 'Address:'}
+            </p>
+            <p style={{
+              margin: 0,
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              color: 'var(--t-color-text-subtle)'
+            }}>
+              {isRTL ? 'شارع التحرير، وسط البلد، القاهرة، مصر' : 'Tahrir Street, Downtown, Cairo, Egypt'}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Profile Images in RTL
+
+For user profiles and avatar displays with consistent ratios:
+
+```jsx
+function RTLProfileImages() {
+  const { isRTL } = useTheme();
+  
+  const profiles = isRTL ? [
+    { name: 'أحمد محمود', role: 'مطور أول', avatar: '/ahmed.jpg' },
+    { name: 'فاطمة أحمد', role: 'مصممة UI', avatar: '/fatima.jpg' },
+    { name: 'محمد علي', role: 'مدير المنتج', avatar: '/mohamed.jpg' }
+  ] : [
+    { name: 'Ahmed Mahmoud', role: 'Senior Developer', avatar: '/ahmed.jpg' },
+    { name: 'Fatima Ahmed', role: 'UI Designer', avatar: '/fatima.jpg' },
+    { name: 'Mohamed Ali', role: 'Product Manager', avatar: '/mohamed.jpg' }
+  ];
+  
+  return (
+    <div style={{ 
+      direction: isRTL ? 'rtl' : 'ltr',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '16px'
+    }}>
+      <h3 style={{
+        fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+        lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+        textAlign: isRTL ? 'right' : 'left'
+      }}>
+        {isRTL ? 'فريق العمل' : 'Team Members'}
+      </h3>
+      
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '16px'
+      }}>
+        {profiles.map((profile, index) => (
+          <div key={index} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: isRTL ? 'flex-end' : 'flex-start',
+            padding: '16px',
+            border: '1px solid var(--t-color-border-secondary)',
+            borderRadius: 'var(--t-border-radius-300)',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            <div style={{ width: '80px', marginBottom: '12px' }}>
+              <AspectRatio ratio={1}>
+                <img 
+                  src={profile.avatar || `https://picsum.photos/80/80?random=${index}`} 
+                  alt={profile.name}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover',
+                    borderRadius: '50%'
+                  }} 
+                />
+              </AspectRatio>
+            </div>
+            
+            <h4 style={{
+              margin: '0 0 4px 0',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              fontSize: '16px'
+            }}>
+              {profile.name}
+            </h4>
+            
+            <p style={{
+              margin: 0,
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              fontSize: '14px',
+              color: 'var(--t-color-text-subtle)'
+            }}>
+              {profile.role}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+### Custom Ratio Content in RTL
+
+For custom aspect ratios with RTL-specific content:
+
+```jsx
+function RTLCustomRatios() {
+  const { isRTL } = useTheme();
+  
+  const ratios = [
+    { ratio: 1, label: isRTL ? 'مربع (1:1)' : 'Square (1:1)' },
+    { ratio: 16/9, label: isRTL ? 'عريض (16:9)' : 'Widescreen (16:9)' },
+    { ratio: 4/3, label: isRTL ? 'قياسي (4:3)' : 'Standard (4:3)' },
+    { ratio: 2/3, label: isRTL ? 'عمودي (2:3)' : 'Portrait (2:3)' }
+  ];
+  
+  return (
+    <div style={{ 
+      direction: isRTL ? 'rtl' : 'ltr',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '16px'
+    }}>
+      {ratios.map((item, index) => (
+        <div key={index}>
+          <h4 style={{
+            marginBottom: '8px',
+            fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+            lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            {item.label}
+          </h4>
+          
+          <AspectRatio ratio={item.ratio}>
+            <div style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'var(--t-color-fill-brand)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--t-color-text-on-fill)',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+              borderRadius: 'var(--t-border-radius-200)',
+              fontSize: '14px',
+              textAlign: 'center'
+            }}>
+              {item.ratio.toFixed(2)}
+            </div>
+          </AspectRatio>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with Arabic content overlays** to ensure proper text positioning and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider content positioning** - captions, overlays, and controls should respect RTL layout
+5. **Test media embeds** to ensure proper display and accessibility in RTL
+6. **Validate responsive behavior** across different aspect ratios in RTL contexts
+7. **Ensure proper text rendering** with Arabic fonts and line heights for any text content
+
+## Accessibility
+
+- The AspectRatio component is a presentational wrapper that doesn't affect the accessibility of its children
+- Ensure that content placed inside AspectRatio (especially images) has appropriate alt text and ARIA attributes
+- For iframe content, always provide a descriptive title attribute
+
+## Implementation Details
+
+### CSS Variables
+
+The AspectRatio component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-border-radius-200` | Border radius for the container |
+| `--t-duration-base` | Duration for transitions |
+| `--t-easing-in-out` | Easing function for transitions |
+
+### Browser Compatibility
+
+The AspectRatio component has been designed with browser compatibility in mind:
+
+1. Modern browsers: Uses the CSS `aspect-ratio` property for simple, efficient aspect ratio control
+2. Legacy browsers: Falls back to the "padding-top hack" technique where the modern property isn't supported
+   
+The fallback is applied automatically through feature detection, providing consistent behavior across all supported browsers.
+
+### Technical Implementation
+
+The AspectRatio component:
+
+1. Checks for `aspect-ratio` CSS support at runtime
+2. For modern browsers, applies the `aspect-ratio` CSS property directly
+3. For legacy browsers, calculates a percentage-based padding-top value based on the ratio (e.g., a 16:9 ratio becomes padding-top: 56.25%)
+4. Ensures children are positioned correctly within the ratio container
+
+This dual approach ensures the most efficient implementation is used when available, while maintaining support for older browsers.

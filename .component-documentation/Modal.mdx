@@ -1,0 +1,642 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ModalStories from './Modal.stories';
+import { Modal } from './Modal';
+import { Button } from '../Button/Button';
+
+<Meta of={ModalStories} />
+
+# 🚨 AI CODING AGENT - CRITICAL IMPLEMENTATION GUIDE 🚨
+
+## MODAL COMPONENT ARCHITECTURE - READ FIRST
+```
+┌─────────────────────────────────────┐
+│ HEADER (Controlled by Props)       │ ← title, showTitle, close button
+├─────────────────────────────────────┤
+│ BODY (Your Content Goes Here)      │ ← children prop ONLY
+├─────────────────────────────────────┤
+│ FOOTER (Controlled by Props)       │ ← footerVariant, primaryLabel, etc.
+└─────────────────────────────────────┘
+```
+
+## ❌ CRITICAL MISTAKES TO AVOID
+1. **❌ NEVER create manual FOOTER action buttons in children**
+2. **❌ NEVER create modal-level Cancel/Save/Submit buttons in children**
+3. **❌ NEVER create `<div className="footer">` in children**
+
+**NOTE:** Buttons **within your content** (like "Add Item", "Delete Row", etc.) are perfectly fine in children!
+
+## ✅ CORRECT IMPLEMENTATION PATTERN
+```jsx
+// ✅ CORRECT - Content buttons are fine, no footer buttons
+<Modal
+  title="User Management"
+  primaryLabel="Close"
+  onPrimary={() => setOpen(false)}
+>
+  {/* Content with action buttons - THIS IS FINE! */}
+  <div>
+    <h3>Users List</h3>
+    <Button onClick={handleAddUser}>Add New User</Button>
+
+    <UserList>
+      {users.map(user => (
+        <UserRow key={user.id}>
+          {user.name}
+          <Button onClick={() => handleEdit(user)}>Edit</Button>
+          <Button onClick={() => handleDelete(user)}>Delete</Button>
+        </UserRow>
+      ))}
+    </UserList>
+  </div>
+</Modal>
+
+// ✅ CORRECT - Footer props for modal-level actions
+<Modal
+  title="Edit User"
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save Changes"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
+>
+  {/* Content can have its own buttons too! */}
+  <form>
+    <input placeholder="Name" />
+    <Button onClick={generatePassword}>Generate Password</Button>
+  </form>
+</Modal>
+
+// ❌ WRONG - Manual modal-level footer buttons
+<Modal title="Edit User">
+  <form>
+    <input placeholder="Name" />
+  </form>
+  {/* ❌ DON'T CREATE MODAL FOOTER BUTTONS HERE */}
+  <div style={{ position: 'sticky', bottom: 0 }}>
+    <button>Cancel</button>  {/* Use footer props instead! */}
+    <button>Save</button>
+  </div>
+</Modal>
+```
+
+## 🎯 AI IMPLEMENTATION CHECKLIST
+- [ ] Use `children` for body content (including content-level buttons)
+- [ ] **DEFAULT: Use single button with `primaryLabel` only**
+- [ ] Use footer props for modal-level actions (Cancel, Save, Submit)
+- [ ] Content buttons (Add, Edit, Delete items) go in `children` - that's fine!
+- [ ] Never create manual modal footer bars
+- [ ] Use `showFooter={false}` if no footer needed
+
+---
+
+# Modal Component
+
+The Modal component is a dialog that appears on top of the main content to provide critical information or request user input.
+
+## Import
+```jsx
+import { Modal } from 'tagaddod-design-react';
+```
+
+## Props
+<ArgTypes of={Modal} />
+
+## Basic Usage
+<Canvas of={ModalStories.Default} />
+
+```jsx
+// DEFAULT: Single button pattern (most common)
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Modal Title"
+  primaryLabel="OK"           // Single button (DEFAULT)
+  onPrimary={() => closeModal()}
+>
+  <div style={{ padding: '16px' }}>
+    Modal content goes here
+  </div>
+</Modal>
+```
+
+## ❌ COMMON AI AGENT MISTAKES
+
+### Mistake 1: Manual Modal Footer Creation
+```jsx
+// ❌ WRONG - Don't create modal-level footer buttons manually
+<Modal title="Delete Confirmation">
+  <p>Are you sure?</p>
+  <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '20px'}}>
+    <button>Cancel</button>  {/* Modal-level action - use footer props! */}
+    <button>Delete</button>
+  </div>
+</Modal>
+
+// ✅ CORRECT - Use footer props for modal actions
+<Modal
+  title="Delete Confirmation"
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Delete"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleDelete}
+>
+  <p>Are you sure you want to delete this item?</p>
+</Modal>
+```
+
+### Mistake 2: Confusing Content Buttons with Footer Buttons
+```jsx
+// ✅ CORRECT - Content buttons inside children are fine!
+<Modal title="User Management" primaryLabel="Close" onPrimary={() => setOpen(false)}>
+  <div>
+    <h3>Users</h3>
+    <Button onClick={handleAddUser}>Add New User</Button>  {/* ✅ Content button - OK! */}
+
+    {users.map(user => (
+      <div key={user.id}>
+        {user.name}
+        <Button onClick={() => editUser(user)}>Edit</Button>  {/* ✅ Content button - OK! */}
+      </div>
+    ))}
+  </div>
+</Modal>
+
+// ❌ WRONG - Modal-level footer actions in children
+<Modal title="Edit Form">
+  <form>
+    <input name="email" />
+  </form>
+  <div style={{position: 'sticky', bottom: 0}}>
+    <button>Cancel</button>  {/* ❌ Use footer props instead! */}
+    <button>Save</button>
+  </div>
+</Modal>
+
+// ✅ CORRECT - Footer props for modal actions, content buttons in children
+<Modal
+  title="Edit Form"
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
+>
+  <form>
+    <input name="email" />
+    <Button onClick={generateEmail}>Generate Email</Button>  {/* ✅ Content button - OK! */}
+  </form>
+</Modal>
+```
+
+## STEP-BY-STEP IMPLEMENTATION
+
+### Step 1: Simple Confirmation Dialog
+```jsx
+// DEFAULT: Single button for simple confirmations
+<Modal
+  title="Confirm Action"
+  primaryLabel="Continue"        // Single button (DEFAULT)
+  onPrimary={() => {
+    performAction();
+    setShowModal(false);
+  }}
+  open={showModal}
+  onOpenChange={setShowModal}
+>
+  <div style={{ padding: '16px' }}>
+    <p>Click Continue to perform this action.</p>
+  </div>
+</Modal>
+
+// Only use multiple buttons when user needs choice
+<Modal
+  title="Confirm Deletion"
+  footerVariant="cancelAndActions"  // When user needs to cancel
+  cancelLabel="No, Cancel"
+  primaryLabel="Yes, Delete"
+  onCancel={() => setShowModal(false)}
+  onPrimary={() => {
+    performAction();
+    setShowModal(false);
+  }}
+>
+  <div style={{ padding: '16px' }}>
+    <p>Are you sure you want to delete this item?</p>
+  </div>
+</Modal>
+```
+
+### Step 2: Form Modal
+```jsx
+// DEFAULT: Single button for forms
+<Modal
+  title="Add New User"
+  primaryLabel="Add User"         // Single submit button (DEFAULT)
+  onPrimary={() => submitUser(formData)}
+>
+  <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <input
+      placeholder="Full Name"
+      value={formData.name}
+      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+    />
+    <input
+      placeholder="Email"
+      value={formData.email}
+      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+    />
+  </div>
+</Modal>
+```
+
+### Step 3: Scrollable Content
+```jsx
+// DEFAULT: Single button for simple acceptance
+<Modal
+  title="Terms and Conditions"
+  scrollable={true}
+  maxHeight="60vh"
+  primaryLabel="I Understand"     // Single button (DEFAULT)
+  onPrimary={() => acceptTerms()}
+>
+  <div>
+    <h3>1. Introduction</h3>
+    <p>Long content that will scroll...</p>
+    {/* More content sections */}
+  </div>
+</Modal>
+
+// Use multiple buttons only when user needs choice
+<Modal
+  title="Terms and Conditions"
+  scrollable={true}
+  maxHeight="60vh"
+  footerVariant="cancelAndActions"  // When user can decline
+  cancelLabel="Decline"
+  primaryLabel="Accept"
+  onCancel={() => setShowModal(false)}
+  onPrimary={() => acceptTerms()}
+>
+  <div>
+    <h3>1. Introduction</h3>
+    <p>Long content that will scroll...</p>
+  </div>
+</Modal>
+```
+
+## Footer Variants
+
+### Default: Single Button (Most Common)
+```jsx
+// ✅ DEFAULT: Use this pattern first
+<Modal
+  primaryLabel="Save"         // Single button (DEFAULT)
+  onPrimary={handleSave}
+>
+  {/* Content only */}
+</Modal>
+// Renders:                   [Save]
+```
+
+### cancelAndActions (Use Only When Multiple Buttons Needed)
+```jsx
+// Use only when user needs choice between cancel and action
+<Modal
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"        // Left side
+  primaryLabel="Save"         // Right side
+  secondaryLabel="Draft"      // Right side
+>
+  {/* Content only */}
+</Modal>
+// Renders: [Cancel]           [Draft] [Save]
+```
+
+### swapAndActions
+```jsx
+<Modal
+  footerVariant="swapAndActions"
+  swapContent={<span>Auto-saved</span>}  // Left side
+  primaryLabel="Publish"                 // Right side
+>
+  {/* Content only */}
+</Modal>
+// Renders: [Auto-saved]       [Publish]
+```
+
+### actionsOnly
+```jsx
+<Modal
+  footerVariant="actionsOnly"
+  primaryLabel="Continue"     // Right side
+  secondaryLabel="Back"       // Right side
+>
+  {/* Content only */}
+</Modal>
+// Renders:                   [Back] [Continue]
+```
+
+## Width Sizes
+
+### Small Width (424px)
+<Canvas of={ModalStories.SmallWidth} />
+```jsx
+<Modal width="small" title="Small Modal">
+  <div style={{ padding: '16px' }}>Perfect for confirmations</div>
+</Modal>
+```
+
+### Medium Width (620px) - Default
+<Canvas of={ModalStories.MediumWidth} />
+```jsx
+<Modal width="medium" title="Medium Modal">
+  <div style={{ padding: '16px' }}>Ideal for most content</div>
+</Modal>
+```
+
+### Large Width (980px)
+<Canvas of={ModalStories.LargeWidth} />
+```jsx
+<Modal width="large" title="Large Modal">
+  <div style={{ padding: '16px' }}>For complex content</div>
+</Modal>
+```
+
+### Custom Width
+<Canvas of={ModalStories.CustomWidth} />
+```jsx
+<Modal width="custom" customWidth="50rem" title="Custom Width">
+  <div style={{ padding: '16px' }}>Custom dimensions</div>
+</Modal>
+```
+
+## Content Padding Control
+
+### Default Padding
+<Canvas of={ModalStories.Default} />
+```jsx
+<Modal title="Default Padding">
+  <div>Content with default padding (--t-space-500)</div>
+</Modal>
+```
+
+### Custom Padding
+<Canvas of={ModalStories.CustomContentPadding} />
+```jsx
+<Modal contentPadding="var(--t-space-700)" title="Custom Padding">
+  <div>Content with larger padding</div>
+</Modal>
+```
+
+### No Padding
+<Canvas of={ModalStories.NoContentPadding} />
+```jsx
+<Modal contentPadding="0" title="No Padding">
+  <div style={{ padding: '16px', backgroundColor: '#f0f0f0' }}>
+    Custom layout control
+  </div>
+</Modal>
+```
+
+## Component Integration
+
+### With Select Components
+<Canvas of={ModalStories.FormWithSelect} />
+```jsx
+<Modal
+  title="User Preferences"
+  scrollable={true}
+  maxHeight="500px"
+  footerVariant="cancelAndActions"
+  primaryLabel="Save"
+>
+  <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Select
+      label="Country"
+      options={countryOptions}
+      value={preferences.country}
+      onValueChange={(value) => setPreferences(prev => ({ ...prev, country: value }))}
+    />
+    <Select
+      label="Language"
+      options={languageOptions}
+      value={preferences.language}
+      onValueChange={(value) => setPreferences(prev => ({ ...prev, language: value }))}
+    />
+  </div>
+</Modal>
+```
+
+### Scrollable Content Example
+<Canvas of={ModalStories.ScrollableContent} />
+
+## RTL Support
+
+The Modal automatically supports RTL when used with ThemeProvider:
+
+```jsx
+import { ThemeProvider } from 'tagaddod-design-react';
+
+<ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+  <Modal
+    title="عنوان النافذة"
+    cancelLabel="إلغاء"
+    primaryLabel="تأكيد"
+  >
+    <div style={{ padding: '16px', textAlign: 'right' }}>
+      محتوى النافذة باللغة العربية
+    </div>
+  </Modal>
+</ThemeProvider>
+```
+
+### Arabic Content Example
+<Canvas of={ModalStories.ArabicContent} />
+
+## Common Use Cases
+
+### Confirmation Dialog
+```jsx
+const DeleteConfirmation = ({ item, onConfirm }) => (
+  <Modal
+    title="Confirm Deletion"
+    width="small"
+    footerVariant="cancelAndActions"
+    cancelLabel="Keep Item"
+    primaryLabel={`Delete ${item.type}`}
+    onCancel={closeModal}
+    onPrimary={() => onConfirm(item.id)}
+  >
+    <div style={{ padding: '16px', textAlign: 'center' }}>
+      <p>Delete <strong>{item.name}</strong>?</p>
+    </div>
+  </Modal>
+);
+```
+
+### Information Display
+```jsx
+<Modal
+  title="User Details"
+  showFooter={false}  // No modal-level actions needed
+>
+  <div style={{ padding: '16px' }}>
+    <h3>John Doe</h3>
+    <p><strong>Email:</strong> john@example.com</p>
+    <p><strong>Role:</strong> Administrator</p>
+
+    {/* Content buttons are fine in children! */}
+    <Button onClick={handleResetPassword}>Reset Password</Button>
+    <Button onClick={handleSendEmail}>Send Email</Button>
+  </div>
+</Modal>
+```
+
+### Content Management with Action Buttons
+```jsx
+<Modal
+  title="User Management"
+  primaryLabel="Close"
+  onPrimary={() => setOpen(false)}
+>
+  <div style={{ padding: '16px' }}>
+    <div style={{ marginBottom: '16px' }}>
+      <Button onClick={handleAddUser}>Add New User</Button>
+    </div>
+
+    {users.map(user => (
+      <div key={user.id} style={{ display: 'flex', gap: '8px', padding: '8px', borderBottom: '1px solid #eee' }}>
+        <span>{user.name}</span>
+        <Button variant="plain" onClick={() => handleEdit(user)}>Edit</Button>
+        <Button variant="plain" tone="critical" onClick={() => handleDelete(user)}>Delete</Button>
+      </div>
+    ))}
+  </div>
+</Modal>
+```
+
+### Multi-Step Form
+```jsx
+<Modal
+  title={`Step ${currentStep} of 3`}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel={currentStep === 3 ? "Complete" : "Next"}
+  secondaryLabel={currentStep > 1 ? "Back" : undefined}
+  showSecondaryButton={currentStep > 1}
+  onCancel={closeModal}
+  onPrimary={currentStep === 3 ? completeForm : nextStep}
+  onSecondary={previousStep}
+>
+  <div style={{ padding: '16px' }}>
+    {/* Step content based on currentStep */}
+    {currentStep === 1 && <PersonalInfoForm />}
+    {currentStep === 2 && <AddressForm />}
+    {currentStep === 3 && <ReviewForm />}
+  </div>
+</Modal>
+```
+
+## Header/Footer Control
+
+### Without Title
+<Canvas of={ModalStories.WithoutTitle} />
+```jsx
+<Modal showTitle={false}>
+  <div style={{ padding: '16px' }}>Content without title bar</div>
+</Modal>
+```
+
+### Without Footer
+<Canvas of={ModalStories.WithoutFooter} />
+```jsx
+<Modal title="Info Modal" showFooter={false}>
+  <div style={{ padding: '16px' }}>
+    Content without action buttons
+    <div style={{ marginTop: '16px', textAlign: 'right' }}>
+      <Button onClick={closeModal}>Close</Button>
+    </div>
+  </div>
+</Modal>
+```
+
+## Advanced Features
+
+### Dynamic Footer Control
+<Canvas of={ModalStories.DynamicFooter} />
+
+### Footer Variants Showcase
+<Canvas of={ModalStories.CancelAndActions} />
+<Canvas of={ModalStories.SwapAndActions} />
+<Canvas of={ModalStories.ActionsOnly} />
+
+## Accessibility
+
+The Modal component provides comprehensive accessibility:
+
+- Built on Radix UI Dialog primitive
+- Focus management and trapping
+- Keyboard navigation (Tab, Escape)
+- Proper ARIA attributes
+- Screen reader support
+- Background scroll prevention
+
+## Technical Details
+
+### CSS Variables
+- `--t-z-modal: 1050` - Modal z-index
+- `--t-z-drawer-modal: 1070` - Higher z-index when opened from drawer
+- Design tokens for colors, spacing, typography
+
+### Browser Support
+Compatible with all modern browsers with full RTL support.
+
+---
+
+## 🎯 QUICK REFERENCE FOR AI AGENTS
+
+### ✅ DO THIS (Content with buttons):
+```jsx
+<Modal
+  title="User Management"
+  primaryLabel="Close"
+  onPrimary={() => setOpen(false)}
+>
+  <div>
+    {/* ✅ Content buttons are fine! */}
+    <Button onClick={addUser}>Add User</Button>
+    <Button onClick={deleteUser}>Delete</Button>
+  </div>
+</Modal>
+```
+
+### ✅ With footer (modal-level actions):
+```jsx
+<Modal
+  title="Edit Form"
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"  // Modal footer button
+  primaryLabel="Save"   // Modal footer button
+  onCancel={handleCancel}
+  onPrimary={handleSave}
+>
+  <form>
+    {/* ✅ Content buttons are fine here too! */}
+    <Button onClick={generatePassword}>Generate Password</Button>
+  </form>
+</Modal>
+```
+
+### ❌ NEVER DO THIS:
+```jsx
+<Modal title="Edit Form">
+  <form>Content</form>
+  {/* ❌ Don't create modal footer buttons manually */}
+  <div className="footer">
+    <button>Cancel</button>  {/* Use footer props! */}
+    <button>Save</button>
+  </div>
+</Modal>
+```
+
+**Remember: Content buttons go in `children` (✅), modal footer buttons use props (✅), manual modal footers are wrong (❌)!**

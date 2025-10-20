@@ -1,0 +1,923 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as DrawerStories from './Drawer.stories';
+import { Drawer, useDrawerContext } from './Drawer';
+import { Button } from '../Button/Button';
+
+<Meta of={DrawerStories} />
+
+# 🚨 AI CODING AGENT - CRITICAL IMPLEMENTATION GUIDE 🚨
+
+## DRAWER COMPONENT ARCHITECTURE - READ FIRST
+```
+┌─────────────────────────────────────┐
+│ HEADER (Controlled by Props)       │ ← title, showTitle, headerPrefix, headerSuffix
+├─────────────────────────────────────┤
+│ BODY (Your Content Goes Here)      │ ← children prop ONLY
+├─────────────────────────────────────┤
+│ FOOTER (Controlled by Props)       │ ← footerVariant, primaryLabel, etc.
+└─────────────────────────────────────┘
+```
+
+## ❌ CRITICAL MISTAKES TO AVOID
+1. **❌ NEVER create manual FOOTER action buttons in children**
+2. **❌ NEVER create drawer-level Cancel/Save/Submit buttons in children**
+3. **❌ NEVER create `<div className="footer">` in children**
+4. **❌ NEVER manually manage z-index for nested modals**
+
+**NOTE:** Buttons **within your content** (like "Add Item", "Delete Row", etc.) are perfectly fine in children!
+
+## ✅ CORRECT IMPLEMENTATION PATTERN
+```jsx
+// ✅ CORRECT - Content buttons are fine, no footer buttons
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="User Management"
+  showFooter={false}
+>
+  {/* Content with action buttons - THIS IS FINE! */}
+  <div>
+    <h3>Users List</h3>
+    <Button onClick={handleAddUser}>Add New User</Button>
+
+    <UserList>
+      {users.map(user => (
+        <UserRow key={user.id}>
+          {user.name}
+          <Button onClick={() => handleEdit(user)}>Edit</Button>
+          <Button onClick={() => handleDelete(user)}>Delete</Button>
+        </UserRow>
+      ))}
+    </UserList>
+  </div>
+</Drawer>
+
+// ✅ CORRECT - Footer props for drawer-level actions
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Edit User"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save Changes"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
+>
+  {/* Content can have its own buttons too! */}
+  <form>
+    <input placeholder="Name" />
+    <Button onClick={generatePassword}>Generate Password</Button>
+  </form>
+</Drawer>
+
+// ❌ WRONG - Manual drawer-level footer buttons
+<Drawer title="Edit User">
+  <form>
+    <input placeholder="Name" />
+  </form>
+  {/* ❌ DON'T CREATE DRAWER FOOTER BUTTONS HERE */}
+  <div style={{ position: 'sticky', bottom: 0 }}>
+    <button>Cancel</button>  {/* Use footer props instead! */}
+    <button>Save</button>
+  </div>
+</Drawer>
+```
+
+## 🎯 AI IMPLEMENTATION CHECKLIST
+- [ ] Use `children` for body content (including content-level buttons)
+- [ ] **DEFAULT: Use `showFooter={false}` for simple content display**
+- [ ] Use footer props for drawer-level actions (Cancel, Save, Submit)
+- [ ] Content buttons (Add, Edit, Delete items) go in `children` - that's fine!
+- [ ] Never create manual drawer footer bars
+- [ ] Use `useDrawerContext` automatically handles modal z-index
+- [ ] **ALWAYS use default width first, custom width only when necessary**
+
+---
+
+# Drawer Component
+
+The Drawer component is a side panel that slides in from the edge of the screen to provide additional content or actions without navigating away from the current page. It includes sophisticated z-index management for complex component nesting.
+
+## Import
+```jsx
+import { Drawer, useDrawerContext } from 'tagaddod-design-react';
+```
+
+## Props
+<ArgTypes of={Drawer} />
+
+## Basic Usage
+<Canvas of={DrawerStories.Default} />
+
+```jsx
+// DEFAULT: Simple drawer without footer
+import { useState } from 'react';
+import { Drawer, Button } from 'tagaddod-design-react';
+
+function MyComponent() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open Drawer
+      </Button>
+
+      <Drawer
+        open={open}
+        onOpenChange={setOpen}
+        title="Drawer Title"
+      >
+        <div>
+          <p>This is a default drawer content.</p>
+          <p>You can place any content here.</p>
+        </div>
+      </Drawer>
+    </>
+  );
+}
+```
+
+## ❌ COMMON AI AGENT MISTAKES
+
+### Mistake 1: Manual Drawer Footer Creation
+```jsx
+// ❌ WRONG - Don't create drawer-level footer buttons manually
+<Drawer title="Confirm Deletion">
+  <p>Are you sure?</p>
+  <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '20px'}}>
+    <button>Cancel</button>  {/* Drawer-level action - use footer props! */}
+    <button>Delete</button>
+  </div>
+</Drawer>
+
+// ✅ CORRECT - Use footer props for drawer actions
+<Drawer
+  title="Confirm Deletion"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Delete"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleDelete}
+>
+  <p>Are you sure you want to delete this item?</p>
+</Drawer>
+```
+
+### Mistake 2: Confusing Content Buttons with Footer Buttons
+```jsx
+// ✅ CORRECT - Content buttons inside children are fine!
+<Drawer title="User Management" showFooter={false}>
+  <div>
+    <h3>Users</h3>
+    <Button onClick={handleAddUser}>Add New User</Button>  {/* ✅ Content button - OK! */}
+
+    {users.map(user => (
+      <div key={user.id}>
+        {user.name}
+        <Button onClick={() => editUser(user)}>Edit</Button>  {/* ✅ Content button - OK! */}
+      </div>
+    ))}
+  </div>
+</Drawer>
+
+// ❌ WRONG - Drawer-level footer actions in children
+<Drawer title="Edit Form">
+  <form>
+    <input name="email" />
+  </form>
+  <div style={{position: 'sticky', bottom: 0}}>
+    <button>Cancel</button>  {/* ❌ Use footer props instead! */}
+    <button>Save</button>
+  </div>
+</Drawer>
+
+// ✅ CORRECT - Footer props for drawer actions, content buttons in children
+<Drawer
+  title="Edit Form"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
+>
+  <form>
+    <input name="email" />
+    <Button onClick={generateEmail}>Generate Email</Button>  {/* ✅ Content button - OK! */}
+  </form>
+</Drawer>
+```
+
+### Mistake 3: Manual Z-Index Management
+```jsx
+// ❌ WRONG - Manual z-index configuration
+<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+  <Modal
+    open={modalOpen}
+    onOpenChange={setModalOpen}
+    style={{ zIndex: 9999 }}  // ❌ Don't do this
+  >
+    <Select options={options} />
+  </Modal>
+</Drawer>
+
+// ✅ CORRECT - Automatic z-index via context
+<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+  <Modal open={modalOpen} onOpenChange={setModalOpen}>
+    {/* Modal automatically uses correct z-index */}
+    <Select options={options} />
+  </Modal>
+</Drawer>
+```
+
+## STEP-BY-STEP IMPLEMENTATION
+
+### Step 1: Simple Information Display
+```jsx
+// DEFAULT: No footer for info display
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="User Details"
+  showFooter={false}  // No actions needed
+>
+  <div>
+    <p><strong>Name:</strong> John Doe</p>
+    <p><strong>Email:</strong> john@example.com</p>
+    <p><strong>Role:</strong> Administrator</p>
+  </div>
+</Drawer>
+```
+
+### Step 2: Form with Actions
+```jsx
+// Use footer only for form submissions
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Edit User"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save Changes"
+  onCancel={() => setOpen(false)}
+  onPrimary={() => submitForm(formData)}
+>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <input
+      placeholder="Full Name"
+      value={formData.name}
+      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+    />
+    <input
+      placeholder="Email"
+      value={formData.email}
+      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+    />
+  </div>
+</Drawer>
+```
+
+### Step 3: Multi-Step Flow
+```jsx
+// Use back button for multi-step workflows
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title={`Step ${step} of 3`}
+  showBackButton={true}
+  step={step}
+  onBackClick={() => setStep(step - 1)}
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel={step === 3 ? "Complete" : "Next"}
+  onCancel={() => setOpen(false)}
+  onPrimary={() => step === 3 ? complete() : setStep(step + 1)}
+>
+  <div>
+    <p>This is step {step} of a multi-step drawer.</p>
+    {/* Step-specific content */}
+  </div>
+</Drawer>
+```
+
+## Width Configuration
+
+### Default Width (Recommended)
+<Canvas of={DrawerStories.DefaultWidth} />
+```jsx
+<Drawer
+  title="Default Width Drawer"
+  width="default"  // 28.125rem (450px) - optimal for most cases
+>
+  <div>Content with optimal width</div>
+</Drawer>
+```
+
+### Custom Width
+<Canvas of={DrawerStories.CustomWidthTester} />
+```jsx
+// Fixed width
+<Drawer
+  title="Custom Width"
+  width="custom"
+  customWidth="35rem"
+  minWidth="25rem"  // Always enforced (400px minimum)
+>
+  <div>Custom sized content</div>
+</Drawer>
+
+// Responsive width
+<Drawer
+  width="custom"
+  customWidth="clamp(25rem, 40vw, 50rem)"
+>
+  <div>Responsive content</div>
+</Drawer>
+```
+
+## Position
+
+### Right (Default)
+<Canvas of={DrawerStories.Default} />
+```jsx
+<Drawer position="right" title="Right Drawer">
+  <div>Opens from right side</div>
+</Drawer>
+```
+
+### Left
+```jsx
+<Drawer position="left" title="Left Drawer">
+  <div>Opens from left side</div>
+</Drawer>
+```
+
+## Header Configuration
+
+### With Back Button
+<Canvas of={DrawerStories.WithBackButton} />
+```jsx
+<Drawer
+  title="Step 1 of 3"
+  showBackButton={true}
+  step={1}
+  onBackClick={handleBack}
+>
+  <div>Multi-step content</div>
+</Drawer>
+```
+
+### With Header Components
+<Canvas of={DrawerStories.SwappableHeaderAreas} />
+```jsx
+import { Badge, Button } from 'tagaddod-design-react';
+
+<Drawer
+  title="Document Title"
+  headerPrefix={<Badge tone="info">Draft</Badge>}
+  headerSuffix={<Button variant="plain" size="xSmall">Edit</Button>}
+>
+  <div>Content with header badges and actions</div>
+</Drawer>
+```
+
+## Footer Variants
+
+### Default: No Footer (Most Common for Info Display)
+```jsx
+// ✅ DEFAULT: Use this pattern for simple content
+<Drawer
+  title="Information"
+  showFooter={false}  // Default, can be omitted
+>
+  <div>Content only</div>
+</Drawer>
+```
+
+### cancelAndActions (For Forms)
+<Canvas of={DrawerStories.FooterCancelAndActions} />
+```jsx
+// Use only when form needs submit/cancel actions
+<Drawer
+  title="Edit Form"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"        // Left side
+  primaryLabel="Save"         // Right side
+  secondaryLabel="Draft"      // Right side
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
+  onSecondary={handleDraft}
+>
+  {/* Form content only */}
+</Drawer>
+// Renders: [Cancel]           [Draft] [Save]
+```
+
+### swapAndActions
+<Canvas of={DrawerStories.FooterSwapAndActions} />
+```jsx
+<Drawer
+  showFooter={true}
+  footerVariant="swapAndActions"
+  swapContent={<span>Auto-saved</span>}  // Left side
+  primaryLabel="Publish"                 // Right side
+>
+  {/* Content only */}
+</Drawer>
+// Renders: [Auto-saved]       [Publish]
+```
+
+### actionsOnly
+<Canvas of={DrawerStories.FooterActionsOnly} />
+```jsx
+<Drawer
+  showFooter={true}
+  footerVariant="actionsOnly"
+  primaryLabel="Continue"     // Right side
+  secondaryLabel="Back"       // Right side
+>
+  {/* Content only */}
+</Drawer>
+// Renders:                   [Back] [Continue]
+```
+
+### Single Button Examples
+<Canvas of={DrawerStories.FooterPrimaryOnly} />
+<Canvas of={DrawerStories.FooterSecondaryOnly} />
+
+## Content Padding Control
+
+### Default Padding
+```jsx
+<Drawer title="Default Padding">
+  <div>Content with default padding (var(--t-space-500) = 20px)</div>
+</Drawer>
+```
+
+### Custom Padding
+<Canvas of={DrawerStories.CustomPadding} />
+```jsx
+<Drawer
+  title="Custom Padding"
+  contentPadding="var(--t-space-600)"  // 24px
+>
+  <div>Content with larger padding</div>
+</Drawer>
+
+// Available spacing tokens:
+// var(--t-space-300) = 12px
+// var(--t-space-400) = 16px
+// var(--t-space-500) = 20px (default)
+// var(--t-space-600) = 24px
+// var(--t-space-700) = 32px
+
+// Or use custom values
+<Drawer contentPadding="2rem 1rem">
+  <div>Custom asymmetric padding</div>
+</Drawer>
+```
+
+## Z-Index Management & Modal Integration
+
+The Drawer automatically manages z-index for nested components through `DrawerContext`. **No manual configuration required.**
+
+### Automatic Z-Index for Nested Modals
+<Canvas of={DrawerStories.UltimateZIndexTest} />
+
+```jsx
+import { Drawer, Modal, Select, Button } from 'tagaddod-design-react';
+
+// ✅ CORRECT - Automatic z-index management
+function DrawerWithModal() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setDrawerOpen(true)}>Open Drawer</Button>
+
+      <Drawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        title="Employee Management"
+      >
+        <div>
+          <Button onClick={() => setModalOpen(true)}>
+            Add New Employee
+          </Button>
+
+          {/* Modal automatically detects drawer context and uses z-index: 1070 */}
+          <Modal
+            open={modalOpen}
+            onOpenChange={setModalOpen}
+            title="Add New Employee"
+          >
+            <div style={{ padding: '16px' }}>
+              {/* Select automatically uses maximum z-index when in modal */}
+              <Select
+                label="Department"
+                options={departmentOptions}
+                searchable
+              />
+              <Select
+                label="Position"
+                options={positionOptions}
+              />
+            </div>
+          </Modal>
+        </div>
+      </Drawer>
+    </>
+  );
+}
+```
+
+### Z-Index Hierarchy (Automatic)
+```css
+/* Automatically managed by the component */
+Drawer Overlay:     z-index: 1019
+Drawer Content:     z-index: 1020
+Regular Modals:     z-index: 1050
+Modals in Drawer:   z-index: 1070 (automatic)
+Select Dropdowns:   z-index: 2147483647 (automatic)
+```
+
+### useDrawerContext Hook (Optional - For Custom Components)
+```jsx
+import { useDrawerContext } from 'tagaddod-design-react';
+
+function CustomComponentInDrawer() {
+  const { isInsideDrawer, drawerZIndex } = useDrawerContext();
+
+  // Only needed for custom modal-like components
+  // Built-in components (Modal, Select) handle this automatically
+  if (isInsideDrawer) {
+    // Component is inside a drawer
+    // drawerZIndex = 1070
+  }
+
+  return <div>Component content</div>;
+}
+```
+
+## Internationalization and RTL Support
+
+The Drawer component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper drawer positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Drawer, Button } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Drawer
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        title="درج جانبي"
+        showFooter={true}
+        cancelLabel="إلغاء"
+        primaryLabel="حفظ"
+      >
+        <p>محتوى الدرج باللغة العربية</p>
+      </Drawer>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Drawer component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Drawer Position**: Always opens from left in RTL (following reading direction)
+3. **Header Layout**: Repositions title, prefix, and suffix elements for RTL
+4. **Line Height**: Applies `var(--t-line-height-arabic, 1.5)` for Arabic text
+5. **Content Direction**: Sets `dir="rtl"` attribute on drawer content
+6. **Animation Direction**: Slide animations respect RTL reading direction
+7. **Button Labels**: Automatically applies Arabic aria-labels
+
+### Directional Icon Handling
+
+**Important**: The Drawer automatically handles back arrow direction. The back button icon automatically points in the correct direction based on the current language:
+
+```jsx
+import { Drawer, Button } from 'tagaddod-design-react';
+
+function DirectionalDrawer() {
+  // The drawer automatically handles back arrow direction internally:
+  // In RTL: back arrow points right (→) - IconArrowRight
+  // In LTR: back arrow points left (←) - IconArrowLeft
+
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={setOpen}
+      title={isRTL ? 'الإعدادات' : 'Settings'}
+      showBackButton={true}
+      onBackClick={handleBack}
+      showFooter={true}
+      primaryLabel={isRTL ? 'حفظ' : 'Save'}
+      cancelLabel={isRTL ? 'إلغاء' : 'Cancel'}
+    >
+      <div>
+        <p>{isRTL ? 'محتوى الإعدادات' : 'Settings content'}</p>
+      </div>
+    </Drawer>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Back" Navigation
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+// Automatically handled by showBackButton prop
+
+<Drawer
+  showBackButton={true}
+  onBackClick={handleBack}
+  title={isRTL ? 'رجوع' : 'Back'}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### RTL Testing Example
+<Canvas of={DrawerStories.RTLDrawer} />
+
+```jsx
+<div dir="rtl">
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="عنوان الدرج"
+    showBackButton={true}
+    showFooter={true}
+    footerVariant="cancelAndActions"
+    primaryLabel="حفظ"
+    cancelLabel="إلغاء"
+    onPrimary={() => setOpen(false)}
+    onCancel={() => setOpen(false)}
+  >
+    <div style={{ textAlign: 'right' }}>
+      <p>هذا محتوى الدرج باللغة العربية.</p>
+      <p>يتم عرض النص بشكل صحيح مع المحاذاة المناسبة.</p>
+    </div>
+  </Drawer>
+</div>
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Let drawer handle positioning** - it automatically adjusts slide direction for RTL
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Back button direction** is automatic - no manual icon selection needed
+6. **Direction follows reading flow** - not physical direction on screen
+7. **Test nested components** - ensure modals, selects work correctly in RTL
+8. **Use semantic HTML** - apply `dir="rtl"` to content containers when needed
+
+## Full Height Control
+<Canvas of={DrawerStories.FullHeightDrawer} />
+
+```jsx
+<Drawer
+  title="Full Height Drawer"
+  fullHeight={true}  // Default, spans full viewport height
+>
+  <div>
+    <div style={{ height: '1000px' }}>
+      <p>This content area scrolls while header and footer remain fixed.</p>
+    </div>
+  </div>
+</Drawer>
+```
+
+## Common Use Cases
+
+### Information Display
+```jsx
+const UserDetails = ({ user }) => (
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="User Details"
+    showFooter={false}  // No drawer-level actions needed
+  >
+    <div>
+      <h3>{user.name}</h3>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Role:</strong> {user.role}</p>
+
+      {/* Content buttons are fine in children! */}
+      <Button onClick={handleResetPassword}>Reset Password</Button>
+      <Button onClick={handleSendEmail}>Send Email</Button>
+    </div>
+  </Drawer>
+);
+```
+
+### Content Management with Action Buttons
+```jsx
+const UserManagement = ({ users }) => (
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="User Management"
+    showFooter={false}  // No drawer footer - using content buttons instead
+  >
+    <div>
+      <div style={{ marginBottom: '16px' }}>
+        <Button onClick={handleAddUser}>Add New User</Button>
+      </div>
+
+      {users.map(user => (
+        <div key={user.id} style={{ display: 'flex', gap: '8px', padding: '8px', borderBottom: '1px solid #eee' }}>
+          <span>{user.name}</span>
+          <Button variant="plain" onClick={() => handleEdit(user)}>Edit</Button>
+          <Button variant="plain" tone="critical" onClick={() => handleDelete(user)}>Delete</Button>
+        </div>
+      ))}
+    </div>
+  </Drawer>
+);
+```
+
+### Form Entry
+```jsx
+const EditForm = ({ data }) => (
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="Edit User"
+    showFooter={true}
+    footerVariant="cancelAndActions"
+    cancelLabel="Cancel"
+    primaryLabel="Save Changes"
+    onCancel={() => setOpen(false)}
+    onPrimary={handleSave}
+  >
+    <form>
+      <input name="name" defaultValue={data.name} />
+      <input name="email" defaultValue={data.email} />
+    </form>
+  </Drawer>
+);
+```
+
+### Multi-Step Wizard
+```jsx
+const MultiStepWizard = () => {
+  const [step, setStep] = useState(1);
+
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={setOpen}
+      title={`Step ${step} of 3`}
+      showBackButton={step > 1}
+      step={step}
+      onBackClick={() => setStep(step - 1)}
+      showFooter={true}
+      footerVariant="cancelAndActions"
+      cancelLabel="Cancel"
+      primaryLabel={step === 3 ? "Complete" : "Next"}
+      onCancel={() => setOpen(false)}
+      onPrimary={() => step === 3 ? complete() : setStep(step + 1)}
+    >
+      <div>
+        {/* Step-specific content */}
+        {step === 1 && <PersonalInfo />}
+        {step === 2 && <AddressInfo />}
+        {step === 3 && <Review />}
+      </div>
+    </Drawer>
+  );
+};
+```
+
+### Settings Panel
+```jsx
+const SettingsPanel = () => (
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="Settings"
+    width="default"
+    position="right"
+  >
+    <div>
+      {/* Settings options */}
+      <section>
+        <h4>Preferences</h4>
+        {/* Settings controls */}
+      </section>
+    </div>
+  </Drawer>
+);
+```
+
+## Accessibility
+
+The Drawer component provides comprehensive accessibility:
+
+- Built on Vaul Drawer primitive for proper focus management
+- Focus trapping within drawer when open
+- Keyboard navigation (Tab, Escape)
+- Proper ARIA attributes
+- Screen reader support
+- Background scroll prevention
+- Proper heading hierarchy
+- Labeled buttons (back, close)
+
+## Technical Details
+
+### CSS Variables
+- `--t-z-drawer: 1020` - Drawer base z-index
+- `--t-z-drawer-modal: 1070` - Higher z-index for modals in drawer
+- Design tokens for colors, spacing, typography
+- RTL-specific variables for line height and fonts
+
+### Browser Support
+Compatible with all modern browsers with full RTL support.
+
+### Mobile Behavior
+On smaller screens (below 640px):
+- Full width drawer
+- Slides up from bottom
+- Maximum height of 80% viewport
+- Rounded corners at top
+
+---
+
+## 🎯 QUICK REFERENCE FOR AI AGENTS
+
+### ✅ DO THIS (Content with buttons):
+```jsx
+<Drawer
+  title="User Management"
+  showFooter={false}  // No drawer footer needed
+>
+  <div>
+    {/* ✅ Content buttons are fine! */}
+    <Button onClick={addUser}>Add User</Button>
+    <Button onClick={deleteUser}>Delete</Button>
+  </div>
+</Drawer>
+```
+
+### ✅ With footer (drawer-level actions):
+```jsx
+<Drawer
+  title="Edit Form"
+  showFooter={true}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"  // Drawer footer button
+  primaryLabel="Save"   // Drawer footer button
+  onCancel={handleCancel}
+  onPrimary={handleSave}
+>
+  <form>
+    {/* ✅ Content buttons are fine here too! */}
+    <Button onClick={generatePassword}>Generate Password</Button>
+  </form>
+</Drawer>
+```
+
+### ✅ Nested modal (automatic z-index):
+```jsx
+<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+  <Modal open={modalOpen} onOpenChange={setModalOpen}>
+    {/* Automatic z-index management */}
+    <Select options={options} />
+  </Modal>
+</Drawer>
+```
+
+### ❌ NEVER DO THIS:
+```jsx
+<Drawer title="Edit Form">
+  <form>Content</form>
+  {/* ❌ Don't create drawer footer buttons manually */}
+  <div className="footer">
+    <button>Cancel</button>  {/* Use footer props! */}
+    <button>Save</button>
+  </div>
+</Drawer>
+```
+
+**Remember: Content buttons go in `children` (✅), drawer footer buttons use props (✅), manual drawer footers are wrong (❌)!**

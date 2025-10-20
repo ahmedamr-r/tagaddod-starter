@@ -1,0 +1,639 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TopBarStories from './TopBar.stories';
+import { TopBar } from './TopBar';
+
+<Meta of={TopBarStories} />
+
+# REALM AGENT NAVIGATION INDEX
+
+Quick Reference for AI Agents (Claude Code):
+
+📋 **CRITICAL READING**: TopBar-AI-AGENT-GUIDE.md (Complete AI implementation guide)
+📦 **3-SLOT ARCHITECTURE** (Lines 50-120)
+🎯 **BASIC USAGE** (Lines 122-160)
+🔄 **SWAPPABLE SECTIONS** (Lines 162-340)
+  - Center Content (Lines 170-240)
+  - End Content (Lines 242-310)
+  - Warehouse Example (Lines 312-340)
+📱 **RESPONSIVE PATTERNS** (Lines 342-420)
+🌐 **RTL SUPPORT** (Lines 422-480)
+♿ **ACCESSIBILITY** (Lines 482-500)
+💡 **COMPLETE EXAMPLES** (Lines 502-600)
+
+**⚠️ CRITICAL FOR AI AGENTS:**
+1. **Default = Empty**: Center and end sections are NULL by default
+2. **Warehouse is optional**: Use `showWarehouseDropdown={true}` to enable example
+3. **Center requires flag**: Must set `showCenterSection={true}` to show center content
+4. **Responsive first**: ALWAYS use design tokens and flexible layouts (see guide)
+5. **Read AI Guide**: `/TopBar-AI-AGENT-GUIDE.md` has complete patterns and examples
+
+**🚨 ANTI-PATTERNS TO AVOID:**
+- ❌ Hardcoded widths/heights in custom content
+- ❌ Assuming warehouse dropdown exists by default
+- ❌ Forgetting `showCenterSection={true}`
+- ❌ Not considering mobile responsiveness
+- ❌ Using literal values instead of design tokens
+
+**⚠️ FALLBACK INSTRUCTION:**
+Read TopBar-AI-AGENT-GUIDE.md for comprehensive implementation patterns.
+
+---
+
+# TopBar Component
+
+The TopBar is a **flexible 3-slot layout system** for application headers. It provides independent, swappable sections that you can customize with any content.
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ ┌──────────┐  ┌─────────────────┐  ┌──────────────────────┐   │
+│ │  START   │  │     CENTER      │  │         END          │   │
+│ │  (Fixed) │  │   (Swappable)   │  │     (Swappable)      │   │
+│ └──────────┘  └─────────────────┘  └──────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### The 3 Slots
+
+| Slot | Purpose | Swappable | Default |
+|------|---------|-----------|---------|
+| **START** | Logo + Mobile menu | ❌ Fixed | TAGADDOD logo, hamburger |
+| **CENTER** | Navigation/Search | ✅ Yes | `null` (empty) |
+| **END** | User actions/Profile | ✅ Yes | `null` (empty) |
+
+**Key Concept**: CENTER and END are fully swappable slots. You can put ANY React component there. The warehouse dropdown is just an optional example.
+
+## Import
+
+```jsx
+import { TopBar } from 'tagaddod-design-react';
+```
+
+## Props
+
+<ArgTypes of={TopBar} />
+
+## Basic Usage
+
+### Minimal TopBar
+
+<Canvas of={TopBarStories.BasicLayout} />
+
+```jsx
+// Just logo and hamburger - clean slate
+<TopBar />
+```
+
+### With Warehouse Dropdown (Example)
+
+<Canvas of={TopBarStories.WithWarehouseDropdown} />
+
+```jsx
+// Enable the optional warehouse dropdown example
+<TopBar
+  showWarehouseDropdown={true}
+  selectedWarehouse="Main Warehouse"
+  warehouses={["Main Warehouse", "Secondary Warehouse"]}
+  onWarehouseChange={setWarehouse}
+  onLogoutClick={handleLogout}
+/>
+```
+
+**Note**: The warehouse dropdown is an **optional convenience feature**, not a default. Use `showWarehouseDropdown={true}` to enable it, or replace the end section with your own component.
+
+## Swappable Sections
+
+### Center Section (`centerContent`)
+
+**Purpose**: Primary navigation, search bars, or application status
+**Positioning**: Absolutely centered (50% of TopBar width)
+**Default**: `null` (hidden)
+
+<Canvas of={TopBarStories.CenterContentSwappable} />
+
+#### Requirements
+1. Set `showCenterSection={true}` to enable
+2. Pass content via `centerContent` prop
+3. Content should be responsive (see guidelines below)
+
+#### Search Bar Example
+
+```jsx
+<TopBar
+  showCenterSection={true}
+  centerContent={
+    <TextInput
+      placeholder="Search products..."
+      prefixIcon={<IconSearch size={18} />}
+      style={{
+        width: '100%',
+        maxWidth: '500px',
+        minWidth: '300px'
+      }}
+    />
+  }
+/>
+```
+
+#### Navigation Menu Example
+
+```jsx
+<TopBar
+  showCenterSection={true}
+  centerContent={
+    <div style={{
+      display: 'flex',
+      gap: 'var(--t-space-300)',
+      alignItems: 'center'
+    }}>
+      <Button variant="plain" size="small">Dashboard</Button>
+      <Button variant="plain" size="small">Orders</Button>
+      <Button variant="plain" size="small">Analytics</Button>
+    </div>
+  }
+/>
+```
+
+#### Status Indicator Example
+
+```jsx
+<TopBar
+  showCenterSection={true}
+  centerContent={
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-200)',
+      padding: '0 var(--t-space-400)',
+      backgroundColor: 'var(--t-color-fill-success-secondary)',
+      borderRadius: 'var(--t-border-radius-300)',
+      color: 'var(--t-color-text-success)',
+      height: '36px'
+    }}>
+      <div style={{
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: 'var(--t-color-icon-success)'
+      }} />
+      All Systems Operational
+    </div>
+  }
+/>
+```
+
+### End Section (`endContent`)
+
+**Purpose**: User profile, notifications, actions, or contextual controls
+**Positioning**: Right-aligned (left-aligned in RTL)
+**Default**: `null` (empty)
+
+<Canvas of={TopBarStories.EndContentSwappable} />
+
+#### User Profile with Notifications
+
+```jsx
+<TopBar
+  endContent={
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-300)'
+    }}>
+      <Button
+        variant="plain"
+        size="small"
+        prefixIcon={<IconBell size={18} />}
+        aria-label="Notifications"
+      >
+        3
+      </Button>
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        backgroundColor: 'var(--t-color-fill-brand-primary)',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'var(--t-font-weight-medium)',
+        fontSize: 'var(--t-font-size-250)',
+        cursor: 'pointer'
+      }}>
+        JD
+      </div>
+    </div>
+  }
+/>
+```
+
+#### Action Buttons
+
+```jsx
+<TopBar
+  endContent={
+    <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
+      <Button
+        variant="outlined"
+        size="small"
+        prefixIcon={<IconPlus size={16} />}
+      >
+        New
+      </Button>
+      <Button variant="primary" size="small">
+        Export
+      </Button>
+    </div>
+  }
+/>
+```
+
+#### Custom Dropdown
+
+```jsx
+<TopBar
+  endContent={
+    <Popover>
+      <button>
+        <IconBuilding size={16} />
+        <span>Main Warehouse</span>
+        <IconChevronDown size={16} />
+      </button>
+      {/* Your custom dropdown content */}
+    </Popover>
+  }
+/>
+```
+
+### Warehouse Dropdown (Optional Example)
+
+The TopBar includes an **optional** warehouse dropdown as a convenience feature:
+
+```jsx
+<TopBar
+  showWarehouseDropdown={true}
+  selectedWarehouse="Main Warehouse"
+  warehouses={["Main Warehouse", "Secondary Warehouse"]}
+  onWarehouseChange={setWarehouse}
+  showLogoutOption={true}
+  logoutText="Sign Out"
+  onLogoutClick={handleLogout}
+/>
+```
+
+**Important Notes:**
+- `showWarehouseDropdown` is `false` by default
+- If `endContent` is provided, warehouse dropdown is ignored
+- This is demonstration code - build your own for production use
+
+## Responsive Design Guidelines
+
+### Critical Rules for Custom Components
+
+When adding content to `centerContent` or `endContent`, follow these patterns:
+
+#### 1. Use Design Tokens
+
+```jsx
+// ✅ GOOD
+<div style={{
+  display: 'flex',
+  gap: 'var(--t-space-300)',
+  padding: 'var(--t-space-200)',
+  backgroundColor: 'var(--t-color-surface-secondary)',
+  borderRadius: 'var(--t-border-radius-300)'
+}}>
+  Content
+</div>
+
+// ❌ BAD
+<div style={{
+  display: 'flex',
+  gap: '12px',
+  padding: '8px',
+  backgroundColor: '#f5f5f5',
+  borderRadius: '6px'
+}}>
+  Content
+</div>
+```
+
+#### 2. Flexible Layouts
+
+```jsx
+// ✅ GOOD
+<div style={{
+  display: 'flex',
+  alignItems: 'center',
+  gap: 'var(--t-space-300)',
+  minWidth: '200px',
+  maxWidth: '600px',
+  width: '100%'
+}}>
+  Content
+</div>
+
+// ❌ BAD
+<div style={{ width: '800px' }}>
+  Content
+</div>
+```
+
+#### 3. Height Constraints
+
+Keep content within TopBar height:
+- **Desktop**: 56px (3.5rem)
+- **Mobile**: 56px (3.5rem)
+
+```jsx
+// ✅ GOOD - Fits within height
+<div style={{
+  display: 'flex',
+  alignItems: 'center',
+  height: '40px',  // Fits in 56px TopBar
+  gap: 'var(--t-space-300)'
+}}>
+  <Button size="small">Action</Button>
+</div>
+
+// ❌ BAD - Exceeds height
+<div style={{ height: '60px' }}>
+  Content
+</div>
+```
+
+### Mobile Responsive Behavior
+
+<Canvas of={TopBarStories.ResponsiveBehavior} />
+
+#### Mobile Configuration
+
+```jsx
+<TopBar
+  showCenterSection={true}
+  showCenterSectionOnMobile={false}  // Hide on mobile
+  showCenterSectionOnTablet={true}   // Show on tablet
+  centerContent={<SearchBar />}
+/>
+```
+
+#### Mobile Expandable Pattern
+
+<Canvas of={TopBarStories.MobileExpandableSearch} />
+
+```jsx
+const [isExpanded, setIsExpanded] = useState(false);
+
+<TopBar
+  showCenterSection={true}
+  showCenterSectionOnMobile={false}
+  centerContent={<SearchBar />}
+
+  // Mobile action button
+  mobileActionContent={
+    <Button
+      variant="plain"
+      size="small"
+      prefixIcon={<IconSearch size={18} />}
+      aria-label="Search"
+    />
+  }
+
+  // Expansion config
+  isExpanded={isExpanded}
+  onExpandToggle={setIsExpanded}
+  expandedContent={
+    <div style={{
+      display: 'flex',
+      gap: 'var(--t-space-300)',
+      alignItems: 'center'
+    }}>
+      <TextInput
+        placeholder="Search..."
+        style={{ flex: 1 }}
+        autoFocus={isExpanded}
+      />
+      <Button variant="primary" size="small">
+        Search
+      </Button>
+    </div>
+  }
+  expansionDuration={300}
+/>
+```
+
+## RTL Support
+
+TopBar automatically handles RTL layouts when used with ThemeProvider:
+
+```jsx
+import { ThemeProvider, TopBar } from 'tagaddod-design-react';
+
+<ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+  <TopBar
+    showCenterSection={true}
+    centerContent={<SearchBar />}
+    endContent={<UserProfile />}
+  />
+</ThemeProvider>
+```
+
+**Automatic RTL Adjustments:**
+- ✅ End section moves to left edge
+- ✅ Center section remains centered
+- ✅ Font switches to Arabic (Tajawal)
+- ✅ Line height adjusts for Arabic text
+- ✅ Mobile menu slides from correct side
+
+## Accessibility
+
+- **ARIA Labels**: Proper labeling for screen readers
+- **Keyboard Navigation**: Full keyboard support
+- **Focus Management**: Clear focus indicators
+- **Mobile Touch Targets**: 44x44px minimum
+
+```jsx
+<TopBar
+  endContent={
+    <Button
+      variant="plain"
+      size="small"
+      prefixIcon={<IconBell size={18} />}
+      aria-label="Notifications - 3 unread"
+    >
+      3
+    </Button>
+  }
+/>
+```
+
+## Complete Examples
+
+### Dashboard TopBar
+
+```jsx
+<TopBar
+  logoClickable={true}
+  onLogoClick={() => navigate('/')}
+
+  // Center: Search bar
+  showCenterSection={true}
+  showCenterSectionOnMobile={false}
+  centerContent={
+    <TextInput
+      placeholder="Search products, orders, customers..."
+      prefixIcon={<IconSearch size={18} />}
+      style={{
+        width: '100%',
+        maxWidth: '500px',
+        minWidth: '300px'
+      }}
+    />
+  }
+
+  // End: User profile
+  endContent={
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-300)'
+    }}>
+      <Button variant="plain" size="small" prefixIcon={<IconBell />}>
+        3
+      </Button>
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        backgroundColor: 'var(--t-color-fill-brand-primary)',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer'
+      }}>
+        JD
+      </div>
+    </div>
+  }
+
+  // Mobile expansion
+  mobileActionContent={<Button variant="plain" prefixIcon={<IconSearch />} />}
+  isExpanded={searchExpanded}
+  onExpandToggle={setSearchExpanded}
+  expandedContent={
+    <TextInput placeholder="Search..." autoFocus />
+  }
+/>
+```
+
+### E-commerce TopBar
+
+```jsx
+<TopBar
+  showCenterSection={true}
+  centerContent={
+    <div style={{
+      display: 'flex',
+      gap: 'var(--t-space-400)',
+      alignItems: 'center'
+    }}>
+      <Button variant="plain" size="small">Products</Button>
+      <Button variant="plain" size="small">Categories</Button>
+      <Button variant="plain" size="small">Deals</Button>
+    </div>
+  }
+
+  endContent={
+    <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
+      <Button variant="plain" size="small" prefixIcon={<IconSearch />} />
+      <Button variant="plain" size="small" prefixIcon={<IconHeart />}>
+        12
+      </Button>
+      <Button variant="primary" size="small" prefixIcon={<IconShoppingCart />}>
+        5
+      </Button>
+    </div>
+  }
+/>
+```
+
+### Admin Panel TopBar
+
+```jsx
+<TopBar
+  showWarehouseDropdown={true}
+  selectedWarehouse="Main Warehouse"
+  warehouses={["Main Warehouse", "Secondary Warehouse", "Distribution Center"]}
+  onWarehouseChange={setWarehouse}
+  showLogoutOption={true}
+  logoutText="Sign Out"
+  onLogoutClick={handleLogout}
+
+  showCenterSection={true}
+  centerContent={
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-200)',
+      padding: '0 var(--t-space-400)',
+      backgroundColor: 'var(--t-color-fill-success-secondary)',
+      borderRadius: 'var(--t-border-radius-300)',
+      color: 'var(--t-color-text-success)',
+      height: '36px'
+    }}>
+      <div style={{
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: 'var(--t-color-icon-success)'
+      }} />
+      All Systems Online
+    </div>
+  }
+/>
+```
+
+## Implementation Notes
+
+### CSS Variables Used
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-topbar-height` | TopBar height (56px / 3.5rem - fixed on all devices) |
+| `--t-color-surface-primary` | Background color |
+| `--t-color-text-primary` | Text color |
+| `--t-color-border-primary` | Border color |
+| `--t-space-*` | Spacing tokens |
+| `--t-border-radius-*` | Border radius tokens |
+
+### Mobile Breakpoints
+
+- **Desktop**: 1024px+
+- **Tablet**: 768px - 1024px
+- **Mobile**: < 768px
+
+### Performance
+
+- Lazy loading of Popover content
+- Efficient CSS transforms for animations
+- Minimal re-renders with optimized state
+
+## For AI Agents
+
+**📋 Read the complete implementation guide**: `TopBar-AI-AGENT-GUIDE.md`
+
+**Quick Decision Tree**:
+1. Just logo? → `<TopBar />`
+2. With search/nav? → Add `showCenterSection={true}` + `centerContent={...}`
+3. With user profile? → Add `endContent={...}`
+4. With warehouse example? → Add `showWarehouseDropdown={true}`
+
+**Remember**:
+- Default is empty (no center/end content)
+- Warehouse dropdown is optional example
+- Always use design tokens
+- Think mobile-first
+- Test responsive behavior

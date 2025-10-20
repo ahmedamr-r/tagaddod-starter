@@ -1,0 +1,1950 @@
+# Table Component - AI Agent Implementation Guide
+
+**Version:** 1.0.0
+**Component:** tagaddod-design-react Table
+**Documentation Type:** AI Agent Optimized
+**Related Docs:** [Table-CELL-VARIANTS-GUIDE.md](./Table-CELL-VARIANTS-GUIDE.md)
+
+---
+
+## Quick Navigation Index
+
+### 📦 BASICS (Lines 30-150)
+- Import & Setup
+- Core Props Interface
+- Basic Implementation
+
+### 🎛️ TABLE FEATURES (Lines 151-450)
+- Pagination (Client & Server-Side)
+- Filtering System (Lines 250-380)
+- Search Functionality
+- Tabbed Tables
+- Column Management (Ordering, Resizing, Pinning)
+
+### 🎨 VISUAL CONFIGURATION (Lines 451-550)
+- Striped vs Non-Striped
+- Grid Cells
+- Row Hover States
+- ScrollArea Integration
+
+### 🔄 STATE MANAGEMENT (Lines 551-650)
+- Table States (normal, error, empty, loading, notFound)
+- Controlled vs Uncontrolled
+- State Synchronization
+
+### 🌍 RTL & INTERNATIONALIZATION (Lines 651-720)
+- RTL Detection
+- Arabic Text Handling
+- Directional Props
+
+### ⚡ ADVANCED PATTERNS (Lines 721-900)
+- Server-Side Data Fetching
+- Custom State Management
+- Performance Optimization
+
+### 🐛 TROUBLESHOOTING (Lines 901-1000)
+- Common Issues & Solutions
+- Performance Tips
+- Debugging Strategies
+
+---
+
+## Import & Basic Setup
+
+### Required Imports
+
+```typescript
+import { Table } from 'tagaddod-design-react';
+import { ColumnDef } from '@tanstack/react-table';
+
+// For cell variants (see Table-CELL-VARIANTS-GUIDE.md)
+import {
+  QuickColumns,
+  createCellColumn,
+  createCustomCellColumn,
+  TableCellVariants
+} from 'tagaddod-design-react';
+```
+
+### Minimal Working Example
+
+```tsx
+import { Table } from 'tagaddod-design-react';
+
+// Define your data type
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+// Define columns
+const columns = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    size: 80,
+  },
+  {
+    accessorKey: 'name',
+    header: 'Product Name',
+    size: 200,
+  },
+  {
+    accessorKey: 'price',
+    header: 'Price',
+    size: 120,
+  },
+];
+
+// Sample data
+const data: Product[] = [
+  { id: 1, name: 'Widget', price: 29.99 },
+  { id: 2, name: 'Gadget', price: 49.99 },
+];
+
+// Render
+function ProductTable() {
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      title="Products"
+    />
+  );
+}
+```
+
+---
+
+## Core Props Reference
+
+### TableProps Interface
+
+```typescript
+interface TableProps<T extends object> {
+  // REQUIRED
+  data: T[];                              // Array of data objects
+  columns: ColumnDef<T, any>[];          // Column definitions (TanStack Table)
+
+  // DISPLAY CONFIGURATION
+  title?: string;                         // Header title
+  badge?: number;                         // Badge count next to title
+  showTotalBadge?: boolean;              // Auto-calculate badge from data (default: true)
+  striped?: boolean;                     // Alternating row colors (default: false)
+  gridCells?: boolean;                   // Show cell borders (default: false)
+  disableRowHover?: boolean;             // Disable hover effects (default: false)
+
+  // FEATURE TOGGLES
+  showHeader?: boolean;                  // Show title/search/filter bar (default: true)
+  showPagination?: boolean;              // Show pagination controls (default: true)
+  showSearch?: boolean;                  // Show search input (default: true)
+  showFilters?: boolean;                 // Show filter button (default: true)
+  showFilterBar?: boolean;               // Show filter bar initially (default: false)
+  showExport?: boolean;                  // Show export button (default: false)
+  showTabs?: boolean;                    // Enable tabbed interface (default: false)
+
+  // COLUMN FEATURES
+  enableColumnOrdering?: boolean;        // Drag-drop column reorder (default: false)
+  enableColumnResizing?: boolean;        // Interactive column resize (default: false)
+
+  // PAGINATION
+  pagination?: {
+    pageSize: number;                    // Items per page
+    pageIndex: number;                   // Current page (0-indexed)
+    pageCount: number;                   // Total pages
+    onPageChange: (pageIndex: number) => void;
+    onPageSizeChange?: (pageSize: number) => void;
+    pageSizeOptions?: number[];          // Options for page size selector
+    isServerSide?: boolean;              // Enable server-side pagination
+  };
+
+  // SEARCH CONFIGURATION
+  searchQuery?: string;                  // Controlled search value
+  onSearchChange?: (query: string) => void;
+  searchConfig?: {
+    debounceMs?: number;                 // Debounce delay (default: 300ms)
+    serverSide?: boolean;                // Server-side search (default: false)
+    minLength?: number;                  // Min chars to trigger (default: 0)
+    placeholder?: string;                // Custom placeholder
+  };
+
+  // FILTERING
+  activeFilters?: { [key: string]: any }; // Current filter values
+  onFilterChange?: (filters: { [key: string]: any }) => void;
+  filterOptions?: {
+    [key: string]: {
+      label: string;
+      type?: 'select' | 'rangeSlider' | 'checkboxGroup' | 'radioGroup' | 'currentFilters';
+      options?: Array<{ label: string; value: any }>;
+      rangeConfig?: {
+        min: number;
+        max: number;
+        step?: number;
+        prefix?: string;
+        suffix?: string;
+        formatValue?: (value: number) => string;
+      };
+    };
+  };
+
+  // TABS
+  tabItems?: Array<{
+    id: string;
+    label: string;
+    active?: boolean;
+    badge?: number;
+  }>;
+
+  tableTabs?: Array<TableTab<T>>;       // Enhanced tabs with separate data/columns
+  onTabChange?: (tabId: string) => void;
+
+  // STATE MANAGEMENT
+  state?: 'normal' | 'error' | 'empty' | 'notFound' | 'loading';
+  errorMessage?: string;
+  emptyMessage?: string;
+  notFoundMessage?: string;
+  notFoundSubtitle?: string;
+  emptyStateNode?: ReactNode;            // Custom empty state component
+
+  // SORTING
+  defaultSorting?: SortingState;        // Initial sort configuration
+  defaultColumnVisibility?: VisibilityState;
+
+  // INTERACTIONS
+  onRowClick?: (row: Row<T>) => void;
+  onCellClick?: (cell: Cell<T, unknown>) => void;
+  onExport?: () => void;
+
+  // SCROLLING
+  enableScrollArea?: boolean;            // Wrap in ScrollArea (default: false)
+  scrollAreaHeight?: string | number;    // ScrollArea height (default: '400px')
+  scrollAreaWidth?: string | number;     // ScrollArea width (default: '100%')
+  enableHorizontalScroll?: boolean;      // Enable horizontal scroll (default: true)
+  enableVerticalScroll?: boolean;        // Enable vertical scroll (default: true)
+  scrollAreaType?: 'always' | 'scroll' | 'hover' | 'auto';
+
+  // CUSTOM CONTENT
+  footerContent?: ReactNode;             // Custom footer content
+  className?: string;                    // Additional CSS classes
+}
+```
+
+---
+
+## Pagination Implementation
+
+### Client-Side Pagination (Default)
+
+For data that is already loaded, use client-side pagination:
+
+```tsx
+function ClientPaginatedTable() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Calculate total pages from full dataset
+  const pageCount = Math.ceil(data.length / pageSize);
+
+  return (
+    <Table
+      data={data}  // Full dataset
+      columns={columns}
+      pagination={{
+        pageIndex: currentPage,
+        pageSize: pageSize,
+        pageCount: pageCount,
+        onPageChange: setCurrentPage,
+        onPageSizeChange: setPageSize,
+        pageSizeOptions: [10, 20, 50, 100],
+        // isServerSide: false (default)
+      }}
+    />
+  );
+}
+```
+
+**Key Points:**
+- Table handles data slicing internally
+- `pageCount` is calculated from full dataset
+- No need to set `isServerSide`
+
+### Server-Side Pagination
+
+For large datasets fetched from an API:
+
+```tsx
+function ServerPaginatedTable() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch data when page or page size changes
+  useEffect(() => {
+    fetchData(currentPage, pageSize);
+  }, [currentPage, pageSize]);
+
+  async function fetchData(page: number, size: number) {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/products?page=${page}&pageSize=${size}`
+      );
+      const result = await response.json();
+
+      setData(result.data);
+      setTotalPages(result.totalPages);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Table
+      data={data}  // Current page data only
+      columns={columns}
+      state={loading ? 'loading' : 'normal'}
+      pagination={{
+        pageIndex: currentPage,
+        pageSize: pageSize,
+        pageCount: totalPages,  // From API response
+        onPageChange: (page) => setCurrentPage(page),
+        onPageSizeChange: (size) => {
+          setPageSize(size);
+          setCurrentPage(0);  // Reset to first page
+        },
+        pageSizeOptions: [10, 20, 50, 100],
+        isServerSide: true,  // CRITICAL: Enable server-side mode
+      }}
+    />
+  );
+}
+```
+
+**Key Points:**
+- **MUST** set `isServerSide: true`
+- `data` contains only current page items
+- `pageCount` from API, not calculated
+- Handle loading state yourself
+
+---
+
+## Filtering System
+
+### CRITICAL CONCEPT: Table Does NOT Filter Data
+
+**The Table component provides the filter UI but does NOT perform filtering.**
+You must implement the filtering logic yourself and pass the filtered data.
+
+### Complete Filtering Implementation
+
+```tsx
+function FilteredTable() {
+  const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
+
+  // Define filter options
+  const filterOptions = {
+    category: {
+      label: 'Category',
+      type: 'select',
+      options: [
+        { label: 'All Categories', value: '' },
+        { label: 'Electronics', value: 'electronics' },
+        { label: 'Clothing', value: 'clothing' },
+        { label: 'Food', value: 'food' },
+      ]
+    },
+    priceRange: {
+      label: 'Price Range',
+      type: 'rangeSlider',
+      rangeConfig: {
+        min: 0,
+        max: 1000,
+        step: 10,
+        prefix: '$',
+        formatValue: (value: number) => value.toString()
+      }
+    },
+    status: {
+      label: 'Status',
+      type: 'checkboxGroup',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+        { label: 'Pending', value: 'pending' },
+      ]
+    }
+  };
+
+  // YOUR FILTERING LOGIC
+  const filteredData = useMemo(() => {
+    let result = [...fullData];
+
+    // Category filter
+    if (activeFilters.category && activeFilters.category !== '') {
+      result = result.filter(item => item.category === activeFilters.category);
+    }
+
+    // Price range filter
+    if (activeFilters.priceRange && Array.isArray(activeFilters.priceRange)) {
+      const [min, max] = activeFilters.priceRange;
+      result = result.filter(item => item.price >= min && item.price <= max);
+    }
+
+    // Status checkbox filter
+    if (activeFilters.status && Array.isArray(activeFilters.status) && activeFilters.status.length > 0) {
+      result = result.filter(item => activeFilters.status.includes(item.status));
+    }
+
+    return result;
+  }, [fullData, activeFilters]);
+
+  return (
+    <Table
+      data={filteredData}  // Pass FILTERED data
+      columns={columns}
+      activeFilters={activeFilters}
+      onFilterChange={setActiveFilters}
+      filterOptions={filterOptions}
+      showFilters={true}
+      showFilterBar={true}  // Show filter bar initially
+    />
+  );
+}
+```
+
+### Filter Types Reference
+
+The Table component supports 6 different filter types, each optimized for specific use cases. All filters are displayed in a **Popover component** when clicked.
+
+#### 1. Select Dropdown (`type: 'select'`)
+
+**When to Use:**
+- Single selection from a small list (3-10 options)
+- Mutually exclusive choices (e.g., category, status, priority)
+- When the user needs to see all options at once
+- Default filter type if `type` is not specified
+
+**UI Behavior:**
+- Renders as a simple dropdown list in a Popover
+- Single selection only
+- Popover closes automatically when an option is selected
+- Immediate response (0ms debounce)
+
+**Configuration:**
+```typescript
+{
+  label: 'Category',
+  type: 'select',  // or omit for default
+  options: [
+    { label: 'All Categories', value: '' },  // Empty value for "all"
+    { label: 'Electronics', value: 'electronics' },
+    { label: 'Clothing', value: 'clothing' },
+    { label: 'Food', value: 'food' },
+  ]
+}
+```
+
+**Data Structure:**
+- Value: `string | number` (single value)
+- Example: `activeFilters.category = 'electronics'`
+
+**Filtering Logic:**
+```typescript
+if (activeFilters.category && activeFilters.category !== '') {
+  data = data.filter(item => item.category === activeFilters.category);
+}
+```
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Category [▼]`
+- Selected: `[×] Category | Electronics [▼]`
+
+#### 2. Range Slider (`type: 'rangeSlider'`)
+
+**When to Use:**
+- Filtering numeric ranges (price, age, quantity, distance)
+- Continuous values with min/max bounds
+- When users need to see and adjust both endpoints
+- Large numeric ranges where dropdowns would be impractical
+
+**UI Behavior:**
+- Renders dual-thumb slider with text inputs in a Popover
+- Real-time visual feedback (100ms debounce for performance)
+- Text inputs for precise value entry
+- Popover width: 320px (accommodates slider + inputs)
+- Popover remains open for adjustments
+
+**Configuration:**
+```typescript
+{
+  label: 'Price Range',
+  type: 'rangeSlider',
+  rangeConfig: {  // REQUIRED for rangeSlider
+    min: 0,       // Required: minimum value
+    max: 1000,    // Required: maximum value
+    step: 10,     // Optional: slider increment (default: 1)
+    prefix: '$',  // Optional: appears before value in display
+    suffix: '',   // Optional: appears after value (e.g., ' USD', ' km')
+    formatValue: (value: number) => value.toString()  // Optional: custom formatting
+  }
+}
+```
+
+**Data Structure:**
+- Value: `[number, number]` (array with [min, max])
+- Example: `activeFilters.priceRange = [50, 500]`
+
+**Filtering Logic:**
+```typescript
+if (activeFilters.priceRange && Array.isArray(activeFilters.priceRange)) {
+  const [min, max] = activeFilters.priceRange;
+  data = data.filter(item => item.price >= min && item.price <= max);
+}
+```
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Price Range [▼]`
+- Selected: `[×] Price Range | $50 - $500 [▼]`
+
+**Example Use Cases:**
+- Price filtering: `{ min: 0, max: 10000, step: 100, prefix: '$' }`
+- Age range: `{ min: 18, max: 99, step: 1, suffix: ' years' }`
+- Distance: `{ min: 0, max: 500, step: 10, suffix: ' km' }`
+- Percentage: `{ min: 0, max: 100, step: 5, suffix: '%' }`
+
+#### 3. Checkbox Group (`type: 'checkboxGroup'`)
+
+**When to Use:**
+- Multiple selection from a list (3-8 options recommended)
+- Non-mutually exclusive choices (user can select multiple)
+- Filter by multiple criteria simultaneously (e.g., regions, features, tags)
+- When "OR" logic is needed (match ANY selected option)
+
+**UI Behavior:**
+- Renders vertical list of checkboxes in a Popover
+- Multiple selection allowed
+- Popover remains open for multiple selections
+- Immediate response (0ms debounce)
+- Popover min-width: 220px
+
+**Configuration:**
+```typescript
+{
+  label: 'Regions',
+  type: 'checkboxGroup',
+  options: [
+    { label: 'North America', value: 'NA' },
+    { label: 'Europe', value: 'EU' },
+    { label: 'Asia', value: 'ASIA' },
+    { label: 'Middle East', value: 'ME' },
+  ]
+}
+```
+
+**Data Structure:**
+- Value: `any[]` (array of selected values)
+- Example: `activeFilters.regions = ['NA', 'EU']`
+
+**Filtering Logic:**
+```typescript
+// OR logic: show items matching ANY selected region
+if (activeFilters.regions && Array.isArray(activeFilters.regions) && activeFilters.regions.length > 0) {
+  data = data.filter(item => activeFilters.regions.includes(item.region));
+}
+```
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Regions [▼]`
+- Selected (1): `[×] Regions | 1 selected [▼]`
+- Selected (2+): `[×] Regions | 3 selected [▼]`
+
+**Example Use Cases:**
+- Multi-region filtering
+- Feature toggles (show items with specific features)
+- Tag-based filtering
+- Multi-category selection
+
+#### 4. Radio Group (`type: 'radioGroup'`)
+
+**When to Use:**
+- Single selection from a small list (2-6 options)
+- Mutually exclusive choices with visual emphasis
+- When you want radio button UI instead of dropdown
+- Alternative to `select` type with different visual style
+
+**UI Behavior:**
+- Renders vertical list of radio buttons in a Popover
+- Single selection only (like `select` type)
+- Popover closes automatically when an option is selected
+- Immediate response (0ms debounce)
+- Popover min-width: 200px
+
+**Configuration:**
+```typescript
+{
+  label: 'Status',
+  type: 'radioGroup',
+  options: [
+    { label: 'All Statuses', value: '' },  // Empty for "all"
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' },
+    { label: 'Pending', value: 'pending' },
+  ]
+}
+```
+
+**Data Structure:**
+- Value: `string | number` (single value, same as `select`)
+- Example: `activeFilters.status = 'active'`
+
+**Filtering Logic:**
+```typescript
+if (activeFilters.status && activeFilters.status !== '') {
+  data = data.filter(item => item.status === activeFilters.status);
+}
+```
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Status [▼]`
+- Selected: `[×] Status | Active [▼]`
+
+**When to Use Radio vs Select:**
+- Use `radioGroup`: When options need visual emphasis or represent important mutually-exclusive choices
+- Use `select`: For standard dropdown behavior with less visual weight
+
+#### 5. Popover Listbox (`type: 'popoverListbox'`)
+
+**When to Use:**
+- Single selection from a longer list (10+ options)
+- When options need search/filter capability (Listbox component provides this)
+- Better UX for large option lists compared to standard `select`
+- When you want the Listbox component's enhanced features
+
+**UI Behavior:**
+- Renders Listbox component in a Popover
+- Single selection with enhanced UX
+- Popover closes automatically when an option is selected
+- Fast response (200ms debounce)
+- Popover min-width: 200px
+- Supports keyboard navigation and search
+
+**Configuration:**
+```typescript
+{
+  label: 'Country',
+  type: 'popoverListbox',
+  options: [
+    { label: 'United States', value: 'US' },
+    { label: 'United Kingdom', value: 'UK' },
+    { label: 'Canada', value: 'CA' },
+    { label: 'Australia', value: 'AU' },
+    // ... many more options
+  ]
+}
+```
+
+**Data Structure:**
+- Value: `string | number` (single value)
+- Example: `activeFilters.country = 'US'`
+
+**Filtering Logic:**
+```typescript
+if (activeFilters.country && activeFilters.country !== '') {
+  data = data.filter(item => item.country === activeFilters.country);
+}
+```
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Country [▼]`
+- Selected: `[×] Country | United States [▼]`
+
+**When to Use Listbox vs Select:**
+- Use `popoverListbox`: For 10+ options, when search/filter is helpful
+- Use `select`: For 3-10 options, simple dropdown
+
+#### 6. Current Filters Display (`type: 'currentFilters'`)
+
+**When to Use:**
+- Display all currently active filters in one place
+- "Filter summary" or "Applied filters" view
+- Quick overview of active filtering state
+- Read-only display (not for selection)
+
+**UI Behavior:**
+- Renders read-only Listbox showing active filters in a Popover
+- No selection - display only
+- Shows formatted filter values (e.g., "Price: $50 - $200")
+- Automatically updates when other filters change
+- Popover min-width: 200px
+
+**Configuration:**
+```typescript
+{
+  label: 'Active Filters',
+  type: 'currentFilters'
+  // No options array - generated automatically from activeFilters
+}
+```
+
+**Data Structure:**
+- Auto-generated from current `activeFilters` state
+- Displays formatted labels for each active filter
+
+**Visual Display in Filter Bar:**
+- Unselected: `[+] Active Filters [▼]`
+- Selected: `[×] Active Filters | 3 filters [▼]`
+
+**Popover Content Example:**
+```
+Category: Electronics
+Price Range: $50 - $500
+Regions: NA, EU (2 selected)
+```
+
+**Note:** This is a special display-only filter type. It doesn't change filter state - it only shows current state.
+
+### Filter Type Comparison Chart
+
+| Filter Type | Use When | Selection | Options | Popover UI | Debounce |
+|-------------|----------|-----------|---------|------------|----------|
+| `select` | 3-10 options, single choice | Single | Required | Simple dropdown | 0ms |
+| `radioGroup` | 2-6 options, visual emphasis | Single | Required | Radio buttons | 0ms |
+| `popoverListbox` | 10+ options, searchable | Single | Required | Enhanced listbox | 200ms |
+| `checkboxGroup` | 3-8 options, multiple choice | Multiple | Required | Checkboxes | 0ms |
+| `rangeSlider` | Numeric range | Range | N/A | Slider + inputs | 100ms |
+| `currentFilters` | Display active filters | None | N/A | Read-only list | N/A |
+
+### Filter Bar Behavior
+
+**Initial State:** Hidden by default (`showFilterBar: false`)
+
+**Progressive Disclosure:**
+- First 5 filters shown in filter bar
+- Remaining filters accessible via "More filters" button
+- Opens drawer with all filter options
+
+**Clear All Filters:**
+```typescript
+const handleClearAll = () => {
+  setActiveFilters({});
+};
+```
+
+### Complete Filter Example
+
+```tsx
+const filterOptions = {
+  // Select: Simple dropdown (default)
+  category: {
+    label: 'Category',
+    type: 'select',
+    options: [
+      { label: 'All', value: '' },
+      { label: 'Electronics', value: 'electronics' },
+      { label: 'Clothing', value: 'clothing' },
+    ]
+  },
+
+  // Radio Group: Visual emphasis
+  priority: {
+    label: 'Priority',
+    type: 'radioGroup',
+    options: [
+      { label: 'All', value: '' },
+      { label: 'High', value: 'high' },
+      { label: 'Medium', value: 'medium' },
+      { label: 'Low', value: 'low' },
+    ]
+  },
+
+  // Popover Listbox: Long lists with search
+  country: {
+    label: 'Country',
+    type: 'popoverListbox',
+    options: [
+      { label: 'United States', value: 'US' },
+      { label: 'United Kingdom', value: 'UK' },
+      // ... 50+ more countries
+    ]
+  },
+
+  // Checkbox Group: Multiple selection
+  regions: {
+    label: 'Regions',
+    type: 'checkboxGroup',
+    options: [
+      { label: 'North America', value: 'NA' },
+      { label: 'Europe', value: 'EU' },
+      { label: 'Asia', value: 'ASIA' },
+    ]
+  },
+
+  // Range Slider: Numeric ranges
+  priceRange: {
+    label: 'Price',
+    type: 'rangeSlider',
+    rangeConfig: {
+      min: 0,
+      max: 1000,
+      step: 10,
+      prefix: '$',
+      formatValue: (val) => val.toString()
+    }
+  },
+
+  // Current Filters: Display only
+  activeFilters: {
+    label: 'Active Filters',
+    type: 'currentFilters'
+  }
+};
+```
+
+---
+
+## Search Implementation
+
+### Client-Side Search
+
+```tsx
+function SearchableTable() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Define which fields to search
+  const searchFields = ['name', 'email', 'id'];
+
+  // Perform search
+  const searchedData = useMemo(() => {
+    if (!searchQuery) return data;
+
+    const query = searchQuery.toLowerCase();
+    return data.filter(item =>
+      searchFields.some(field =>
+        item[field]?.toString().toLowerCase().includes(query)
+      )
+    );
+  }, [data, searchQuery]);
+
+  return (
+    <Table
+      data={searchedData}
+      columns={columns}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchConfig={{
+        placeholder: 'Search by name, email, or ID...',
+        debounceMs: 300,      // Wait 300ms after typing stops
+        minLength: 2,         // Require at least 2 characters
+      }}
+    />
+  );
+}
+```
+
+### Server-Side Search
+
+```tsx
+function ServerSearchTable() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Debounced search effect
+  useEffect(() => {
+    if (searchQuery.length < 2) {
+      setData(initialData);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      performSearch(searchQuery);
+    }, 500);  // 500ms debounce for server requests
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  async function performSearch(query: string) {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const results = await response.json();
+      setData(results);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchConfig={{
+        serverSide: true,
+        debounceMs: 500,      // Longer debounce for server
+        minLength: 2,
+        placeholder: 'Search products...',
+      }}
+      state={loading ? 'loading' : data.length === 0 ? 'notFound' : 'normal'}
+      notFoundMessage="No results found"
+    />
+  );
+}
+```
+
+### Combined Search + Filter
+
+```tsx
+function SearchAndFilterTable() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState({});
+
+  const processedData = useMemo(() => {
+    let result = [...fullData];
+
+    // 1. Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(item =>
+        item.name?.toLowerCase().includes(query) ||
+        item.email?.toLowerCase().includes(query)
+      );
+    }
+
+    // 2. Apply filters
+    if (activeFilters.category && activeFilters.category !== '') {
+      result = result.filter(item => item.category === activeFilters.category);
+    }
+
+    if (activeFilters.priceRange && Array.isArray(activeFilters.priceRange)) {
+      const [min, max] = activeFilters.priceRange;
+      result = result.filter(item => item.price >= min && item.price <= max);
+    }
+
+    return result;
+  }, [fullData, searchQuery, activeFilters]);
+
+  return (
+    <Table
+      data={processedData}
+      columns={columns}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      activeFilters={activeFilters}
+      onFilterChange={setActiveFilters}
+      filterOptions={filterOptions}
+      state={processedData.length === 0 ? 'notFound' : 'normal'}
+    />
+  );
+}
+```
+
+---
+
+## Tabbed Tables
+
+### Simple Tabs (UI Only)
+
+For tabs that just change the display without changing data:
+
+```tsx
+function SimpleTabbedTable() {
+  const [activeTab, setActiveTab] = useState('all');
+
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      showTabs={true}
+      tabItems={[
+        { id: 'all', label: 'All Items', badge: data.length, active: true },
+        { id: 'active', label: 'Active', badge: 45 },
+        { id: 'archived', label: 'Archived', badge: 12 },
+      ]}
+      onTabChange={(tabId) => {
+        setActiveTab(tabId);
+        // Handle tab change logic
+      }}
+    />
+  );
+}
+```
+
+### Enhanced Tabs (Separate Data/Columns)
+
+For tabs with completely different data and columns:
+
+```tsx
+function EnhancedTabbedTable() {
+  const allProductsData = [/* products data */];
+  const lowStockData = [/* low stock products */];
+  const outOfStockData = [/* out of stock */];
+
+  const productColumns = [/* standard columns */];
+  const lowStockColumns = [/* columns with stock alerts */];
+
+  return (
+    <Table
+      data={allProductsData}  // Default data
+      columns={productColumns}  // Default columns
+      title="Inventory"
+      showTabs={true}
+      tableTabs={[
+        {
+          id: 'all',
+          label: 'All Products',
+          badge: allProductsData.length,
+          active: true,
+          // Uses default data and columns
+        },
+        {
+          id: 'low-stock',
+          label: 'Low Stock',
+          badge: lowStockData.length,
+          data: lowStockData,           // Tab-specific data
+          columns: lowStockColumns,     // Tab-specific columns
+          title: 'Low Stock Items',     // Tab-specific title
+          pagination: {                  // Tab-specific pagination
+            pageSize: 5,
+            pageIndex: 0,
+            pageCount: Math.ceil(lowStockData.length / 5),
+            onPageChange: (page) => console.log('Low stock page:', page),
+          }
+        },
+        {
+          id: 'out-of-stock',
+          label: 'Out of Stock',
+          badge: outOfStockData.length,
+          data: outOfStockData,
+          // Uses default columns
+        }
+      ]}
+      onTabChange={(tabId) => console.log('Active tab:', tabId)}
+    />
+  );
+}
+```
+
+**Key Points:**
+- `tableTabs` overrides `tabItems` if both provided
+- Each tab can have its own: `data`, `columns`, `title`, `pagination`
+- Tabs without specific config inherit from main table props
+- Pagination resets when switching tabs
+
+---
+
+## Column Configuration
+
+### Column Definition Interface
+
+Based on TanStack Table's `ColumnDef`:
+
+```typescript
+interface ColumnDef<T, TValue> {
+  // IDENTIFICATION
+  id?: string;                    // Unique column ID (required for ordering)
+  accessorKey?: keyof T;          // Data property to access
+  accessorFn?: (row: T) => TValue; // Custom accessor function
+
+  // DISPLAY
+  header: string | ((props) => ReactNode);  // Column header
+  cell?: (props) => ReactNode;              // Custom cell renderer
+  footer?: string | ((props) => ReactNode);
+
+  // SIZING
+  size?: number;                  // Initial width (pixels)
+  minSize?: number;               // Minimum width (default: 20)
+  maxSize?: number;               // Maximum width
+  enableResizing?: boolean;       // Allow resizing this column
+
+  // FEATURES
+  enableSorting?: boolean;        // Allow sorting (default: true)
+  enableColumnFilter?: boolean;   // Allow filtering
+  enableGlobalFilter?: boolean;   // Include in global search
+
+  // META (custom properties)
+  meta?: {
+    headerClassName?: string;     // CSS class for header
+    cellClassName?: string;       // CSS class for cells
+    width?: string;               // CSS width value
+    pinned?: 'left' | 'right' | false;  // Pin column position
+  };
+}
+```
+
+### Column Pinning
+
+Pin important columns to left or right:
+
+```tsx
+const columns = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    size: 80,
+    meta: {
+      pinned: 'left',  // Pin to left side
+    }
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    size: 200,
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    size: 250,
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    size: 100,
+    meta: {
+      pinned: 'right',  // Pin to right side
+    },
+    cell: ({ row }) => (
+      <Button onClick={() => handleAction(row)}>Edit</Button>
+    )
+  }
+];
+
+<Table
+  data={data}
+  columns={columns}
+  enableScrollArea={true}
+  scrollAreaWidth="800px"  // Pinning works best with horizontal scroll
+/>
+```
+
+**Pinning Behavior:**
+- Pinned columns remain visible during horizontal scroll
+- Supports left and right pinning
+- Automatically handles RTL direction
+- Shadow effects indicate pinned state
+
+### Column Ordering (Drag & Drop)
+
+```tsx
+const columns = [
+  {
+    id: 'name',           // REQUIRED for ordering
+    accessorKey: 'name',
+    header: 'Name',
+    size: 200,
+  },
+  {
+    id: 'email',          // REQUIRED
+    accessorKey: 'email',
+    header: 'Email',
+    size: 250,
+  },
+  // ... more columns
+];
+
+<Table
+  data={data}
+  columns={columns}
+  enableColumnOrdering={true}  // Enable drag-drop reordering
+/>
+```
+
+**Requirements:**
+- Each column MUST have a unique `id`
+- Uses @dnd-kit for accessibility
+- Keyboard navigation: Tab + Arrow Keys + Space
+- Order state persists during table interactions
+
+### Column Resizing
+
+```tsx
+const columns = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    size: 200,           // Initial width
+    minSize: 100,        // Minimum width
+    maxSize: 400,        // Maximum width
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    size: 300,
+    minSize: 150,
+    // No maxSize = unlimited
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    size: 100,
+    enableResizing: false,  // Disable resizing for this column
+  }
+];
+
+<Table
+  data={data}
+  columns={columns}
+  enableColumnResizing={true}  // Enable resizing
+  gridCells={true}             // Recommended for visual feedback
+/>
+```
+
+**Resize Features:**
+- Drag column borders to resize
+- Double-click to auto-fit content
+- Respects min/max constraints
+- RTL-aware (resize direction inverts)
+- Works on touch devices
+
+---
+
+## Visual Configuration
+
+### Striped vs Non-Striped
+
+**Default:** Non-striped (`striped={false}`)
+
+```tsx
+// Modern, interactive table (default)
+<Table
+  data={data}
+  columns={columns}
+  striped={false}  // White background, better for interactions
+/>
+
+// Static, read-only table
+<Table
+  data={data}
+  columns={columns}
+  striped={true}   // Alternating row colors
+  disableRowHover={true}  // No hover effects
+/>
+```
+
+**When to Use Striped:**
+- Read-only data tables
+- Dense information requiring visual separation
+- Static reports or dashboards
+
+**When to Use Non-Striped:**
+- Interactive tables with row/cell clicks
+- Tables with action buttons
+- Modern UI aesthetics
+
+### Grid Cells
+
+Add borders to cells:
+
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  gridCells={true}  // Show cell borders
+/>
+```
+
+**Recommended With:**
+- Column resizing (visual feedback)
+- Dense data (better cell separation)
+- Aligned numeric columns
+
+### Row Hover States
+
+```tsx
+// Default: hover enabled
+<Table
+  data={data}
+  columns={columns}
+  onRowClick={(row) => console.log(row)}
+/>
+
+// Disable hover (for static tables)
+<Table
+  data={data}
+  columns={columns}
+  disableRowHover={true}
+/>
+```
+
+### ScrollArea Integration
+
+For tables that exceed container dimensions:
+
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  enableScrollArea={true}
+  scrollAreaHeight="500px"        // Fixed height
+  scrollAreaWidth="100%"          // Full width
+  enableHorizontalScroll={true}   // Horizontal scrolling
+  enableVerticalScroll={true}     // Vertical scrolling
+  scrollAreaType="hover"          // Show scrollbars on hover
+/>
+```
+
+**Scroll Types:**
+- `'hover'` - Show scrollbars on hover (default)
+- `'scroll'` - Show scrollbars when content overflows
+- `'always'` - Always show scrollbars
+- `'auto'` - Browser default
+
+---
+
+## Table States
+
+### State Types
+
+```typescript
+type TableState = 'normal' | 'error' | 'empty' | 'notFound' | 'loading';
+```
+
+### Normal State (Default)
+
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  state="normal"  // Default
+/>
+```
+
+### Loading State
+
+```tsx
+<Table
+  data={[]}
+  columns={columns}
+  state="loading"  // Shows loading spinner
+/>
+```
+
+### Empty State
+
+```tsx
+<Table
+  data={[]}
+  columns={columns}
+  state="empty"
+  emptyMessage="No products available"
+/>
+
+// Custom empty state
+<Table
+  data={[]}
+  columns={columns}
+  state="empty"
+  emptyStateNode={
+    <div style={{ padding: '40px', textAlign: 'center' }}>
+      <CustomEmptyIcon />
+      <h3>No Data Found</h3>
+      <Button onClick={loadData}>Load Data</Button>
+    </div>
+  }
+/>
+```
+
+### Error State
+
+```tsx
+<Table
+  data={[]}
+  columns={columns}
+  state="error"
+  errorMessage="Failed to load data. Please try again."
+/>
+```
+
+### Not Found State (Search Results)
+
+```tsx
+<Table
+  data={searchResults}
+  columns={columns}
+  state={searchResults.length === 0 ? 'notFound' : 'normal'}
+  notFoundMessage="No results match your search"
+  notFoundSubtitle="Try adjusting your search terms or filters"
+/>
+```
+
+### Dynamic State Management
+
+```tsx
+function DynamicStateTable() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const tableState = useMemo(() => {
+    if (loading) return 'loading';
+    if (error) return 'error';
+    if (data.length === 0) return 'empty';
+    return 'normal';
+  }, [loading, error, data]);
+
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      state={tableState}
+      errorMessage={error?.message}
+      emptyMessage="No data available"
+    />
+  );
+}
+```
+
+---
+
+## RTL & Internationalization
+
+### Automatic RTL Detection
+
+The Table component automatically detects RTL mode:
+
+```tsx
+// RTL detected from document.dir or document.documentElement.dir
+<Table
+  data={data}
+  columns={columns}
+  // RTL automatically applied to:
+  // - Column resize direction
+  // - Scroll direction
+  // - Text alignment
+  // - Filter drawer position
+/>
+```
+
+### RTL-Aware Text Rendering
+
+All text cells automatically apply proper line-height for Arabic text:
+
+```typescript
+// Automatic in all cell variants
+const lineHeightStyle = {
+  lineHeight: isRTL
+    ? 'var(--t-line-height-arabic, 1.2)'
+    : 'var(--t-line-height-english, 1.5)'
+};
+```
+
+### RTL Filter Labels
+
+```tsx
+const isRTL = document.dir === 'rtl';
+
+const filterOptions = {
+  category: {
+    label: isRTL ? 'الفئة' : 'Category',
+    type: 'select',
+    options: [
+      {
+        label: isRTL ? 'جميع الفئات' : 'All Categories',
+        value: ''
+      },
+      {
+        label: isRTL ? 'إلكترونيات' : 'Electronics',
+        value: 'electronics'
+      },
+    ]
+  }
+};
+```
+
+### RTL Search Placeholders
+
+```tsx
+const searchPlaceholder = isRTL
+  ? 'ابحث باسم المنتج أو المعرف...'
+  : 'Search by product name or ID...';
+
+<Table
+  data={data}
+  columns={columns}
+  searchConfig={{
+    placeholder: searchPlaceholder
+  }}
+/>
+```
+
+### Filter Drawer Position
+
+In RTL mode, the filter drawer automatically opens from the left:
+
+```tsx
+// Automatic behavior
+<Drawer
+  position={isRTL ? "left" : "right"}
+  title={isRTL ? "الفلاتر" : "Filters"}
+>
+  {/* Filter content */}
+</Drawer>
+```
+
+---
+
+## Advanced Patterns
+
+### Controlled Table State
+
+Full control over all table state:
+
+```tsx
+function ControlledTable() {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  // Apply sorting to data
+  const sortedData = useMemo(() => {
+    if (sorting.length === 0) return data;
+
+    const sorted = [...data].sort((a, b) => {
+      for (const sort of sorting) {
+        const aVal = a[sort.id];
+        const bVal = b[sort.id];
+
+        if (aVal < bVal) return sort.desc ? 1 : -1;
+        if (aVal > bVal) return sort.desc ? -1 : 1;
+      }
+      return 0;
+    });
+
+    return sorted;
+  }, [data, sorting]);
+
+  return (
+    <Table
+      data={sortedData}
+      columns={columns}
+      defaultSorting={sorting}
+      defaultColumnVisibility={columnVisibility}
+      searchQuery={globalFilter}
+      onSearchChange={setGlobalFilter}
+      pagination={{
+        ...pagination,
+        pageCount: Math.ceil(sortedData.length / pagination.pageSize),
+        onPageChange: (page) => setPagination(prev => ({ ...prev, pageIndex: page })),
+        onPageSizeChange: (size) => setPagination({ pageIndex: 0, pageSize: size }),
+      }}
+    />
+  );
+}
+```
+
+### Server-Side Everything
+
+Complete server-side implementation:
+
+```tsx
+function ServerSideTable() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState({});
+  const [sorting, setSorting] = useState([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+    pageCount: 0,
+  });
+
+  // Fetch data when any parameter changes
+  useEffect(() => {
+    fetchData();
+  }, [searchQuery, activeFilters, sorting, pagination.pageIndex, pagination.pageSize]);
+
+  async function fetchData() {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams({
+        page: pagination.pageIndex.toString(),
+        pageSize: pagination.pageSize.toString(),
+        search: searchQuery,
+        filters: JSON.stringify(activeFilters),
+        sort: JSON.stringify(sorting),
+      });
+
+      const response = await fetch(`/api/data?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const result = await response.json();
+
+      setData(result.data);
+      setPagination(prev => ({
+        ...prev,
+        pageCount: result.totalPages,
+      }));
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const tableState = useMemo(() => {
+    if (loading) return 'loading';
+    if (error) return 'error';
+    if (data.length === 0 && searchQuery) return 'notFound';
+    if (data.length === 0) return 'empty';
+    return 'normal';
+  }, [loading, error, data, searchQuery]);
+
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      state={tableState}
+      errorMessage={error?.message}
+
+      // Search
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      searchConfig={{
+        serverSide: true,
+        debounceMs: 500,
+        minLength: 2,
+      }}
+
+      // Filters
+      activeFilters={activeFilters}
+      onFilterChange={setActiveFilters}
+      filterOptions={filterOptions}
+
+      // Sorting
+      defaultSorting={sorting}
+
+      // Pagination
+      pagination={{
+        ...pagination,
+        onPageChange: (page) => setPagination(prev => ({ ...prev, pageIndex: page })),
+        onPageSizeChange: (size) => setPagination({ pageIndex: 0, pageSize: size }),
+        isServerSide: true,
+      }}
+    />
+  );
+}
+```
+
+### Performance Optimization
+
+For large datasets:
+
+```tsx
+import { memo, useMemo } from 'react';
+
+// 1. Memoize columns (expensive to recreate)
+const columns = useMemo(() => [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    cell: memo(({ getValue }) => <span>{getValue()}</span>)
+  },
+  // ...
+], []);
+
+// 2. Memoize processed data
+const processedData = useMemo(() => {
+  let result = data;
+
+  // Apply transformations
+  if (searchQuery) {
+    result = performSearch(result, searchQuery);
+  }
+
+  if (Object.keys(activeFilters).length > 0) {
+    result = applyFilters(result, activeFilters);
+  }
+
+  return result;
+}, [data, searchQuery, activeFilters]);
+
+// 3. Use virtual scrolling for 1000+ rows
+<Table
+  data={processedData}
+  columns={columns}
+  enableScrollArea={true}
+  scrollAreaHeight="600px"
+  scrollAreaType="scroll"
+/>
+```
+
+---
+
+## Troubleshooting
+
+### Issue: Pagination Not Changing Content
+
+**Symptom:** Page numbers change but data stays the same
+
+**Solution:** Ensure `isServerSide` is set correctly:
+
+```tsx
+// Client-side (default)
+pagination={{
+  pageIndex: page,
+  pageSize: size,
+  pageCount: Math.ceil(data.length / size),
+  onPageChange: setPage,
+  // isServerSide: false (default)
+}}
+
+// Server-side
+pagination={{
+  pageIndex: page,
+  pageSize: size,
+  pageCount: totalPagesFromAPI,
+  onPageChange: setPage,
+  isServerSide: true  // REQUIRED
+}}
+```
+
+### Issue: Filters Not Working
+
+**Symptom:** Filter UI shows but data doesn't change
+
+**Cause:** Table doesn't filter data automatically
+
+**Solution:** Implement filtering logic:
+
+```tsx
+const filteredData = useMemo(() => {
+  let result = [...data];
+
+  Object.entries(activeFilters).forEach(([key, value]) => {
+    if (!value || value === '') return;
+
+    if (Array.isArray(value)) {
+      // Range filter
+      const [min, max] = value;
+      result = result.filter(item => item[key] >= min && item[key] <= max);
+    } else {
+      // Exact match
+      result = result.filter(item => item[key] === value);
+    }
+  });
+
+  return result;
+}, [data, activeFilters]);
+
+<Table data={filteredData} ... />
+```
+
+### Issue: Search Not Working
+
+**Symptom:** Typing in search doesn't filter data
+
+**Cause:** Table doesn't perform search automatically
+
+**Solution:** Implement search logic:
+
+```tsx
+const searchedData = useMemo(() => {
+  if (!searchQuery) return data;
+
+  const query = searchQuery.toLowerCase();
+  return data.filter(item =>
+    item.name?.toLowerCase().includes(query) ||
+    item.email?.toLowerCase().includes(query)
+  );
+}, [data, searchQuery]);
+
+<Table data={searchedData} ... />
+```
+
+### Issue: Column Ordering Not Working
+
+**Symptom:** Can't drag columns to reorder
+
+**Cause:** Missing column IDs
+
+**Solution:** Add unique `id` to each column:
+
+```tsx
+const columns = [
+  {
+    id: 'name',  // REQUIRED
+    accessorKey: 'name',
+    header: 'Name',
+  },
+  {
+    id: 'email',  // REQUIRED
+    accessorKey: 'email',
+    header: 'Email',
+  },
+];
+
+<Table
+  columns={columns}
+  enableColumnOrdering={true}
+/>
+```
+
+### Issue: Poor Filter Performance
+
+**Symptom:** UI lags when adjusting filters
+
+**Solution:** Optimize filter processing:
+
+```tsx
+// 1. Memoize filter function
+const applyFilters = useCallback((data, filters) => {
+  // Filter logic
+}, []);
+
+// 2. Use efficient data structures
+const filteredData = useMemo(() => {
+  if (Object.keys(activeFilters).length === 0) return data;
+  return applyFilters(data, activeFilters);
+}, [data, activeFilters, applyFilters]);
+
+// 3. Debounce range slider changes
+const debouncedFilters = useDebounce(activeFilters, 100);
+```
+
+### Issue: Table Doesn't Show RTL Properly
+
+**Symptom:** Arabic text layout is incorrect
+
+**Solution:** Ensure document direction is set:
+
+```tsx
+// Set in HTML
+<html dir="rtl">
+
+// Or programmatically
+useEffect(() => {
+  document.dir = 'rtl';
+}, []);
+
+// Table will automatically detect and apply RTL styles
+```
+
+### Issue: Slow Rendering with Many Rows
+
+**Symptom:** Table is slow with 1000+ rows
+
+**Solution:** Use pagination or virtual scrolling:
+
+```tsx
+// Option 1: Pagination (recommended)
+<Table
+  data={data}
+  columns={columns}
+  pagination={{
+    pageSize: 50,  // Limit visible rows
+    pageIndex: currentPage,
+    pageCount: Math.ceil(data.length / 50),
+    onPageChange: setCurrentPage,
+  }}
+/>
+
+// Option 2: ScrollArea with fixed height
+<Table
+  data={data}
+  columns={columns}
+  enableScrollArea={true}
+  scrollAreaHeight="600px"
+  showPagination={false}
+/>
+```
+
+---
+
+## Related Documentation
+
+For detailed information on cell customization, see:
+- **[Table-CELL-VARIANTS-GUIDE.mdx](./Table-CELL-VARIANTS-GUIDE.mdx)** - Complete guide to cell variants, custom cells, and QuickColumns helpers
+
+---
+
+## Quick Reference: Common Patterns
+
+### Basic Table
+```tsx
+<Table data={data} columns={columns} title="Products" />
+```
+
+### With Pagination
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  pagination={{
+    pageIndex: page,
+    pageSize: 10,
+    pageCount: Math.ceil(data.length / 10),
+    onPageChange: setPage,
+  }}
+/>
+```
+
+### With Search
+```tsx
+<Table
+  data={searchedData}
+  columns={columns}
+  searchQuery={query}
+  onSearchChange={setQuery}
+/>
+```
+
+### With Filters
+```tsx
+<Table
+  data={filteredData}
+  columns={columns}
+  activeFilters={filters}
+  onFilterChange={setFilters}
+  filterOptions={filterOptions}
+  showFilterBar={true}
+/>
+```
+
+### Server-Side Table
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  state={loading ? 'loading' : 'normal'}
+  searchConfig={{ serverSide: true }}
+  pagination={{
+    pageIndex: page,
+    pageSize: size,
+    pageCount: totalPages,
+    onPageChange: setPage,
+    isServerSide: true,
+  }}
+/>
+```
+
+### With Tabs
+```tsx
+<Table
+  data={data}
+  columns={columns}
+  showTabs={true}
+  tableTabs={[
+    { id: 'all', label: 'All', data: allData },
+    { id: 'active', label: 'Active', data: activeData },
+  ]}
+/>
+```
+
+---
+
+**End of Table Component AI Agent Guide**
+For cell customization, continue to: [Table-CELL-VARIANTS-GUIDE.mdx](./Table-CELL-VARIANTS-GUIDE.mdx)

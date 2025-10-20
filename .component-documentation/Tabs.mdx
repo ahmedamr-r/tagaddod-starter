@@ -1,0 +1,1399 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TabsStories from './Tabs.stories';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
+
+<Meta of={TabsStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 21-48)
+- Basic import pattern with all sub-components
+- Component structure explanation
+- Props documentation for Tabs, TabsTrigger, TabsContent
+
+🎯 BASIC USAGE (Lines 50-80)
+- Default implementation with TabsList and TabsContent
+- Basic structure pattern
+
+🎨 VARIANTS (Lines 81-126)
+- Primary Tabs (Lines 83-103): Default with underline indicator
+- Secondary Tabs (Lines 105-125): Subtle background highlighting
+
+📐 LAYOUT OPTIONS (Lines 127-187)
+- Standard Tabs (Lines 129-134): Auto-sizing
+- Fitted Tabs (Lines 135-155): Full-width distribution
+- Vertical Orientation (Lines 157-187): Settings/navigation panels
+
+🎛️ TAB FEATURES (Lines 189-261)
+- With Badge (Lines 191-206): Count/status indicators
+- With Icon (Lines 208-225): Visual representation
+- With Icon and Badge (Lines 227-244): Rich indicators
+- Disabled Tab (Lines 246-261): Unavailable states
+
+🔢 TAB COUNT OPTIONS (Lines 263-313)
+- Two Tabs (Lines 267-279): Optimized styling
+- Four Tabs (Lines 281-295): Balanced layout
+- Six Tabs (Lines 297-313): Maximum supported
+
+🌍 INTERNATIONALIZATION & RTL SUPPORT (Lines 315-450)
+- RTL language support with ThemeProvider integration
+- Arabic text examples with proper direction and font switching  
+- Directional icon handling and best practices
+- Tab order adjustment for RTL reading patterns
+- Line height optimization for Arabic text rendering
+
+🔄 CONTROLLED VS UNCONTROLLED (Lines 452-497)
+- Uncontrolled (Lines 454-462): defaultValue pattern
+- Controlled (Lines 464-497): Manual state management
+
+🌐 URL ROUTING INTEGRATION (Lines 499-630)
+- Basic URL sync with query parameters
+- Controlled routing with state management
+- Browser back/forward navigation support
+- URL parameter customization
+- History API integration (pushState vs replaceState)
+
+🔀 OVERLAY COMPONENTS INTEGRATION (Lines 632-750)
+- Modal from TabsContent: Dialog workflows in tabs
+- Drawer from TabsContent: Side panels and forms
+- Popover from TabsContent: Contextual information
+- Complex nesting: Tabs with Table filters (Popover)
+- Automatic z-index management
+
+💼 COMMON USE CASES (Lines 752-853)
+- Navigation Tabs (Lines 501-523): Main application navigation
+- Form Sections (Lines 525-553): Multi-step forms
+- Settings Panel (Lines 555-578): Vertical navigation
+- Dashboard Metrics (Lines 580-600): Data visualization
+
+♿ ACCESSIBILITY (Lines 602-670)
+- WAI-ARIA Compliance (Lines 608-615): Roles and attributes
+- Keyboard Navigation (Lines 616-621): Arrow keys, Space/Enter
+- Focus Management (Lines 622-626): Automatic panel focus
+- Screen Reader Support (Lines 627-631): Descriptions and labels
+- Motion Sensitivity (Lines 632-635): Reduced motion support
+- RTL Support (Lines 636-639): Bidirectional navigation
+
+⚙️ TECHNICAL DETAILS (Lines 672-750)
+- CSS Variables (Lines 674-694): Design token reference
+- Animations (Lines 695-706): Transitions and effects
+- Badge States (Lines 709-713): State-based styling
+- Technical Architecture (Lines 715-725): Radix UI foundation
+- Browser Support (Lines 726-737): Compatibility matrix
+
+🎯 BEST PRACTICES (Lines 738-750)
+- Clear labeling and logical ordering
+- Icon usage and responsive considerations
+- Badge usage guidelines
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic tabs: Lines 57-78
+- Primary variant: Lines 90-102
+- Fitted layout: Lines 142-154
+- With badges: Lines 198-205
+- With icons: Lines 217-224
+- Vertical orientation: Lines 164-186
+- Controlled state: Lines 356-381
+- RTL support: Lines 322-334
+
+⚠️ ACCESSIBILITY NOTE:
+Tabs component includes comprehensive ARIA attributes, keyboard navigation, and screen reader support. Use ariaLabel prop for tab lists and description prop for individual tabs to enhance accessibility.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Tabs component capabilities and patterns.
+
+
+# Tabs Component
+
+The Tabs component allows users to navigate between related sections of content, displaying one section at a time while keeping all options visible and accessible.
+
+## Overview
+
+Tabs are a fundamental navigation pattern that organizes content into separate views that users can switch between without changing the page. The Tagaddod Tabs component is built on Radix UI primitives to ensure full accessibility while providing flexible design options.
+
+Use Tabs when:
+- Content can be organized into discrete categories
+- Users need to navigate between related sections
+- You want to keep the interface clean and organized
+- Screen space is limited and you need to show one view at a time
+
+## Import
+
+```jsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod/react';
+```
+
+## Component Structure
+
+The Tabs component consists of four main parts:
+
+1. **Tabs** - The container that provides context to its children
+2. **TabsList** - The container for the tab triggers
+3. **TabsTrigger** - The clickable buttons that users interact with
+4. **TabsContent** - The content associated with each tab
+
+## Props
+
+### Tabs Props
+
+<ArgTypes of={Tabs} />
+
+### TabsTrigger Props
+
+<ArgTypes of={TabsTrigger} />
+
+### TabsContent Props
+
+<ArgTypes of={TabsContent} />
+
+## Basic Usage
+
+<Canvas of={TabsStories.Default} />
+
+```jsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod/react';
+
+<Tabs defaultValue="tab1" ariaLabel="Content tabs">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Tab one content
+    </div>
+  </TabsContent>
+  <TabsContent value="tab2">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Tab two content
+    </div>
+  </TabsContent>
+  <TabsContent value="tab3">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Tab three content
+    </div>
+  </TabsContent>
+</Tabs>
+```
+
+## Variants
+
+### Primary Tabs
+
+The primary variant is the default, featuring an underline indicator.
+
+<Canvas of={TabsStories.Primary} />
+
+```jsx
+<Tabs variant="primary" defaultValue="tab1" ariaLabel="Primary tabs example">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Primary variant - Tab one content
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+### Secondary Tabs
+
+The secondary variant has a more subtle appearance with background highlighting.
+
+<Canvas of={TabsStories.Secondary} />
+
+```jsx
+<Tabs variant="secondary" defaultValue="tab1" ariaLabel="Secondary tabs example">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Secondary variant - Tab one content
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+## Layout Options
+
+### Standard Tabs
+
+By default, tabs take up only the space needed for their content.
+
+<Canvas of={TabsStories.Default} />
+
+### Fitted Tabs
+
+Fitted tabs distribute evenly across the available width, making them suitable for full-width containers.
+
+<Canvas of={TabsStories.Fitted} />
+
+```jsx
+<Tabs fitted defaultValue="tab1" ariaLabel="Fitted tabs example">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Fitted tabs - Tab one content
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+### Vertical Orientation
+
+For certain interfaces, tabs can be displayed vertically.
+
+<Canvas of={TabsStories.VerticalOrientation} />
+
+```jsx
+<Tabs 
+  orientation="vertical" 
+  variant="secondary"
+  defaultValue="tab1" 
+  ariaLabel="Vertical tabs example"
+>
+  <div style={{ display: 'flex', gap: '20px' }}>
+    <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+      <TabsTrigger value="tab1">Account</TabsTrigger>
+      <TabsTrigger value="tab2">Security</TabsTrigger>
+      <TabsTrigger value="tab3">Notifications</TabsTrigger>
+    </TabsList>
+    <div style={{ flex: 1 }}>
+      <TabsContent value="tab1">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '150px' }}>
+          <h3>Account Settings</h3>
+          <p>Manage your account information.</p>
+        </div>
+      </TabsContent>
+      {/* Other tab contents */}
+    </div>
+  </div>
+</Tabs>
+```
+
+## Tab Features
+
+### With Badge
+
+Add badges to indicate counts or status.
+
+<Canvas of={TabsStories.WithBadge} />
+
+```jsx
+<Tabs defaultValue="tab1" ariaLabel="Tabs with badge">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2" badge="3">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+### With Icon
+
+Include icons to visually represent tab content.
+
+<Canvas of={TabsStories.WithIcon} />
+
+```jsx
+import { IconHome, IconUser, IconSettings } from '@tabler/icons-react';
+
+<Tabs defaultValue="tab1" ariaLabel="Tabs with icons">
+  <TabsList>
+    <TabsTrigger value="tab1" icon={<IconHome size={18} />}>Home</TabsTrigger>
+    <TabsTrigger value="tab2" icon={<IconUser size={18} />}>Profile</TabsTrigger>
+    <TabsTrigger value="tab3" icon={<IconSettings size={18} />}>Settings</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+### With Icon and Badge
+
+Combine icons and badges for rich tab indicators.
+
+<Canvas of={TabsStories.WithIconAndBadge} />
+
+```jsx
+import { IconHome, IconBell, IconSettings } from '@tabler/icons-react';
+
+<Tabs defaultValue="tab1" ariaLabel="Tabs with icons and badge">
+  <TabsList>
+    <TabsTrigger value="tab1" icon={<IconHome size={18} />}>Home</TabsTrigger>
+    <TabsTrigger value="tab2" icon={<IconBell size={18} />} badge="5">Notifications</TabsTrigger>
+    <TabsTrigger value="tab3" icon={<IconSettings size={18} />}>Settings</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+### Disabled Tab
+
+Disable specific tabs that are currently unavailable.
+
+<Canvas of={TabsStories.DisabledTab} />
+
+```jsx
+<Tabs defaultValue="tab1" ariaLabel="Tabs with disabled tab">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2" disabled>Tab 2 (Disabled)</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+## Tab Count Options
+
+The Tabs component supports 2-6 tabs with optimized styling for each configuration.
+
+### Two Tabs
+
+<Canvas of={TabsStories.Count2} />
+
+```jsx
+<Tabs count={2} defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+### Four Tabs
+
+<Canvas of={TabsStories.Count4} />
+
+```jsx
+<Tabs count={4} defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+    <TabsTrigger value="tab4">Tab 4</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+### Six Tabs
+
+<Canvas of={TabsStories.Count6} />
+
+```jsx
+<Tabs count={6} defaultValue="tab1">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+    <TabsTrigger value="tab4">Tab 4</TabsTrigger>
+    <TabsTrigger value="tab5">Tab 5</TabsTrigger>
+    <TabsTrigger value="tab6">Tab 6</TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+## Internationalization and RTL Support
+
+The Tabs component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, tab order adjustment, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+import { IconUser, IconSettings } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Tabs defaultValue="profile" ariaLabel="Navigation tabs">
+        <TabsList>
+          <TabsTrigger value="profile" icon={<IconUser size={18} />}>
+            الملف الشخصي
+          </TabsTrigger>
+          <TabsTrigger value="settings" icon={<IconSettings size={18} />}>
+            الإعدادات
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+            محتوى الملف الشخصي
+          </div>
+        </TabsContent>
+        <TabsContent value="settings">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+            محتوى الإعدادات
+          </div>
+        </TabsContent>
+      </Tabs>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider or the `dir` prop, the Tabs component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Tab Order**: Adjusts visual order of tabs for RTL reading direction
+3. **Icon Positioning**: Positions tab icons correctly in RTL layouts
+4. **Line Height**: Applies appropriate line height for Arabic text rendering (`--t-line-height-arabic`)
+5. **Content Direction**: Ensures tab content follows RTL text direction
+6. **Active Indicator**: Adjusts active tab indicator positioning for RTL
+7. **Badge Positioning**: Properly positions badges in RTL tab layouts
+
+<Canvas of={TabsStories.RTL} />
+
+```jsx
+<Tabs dir="rtl" defaultValue="tab1" ariaLabel="RTL tabs example">
+  <TabsList>
+    <TabsTrigger value="tab1" icon={<IconHome size={18} />}>الرئيسية</TabsTrigger>
+    <TabsTrigger value="tab2" icon={<IconUser size={18} />} badge="3">الملف الشخصي</TabsTrigger>
+    <TabsTrigger value="tab3" icon={<IconSettings size={18} />}>الإعدادات</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      محتوى التبويب الأول
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+### Directional Icon Handling
+
+**Important**: When using directional icons in tabs (like navigation arrows, chevrons), choose appropriate icons based on direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+
+function DirectionalTabs() {
+  const { isRTL } = useTheme();
+  
+  const NextIcon = isRTL ? IconChevronLeft : IconChevronRight;
+  const PrevIcon = isRTL ? IconChevronRight : IconChevronLeft;
+  
+  return (
+    <Tabs defaultValue="current" ariaLabel="Navigation tabs">
+      <TabsList>
+        <TabsTrigger value="previous" icon={<PrevIcon size={18} />}>
+          {isRTL ? 'السابق' : 'Previous'}
+        </TabsTrigger>
+        <TabsTrigger value="current">
+          {isRTL ? 'الحالي' : 'Current'}
+        </TabsTrigger>
+        <TabsTrigger value="next" icon={<NextIcon size={18} />}>
+          {isRTL ? 'التالي' : 'Next'}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="previous">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة السابقة' : 'Previous page content'}
+        </div>
+      </TabsContent>
+      <TabsContent value="current">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة الحالية' : 'Current page content'}
+        </div>
+      </TabsContent>
+      <TabsContent value="next">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة التالية' : 'Next page content'}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### RTL Tab Navigation Patterns
+
+For complex tab navigation with multiple levels:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconFolder, IconFile, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function RTLNavigationTabs() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Tabs defaultValue="files" variant="secondary" ariaLabel="File browser tabs">
+      <TabsList>
+        <TabsTrigger 
+          value="folders" 
+          icon={<IconFolder size={18} />}
+          description={isRTL ? 'عرض المجلدات' : 'View folders'}
+        >
+          {isRTL ? 'المجلدات' : 'Folders'}
+        </TabsTrigger>
+        <TabsTrigger 
+          value="files" 
+          icon={<IconFile size={18} />}
+          badge="12"
+          description={isRTL ? 'عرض الملفات' : 'View files'}
+        >
+          {isRTL ? 'الملفات' : 'Files'}
+        </TabsTrigger>
+        <TabsTrigger 
+          value="recent"
+          description={isRTL ? 'العناصر الأخيرة' : 'Recently accessed items'}
+        >
+          {isRTL ? 'الأخيرة' : 'Recent'}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="folders">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'إدارة المجلدات' : 'Folder Management'}</h4>
+          <p>{isRTL ? 'عرض وتنظيم المجلدات الخاصة بك.' : 'View and organize your folders.'}</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="files">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'إدارة الملفات' : 'File Management'}</h4>
+          <p>{isRTL ? 'عرض وتحرير ملفاتك المحفوظة.' : 'View and edit your saved files.'}</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="recent">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'العناصر الأخيرة' : 'Recent Items'}</h4>
+          <p>{isRTL ? 'العناصر التي تم الوصول إليها مؤخراً.' : 'Items you\'ve accessed recently.'}</p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Consider tab order** - tabs should follow RTL reading direction when appropriate
+3. **Use appropriate directional icons** in tab labels and avoid purely decorative arrows
+4. **Test tab navigation** - ensure keyboard navigation (arrow keys) works correctly in RTL
+5. **Verify content alignment** - tab content should align properly and respect RTL text direction
+6. **Consider tab width** - Arabic labels may require different spacing due to character width
+7. **Badge positioning** - ensure badges don't interfere with RTL text flow
+8. **Icon spacing** - verify proper spacing between icons and text in RTL layouts
+
+## Controlled vs Uncontrolled
+
+### Uncontrolled
+
+Use the `defaultValue` prop for uncontrolled tabs.
+
+```jsx
+<Tabs defaultValue="tab1">
+  {/* Tabs content */}
+</Tabs>
+```
+
+### Controlled
+
+For more control, manage the state yourself and use the `value` and `onValueChange` props.
+
+```jsx
+import { useState } from 'react';
+
+function ControlledTabs() {
+  const [activeTab, setActiveTab] = useState('tab1');
+  
+  return (
+    <Tabs 
+      value={activeTab} 
+      onValueChange={setActiveTab}
+    >
+      <TabsList>
+        <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+        <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+        <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+      </TabsList>
+      <TabsContent value="tab1">Tab 1 Content</TabsContent>
+      <TabsContent value="tab2">Tab 2 Content</TabsContent>
+      <TabsContent value="tab3">Tab 3 Content</TabsContent>
+      
+      <div style={{ marginTop: '16px' }}>
+        <p>Current tab: {activeTab}</p>
+        <button onClick={() => setActiveTab('tab1')}>Go to Tab 1</button>
+        <button onClick={() => setActiveTab('tab2')}>Go to Tab 2</button>
+        <button onClick={() => setActiveTab('tab3')}>Go to Tab 3</button>
+      </div>
+    </Tabs>
+  );
+}
+```
+
+## URL Routing Integration
+
+The Tabs component supports optional URL synchronization, allowing tab state to persist across page reloads and enabling browser back/forward navigation. This is especially useful for page-level navigation tabs.
+
+### Basic URL Sync
+
+Enable URL synchronization with the `syncWithUrl` prop:
+
+```jsx
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+
+function RoutedTabs() {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  return (
+    <Tabs
+      value={activeTab}
+      onValueChange={setActiveTab}
+      syncWithUrl={true}  // Enable URL synchronization
+      ariaLabel="Page navigation"
+    >
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Overview Dashboard</h4>
+          <p>Main overview content. URL will show: ?tab=overview</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Analytics</h4>
+          <p>Analytics content. URL will show: ?tab=analytics</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="reports">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Reports</h4>
+          <p>Reports content. URL will show: ?tab=reports</p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Custom URL Parameter Name
+
+Customize the query parameter name with `urlParamName`:
+
+```jsx
+<Tabs
+  value={activeTab}
+  onValueChange={setActiveTab}
+  syncWithUrl={true}
+  urlParamName="section"  // Use ?section=... instead of ?tab=...
+>
+  {/* Tabs content */}
+</Tabs>
+```
+
+### Replace vs Push History
+
+Control browser history behavior with `replaceHistory`:
+
+```jsx
+// Default: Creates new history entries (users can go back)
+<Tabs
+  syncWithUrl={true}
+  value={activeTab}
+  onValueChange={setActiveTab}
+>
+  {/* Each tab change adds to browser history */}
+</Tabs>
+
+// With replaceHistory: Updates URL without creating history entries
+<Tabs
+  syncWithUrl={true}
+  replaceHistory={true}  // Don't create history entries
+  value={activeTab}
+  onValueChange={setActiveTab}
+>
+  {/* Tab changes update URL but don't add to browser history */}
+</Tabs>
+```
+
+### When to Use URL Routing
+
+**✅ Use URL routing for:**
+- Page-level navigation tabs (main app navigation)
+- Tabs that users might want to bookmark or share
+- Dashboard sections that benefit from direct URLs
+- Settings panels with deep-linkable sections
+- Any scenario where browser back/forward navigation makes sense
+
+**❌ Don't use URL routing for:**
+- UI-level tabs within a component (like form sections)
+- Tabs nested deep within a page
+- Temporary or ephemeral tab states
+- Tabs that change frequently without user intent (auto-rotating tabs)
+
+### Complete Routing Example
+
+```jsx
+import { useState, useEffect } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+import { IconHome, IconChartBar, IconFileText, IconSettings } from '@tabler/icons-react';
+
+function DashboardPage() {
+  const [activeSection, setActiveSection] = useState('dashboard');
+
+  return (
+    <div style={{ padding: '24px' }}>
+      <h1>Analytics Dashboard</h1>
+
+      <Tabs
+        value={activeSection}
+        onValueChange={setActiveSection}
+        syncWithUrl={true}
+        urlParamName="section"
+        variant="primary"
+        fitted
+        ariaLabel="Dashboard sections"
+      >
+        <TabsList>
+          <TabsTrigger value="dashboard" icon={<IconHome size={18} />}>
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="analytics" icon={<IconChartBar size={18} />}>
+            Analytics
+          </TabsTrigger>
+          <TabsTrigger value="reports" icon={<IconFileText size={18} />}>
+            Reports
+          </TabsTrigger>
+          <TabsTrigger value="settings" icon={<IconSettings size={18} />}>
+            Settings
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard">
+          <div style={{ padding: '24px', backgroundColor: '#f9fafb', borderRadius: '8px', marginTop: '16px' }}>
+            <h3>Dashboard Overview</h3>
+            <p>Main metrics and KPIs. Direct link: /dashboard?section=dashboard</p>
+            {/* Dashboard widgets and charts */}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <div style={{ padding: '24px', backgroundColor: '#f9fafb', borderRadius: '8px', marginTop: '16px' }}>
+            <h3>Detailed Analytics</h3>
+            <p>In-depth data analysis. Direct link: /dashboard?section=analytics</p>
+            {/* Analytics visualizations */}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <div style={{ padding: '24px', backgroundColor: '#f9fafb', borderRadius: '8px', marginTop: '16px' }}>
+            <h3>Generated Reports</h3>
+            <p>View and download reports. Direct link: /dashboard?section=reports</p>
+            {/* Reports list and download options */}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings">
+          <div style={{ padding: '24px', backgroundColor: '#f9fafb', borderRadius: '8px', marginTop: '16px' }}>
+            <h3>Dashboard Settings</h3>
+            <p>Configure dashboard preferences. Direct link: /dashboard?section=settings</p>
+            {/* Settings form */}
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#e0f2fe', borderRadius: '4px' }}>
+        <strong>Current URL:</strong> /dashboard?section={activeSection}
+      </div>
+    </div>
+  );
+}
+```
+
+### Browser Back/Forward Navigation
+
+The Tabs component automatically handles browser navigation:
+
+```jsx
+<Tabs
+  value={activeTab}
+  onValueChange={setActiveTab}
+  syncWithUrl={true}
+>
+  {/*
+    When users:
+    - Click browser back: Returns to previous tab
+    - Click browser forward: Advances to next tab
+    - Bookmark the page: Saves current tab state
+    - Share the URL: Recipient sees the same tab
+    - Reload the page: Maintains tab selection
+  */}
+</Tabs>
+```
+
+## Overlay Components Integration
+
+The Tabs component works seamlessly with all overlay components (Modal, Drawer, Popover) thanks to the design system's **automatic z-index management**. You can open overlays from TabsContent without any configuration.
+
+### Modal from TabsContent
+
+Open modals from within tab content - perfect for forms, confirmations, or detailed views:
+
+```jsx
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Modal, Button } from 'tagaddod-design-react';
+
+function TabsWithModal() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  return (
+    <Tabs defaultValue="products" ariaLabel="Store management">
+      <TabsList>
+        <TabsTrigger value="products">Products</TabsTrigger>
+        <TabsTrigger value="orders">Orders</TabsTrigger>
+        <TabsTrigger value="customers">Customers</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="products">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Product Catalog</h4>
+          <Button onClick={() => setModalOpen(true)}>
+            Add New Product
+          </Button>
+
+          {/* Modal opens correctly on top of tabs */}
+          <Modal
+            open={modalOpen}
+            onOpenChange={setModalOpen}
+            title="Add New Product"
+          >
+            <div style={{ padding: '20px' }}>
+              <p>Product form goes here...</p>
+              <Button onClick={() => setModalOpen(false)}>Save Product</Button>
+            </div>
+          </Modal>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="orders">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Orders List</h4>
+          {/* Order management content */}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="customers">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Customer Management</h4>
+          {/* Customer management content */}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Drawer from TabsContent
+
+Use Drawer for side panels, filters, or settings:
+
+```jsx
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Drawer, Button } from 'tagaddod-design-react';
+
+function TabsWithDrawer() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  return (
+    <Tabs defaultValue="overview" ariaLabel="Analytics dashboard">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="metrics">Metrics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="overview">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Dashboard Overview</h4>
+          <Button onClick={() => setDrawerOpen(true)}>
+            Filter Data
+          </Button>
+
+          {/* Drawer opens correctly from the side */}
+          <Drawer
+            open={drawerOpen}
+            onOpenChange={setDrawerOpen}
+            title="Filter Options"
+            position="right"
+          >
+            <div style={{ padding: '20px' }}>
+              <h5>Date Range</h5>
+              {/* Filter controls */}
+
+              <h5>Categories</h5>
+              {/* Category filters */}
+
+              <Button onClick={() => setDrawerOpen(false)}>Apply Filters</Button>
+            </div>
+          </Drawer>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="metrics">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Key Metrics</h4>
+          {/* Metrics visualizations */}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="reports">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Generated Reports</h4>
+          {/* Reports list */}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Popover from TabsContent
+
+Add contextual information, tooltips, or small menus:
+
+```jsx
+import { Tabs, TabsList, TabsTrigger, TabsContent, Popover, Button } from 'tagaddod-design-react';
+import { IconInfoCircle } from '@tabler/icons-react';
+
+function TabsWithPopover() {
+  return (
+    <Tabs defaultValue="settings" ariaLabel="Account settings">
+      <TabsList>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsTrigger value="security">Security</TabsTrigger>
+        <TabsTrigger value="billing">Billing</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="settings">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Account Settings
+            {/* Popover appears correctly above tab content */}
+            <Popover
+              content={
+                <div style={{ padding: '12px', maxWidth: '250px' }}>
+                  <p>Configure your account preferences, profile information, and display settings.</p>
+                </div>
+              }
+            >
+              <Button variant="ghost" size="sm">
+                <IconInfoCircle size={18} />
+              </Button>
+            </Popover>
+          </h4>
+          {/* Settings form */}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="security">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Security Settings</h4>
+          {/* Security options */}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="billing">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Billing Information</h4>
+          {/* Billing details */}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Complex Integration: Tabs with Table Filters
+
+A real-world scenario combining Tabs, Table, and Popover filters:
+
+```jsx
+import { Tabs, TabsList, TabsTrigger, TabsContent, Table } from 'tagaddod-design-react';
+
+function InventoryManagement() {
+  const columns = [
+    { header: 'Product', accessorKey: 'name' },
+    { header: 'SKU', accessorKey: 'sku' },
+    { header: 'Stock', accessorKey: 'stock' },
+    { header: 'Price', accessorKey: 'price' },
+  ];
+
+  const products = [
+    { id: 1, name: 'Widget A', sku: 'WID-001', stock: 42, price: '$19.99' },
+    { id: 2, name: 'Widget B', sku: 'WID-002', stock: 18, price: '$24.99' },
+    { id: 3, name: 'Widget C', sku: 'WID-003', stock: 0, price: '$29.99' },
+  ];
+
+  return (
+    <Tabs defaultValue="active" ariaLabel="Inventory tabs">
+      <TabsList>
+        <TabsTrigger value="active">Active Products</TabsTrigger>
+        <TabsTrigger value="lowstock" badge="3">Low Stock</TabsTrigger>
+        <TabsTrigger value="archived">Archived</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="active">
+        {/* Table with Popover filters - works perfectly! */}
+        <Table
+          data={products}
+          columns={columns}
+          showFilters={true}  // Filter buttons open Popover components
+          filterOptions={{
+            category: {
+              label: 'Category',
+              type: 'select',
+              options: [
+                { label: 'All', value: 'all' },
+                { label: 'Widgets', value: 'widgets' },
+                { label: 'Gadgets', value: 'gadgets' },
+              ]
+            },
+            priceRange: {
+              label: 'Price Range',
+              type: 'rangeSlider',
+              min: 0,
+              max: 100
+            }
+          }}
+        />
+      </TabsContent>
+
+      <TabsContent value="lowstock">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Low Stock Products</h4>
+          {/* Table with low stock items */}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="archived">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h4>Archived Products</h4>
+          {/* Archived products list */}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Why Overlays Work Automatically
+
+The Tagaddod Design System handles all overlay z-index management automatically:
+
+1. **Portal Rendering**: Modal, Drawer, and Popover use Radix UI portals to render to `document.body`, escaping the TabsContent stacking context
+2. **Context-Aware Z-Index**: Overlay components detect their nesting level and automatically adjust z-index values
+3. **Design Token Integration**: All z-index values use CSS custom properties from the design system
+4. **Zero Configuration**: No manual z-index settings or style props needed
+
+**What this means for you:**
+- ✅ Open any overlay from any TabsContent - it just works
+- ✅ Nest overlays inside overlays (Modal in Drawer in Tabs) - perfect layering
+- ✅ Use Table with Popover filters inside Tabs - no issues
+- ✅ Mix and match any combination - automatic z-index handling
+
+For more details on the overlay system, see `packages/react/src/OVERLAY-SYSTEM-AI-AGENT-GUIDE.md`.
+
+## Common Use Cases
+
+### Navigation Tabs
+
+<Canvas of={TabsStories.CommonUseCases} />
+
+```jsx
+import { IconHome, IconUser, IconMessage, IconSettings } from '@tabler/icons-react';
+
+<Tabs defaultValue="home" variant="primary" fitted ariaLabel="Main navigation">
+  <TabsList>
+    <TabsTrigger value="home" icon={<IconHome size={18} />} description="View your dashboard">Home</TabsTrigger>
+    <TabsTrigger value="profile" icon={<IconUser size={18} />} description="View and edit your profile">Profile</TabsTrigger>
+    <TabsTrigger value="messages" icon={<IconMessage size={18} />} badge="3" description="Read your messages">Messages</TabsTrigger>
+    <TabsTrigger value="settings" icon={<IconSettings size={18} />} description="Configure your account settings">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="home">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      <h4>Welcome to the Dashboard</h4>
+      <p>This is the main view of your application.</p>
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+### Form Sections
+
+Organize multi-step forms into logical sections.
+
+```jsx
+<Tabs defaultValue="personal" variant="secondary" ariaLabel="Registration form sections">
+  <TabsList>
+    <TabsTrigger value="personal" description="Fill in personal information">Personal Info</TabsTrigger>
+    <TabsTrigger value="address" description="Fill in address details">Address</TabsTrigger>
+    <TabsTrigger value="payment" description="Add payment information">Payment</TabsTrigger>
+  </TabsList>
+  <TabsContent value="personal">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      <h4>Personal Information</h4>
+      <form>
+        <label htmlFor="name">Full Name</label>
+        <input id="name" name="name" type="text" />
+        
+        <label htmlFor="email">Email</label>
+        <input id="email" name="email" type="email" />
+        
+        <label htmlFor="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" />
+      </form>
+    </div>
+  </TabsContent>
+  {/* Other form sections */}
+</Tabs>
+```
+
+### Settings Panel with Vertical Tabs
+
+Create a vertical navigation panel for settings.
+
+```jsx
+<Tabs defaultValue="account" variant="secondary" orientation="vertical" ariaLabel="Settings navigation">
+  <div style={{ display: 'flex', gap: '20px' }}>
+    <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+      <TabsTrigger value="account" icon={<IconUser size={18} />} description="Manage account settings">Account</TabsTrigger>
+      <TabsTrigger value="security" icon={<IconSettings size={18} />} description="Adjust security options">Security</TabsTrigger>
+      <TabsTrigger value="notifications" icon={<IconBell size={18} />} badge="2" description="Configure notifications">Notifications</TabsTrigger>
+    </TabsList>
+    <div style={{ flex: 1 }}>
+      <TabsContent value="account">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '200px' }}>
+          <h4>Account Settings</h4>
+          <p>Manage your account information, profile picture, and personal details.</p>
+        </div>
+      </TabsContent>
+      {/* Other tab contents */}
+    </div>
+  </div>
+</Tabs>
+```
+
+### Dashboard Metrics
+
+Display different metrics in a dashboard.
+
+```jsx
+<Tabs defaultValue="overview" fitted ariaLabel="Dashboard metrics">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="sales">Sales</TabsTrigger>
+    <TabsTrigger value="traffic" badge="↑12%">Traffic</TabsTrigger>
+    <TabsTrigger value="conversion">Conversion</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      <h4>Dashboard Overview</h4>
+      {/* Overview metrics and charts */}
+    </div>
+  </TabsContent>
+  {/* Other metric contents */}
+</Tabs>
+```
+
+## Accessibility
+
+<Canvas of={TabsStories.AccessibilityFeatures} />
+
+The Tabs component follows accessibility best practices:
+
+- **WAI-ARIA Compliance**: Uses appropriate ARIA roles, states, and properties:
+  - `role="tablist"` for the tab container
+  - `role="tab"` for individual tabs
+  - `role="tabpanel"` for tab content
+  - `aria-selected` to indicate the selected tab
+  - `aria-controls` to associate tabs with their panels
+  - `aria-labelledby` to associate panels with their tabs
+
+- **Keyboard Navigation**:
+  - `Tab` to move focus to the tab list
+  - `Arrow keys` to navigate between tabs
+  - `Space/Enter` to select a tab
+  - `Home/End` to jump to the first/last tab
+
+- **Focus Management**:
+  - When a tab is activated, focus automatically moves to the associated panel
+  - Clear focus indicators for keyboard users
+  - Proper tab order for logical navigation
+
+- **Screen Reader Support**:
+  - Each tab can include a `description` for additional screen reader context
+  - Proper labeling of the tab list with `ariaLabel` or `ariaLabelledby` 
+  - Appropriate announcement of tab selection changes
+
+- **Motion Sensitivity**:
+  - Animations respect the `prefers-reduced-motion` setting
+  - Subtle transitions that don't cause distraction
+
+- **RTL Support**:
+  - Full right-to-left language support
+  - Appropriate arrow key direction reversal in RTL mode
+
+Example with accessible description for screen readers:
+
+```jsx
+<Tabs 
+  defaultValue="account" 
+  variant="primary" 
+  ariaLabel="Account management tabs"
+>
+  <TabsList>
+    <TabsTrigger 
+      value="account" 
+      description="View and edit your account information"
+    >
+      Account Info
+    </TabsTrigger>
+    <TabsTrigger 
+      value="password" 
+      description="Change your account password"
+    >
+      Password
+    </TabsTrigger>
+    <TabsTrigger 
+      value="preferences" 
+      description="Manage your email and notification settings"
+    >
+      Preferences
+    </TabsTrigger>
+  </TabsList>
+  {/* Tab contents */}
+</Tabs>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Tabs component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-font-family-primary` | Font family |
+| `--t-font-size-*` | Font sizes for different elements |
+| `--t-font-weight-*` | Font weights |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-fill-*` | Brand colors |
+| `--t-color-badge-*` | Badge colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-duration-*` | Animation duration |
+| `--t-easing-*` | Animation timing functions |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Animations
+
+The Tabs component includes several animations that enhance the user experience:
+
+- **Tab Indicator**: The active indicator smoothly transitions between tabs
+- **Content Fade**: Tab content fades in when activated
+- **Hover Effects**: Subtle background and color changes on hover
+- **Selection Animation**: Smooth transitions when a tab is selected
+- **Badge State Changes**: Badge appearance changes with tab states
+
+All animations respect the user's `prefers-reduced-motion` setting.
+
+<Canvas of={TabsStories.AnimationShowcase} />
+
+### Badge States
+
+Badge styling changes based on the tab state:
+
+<Canvas of={TabsStories.BadgeStatesShowcase} />
+
+### Technical Architecture
+
+The Tabs component is built on Radix UI's primitives and includes:
+
+- **State Management**: Tab selection state
+- **Event Handling**: Click handlers and keyboard interactions
+- **Composition**: Multiple sub-components (TabsList, TabsTrigger, TabsContent)
+- **Styling**: CSS modules with proper scoping
+- **Accessibility**: ARIA attributes and keyboard navigation
+- **Internationalization**: RTL support and dynamic line height
+
+### Browser Support
+
+The Tabs component is compatible with all modern browsers:
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Android Chrome)
+
+RTL language support works across all supported browsers.
+
+## Best Practices
+
+1. **Use clear labels**: Keep tab labels short and descriptive
+2. **Include icons**: When appropriate, use icons to enhance recognition
+3. **Order logically**: Arrange tabs in a logical sequence or priority order
+4. **Limit tab count**: Aim for 2-6 tabs; use other navigation for more options
+5. **Match content height**: Try to keep content panels a similar height to prevent jarring layout shifts
+6. **Maintain context**: Ensure users don't lose their place when switching tabs
+7. **Preserve state**: When using controlled tabs, preserve content state between tab switches
+8. **Be responsive**: Consider how tabs will behave on different screen sizes
+9. **Badge appropriately**: Use badges for counts or status indicators, not decorative purposes
+10. **Horizontal vs vertical**: Choose horizontal tabs for top-level navigation and vertical tabs for settings or sections with many options

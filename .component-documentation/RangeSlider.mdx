@@ -1,0 +1,910 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as RangeSliderStories from './RangeSlider.stories';
+import { RangeSlider } from './RangeSlider';
+
+<Meta of={RangeSliderStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 25-33)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 35-59)
+- Default single thumb implementation
+- Value state management
+
+🔄 DUAL THUMB MODE (Lines 61-79)
+- Range selector implementation
+- Price range example
+
+🎨 STATE VARIANTS (Lines 81-99)
+- Rest State (Line 85): Default appearance
+- Focus State (Line 88): Keyboard focus
+- Active State (Line 91): With tooltip display
+- Disabled State (Line 94): Non-interactive
+- Error State (Line 97): Validation errors
+
+🎛️ PREFIX & SUFFIX (Lines 100-122)
+- With Prefix (Line 104): Currency symbols
+- With Suffix (Line 107): Unit indicators
+- Combined (Lines 110-121): Both prefix and suffix
+
+⚡ INTERACTIVE DEMO (Lines 123-125)
+- Complete feature demonstration
+
+🌍 RTL SUPPORT (Lines 127-276)
+- Basic RTL (Lines 131-146): Arabic content
+- RTL with Prefix (Lines 148-165): Currency support
+- RTL with Suffix (Lines 167-184): Percentage indicators
+- Comprehensive RTL (Lines 186-190): Complete implementation
+- RTL vs LTR Comparison (Lines 192-194): Side-by-side
+- Implementation Details (Lines 196-229): Technical specifics
+- Best Practices (Lines 231-256): Recommended patterns
+- RTL Accessibility (Lines 258-284): Screen reader support
+
+🚨 ERROR HANDLING (Lines 285-297)
+- Validation error display
+- Error message configuration
+
+💡 TOOLTIP FUNCTIONALITY (Lines 299-312)
+- Active state tooltips
+- Value formatting
+
+♿ ACCESSIBILITY (Lines 314-358)
+- Keyboard Navigation (Lines 318-323): Arrow keys, Home/End
+- Screen Reader Support (Lines 324-327): ARIA implementation
+- Best Practices (Lines 329-351): Implementation examples
+- ARIA Implementation (Lines 353-358): Technical details
+
+🎨 STYLING & CUSTOMIZATION (Lines 359-400)
+- Design Token Integration (Lines 361-373): CSS variables
+- Custom Styling (Lines 375-400): CSS overrides
+
+🔧 ADVANCED PATTERNS (Lines 401-550)
+- Controlled vs Uncontrolled (Lines 403-431): State management
+- Form Integration (Lines 433-470): Settings forms
+- Event Handling (Lines 472-497): Change detection
+- RTL Detection (Lines 499-550): Dynamic handling
+
+📋 API REFERENCE (Lines 552-631)
+- RangeSlider Props (Lines 554-612): Complete interface
+- Common Formatters (Lines 614-631): Value display patterns
+
+🧪 TESTING (Lines 633-711)
+- Unit Testing (Lines 635-687): Basic tests
+- Integration Testing (Lines 689-711): Complex scenarios
+
+⚡ PERFORMANCE (Lines 713-749)
+- Optimization patterns
+- Debouncing strategies
+- Efficient API integration
+
+🌐 BROWSER SUPPORT (Lines 751-763)
+- Compatibility matrix
+- Feature requirements
+
+🔧 TROUBLESHOOTING (Lines 764-806)
+- Common issues and solutions
+- RTL-specific problems
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic slider: Lines 47-56
+- Dual thumb: Lines 70-78
+- With prefix/suffix: Lines 114-120
+- RTL support: Lines 136-145
+- Form integration: Lines 447-468
+- Controlled state: Lines 407-419
+- Value formatting: Lines 617-630
+
+⚠️ RTL NOTE:
+RangeSlider uses native Radix UI RTL support with automatic direction detection. Use dir="rtl" on parent container for proper Arabic/RTL language support.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all RangeSlider component capabilities and patterns.
+
+
+# RangeSlider Component
+
+The RangeSlider component provides an intuitive input control for selecting single values or ranges within a specified domain. Built on Radix UI primitives, it follows the Tagaddod Design System patterns and matches the specifications from Figma design documentation.
+
+## Overview
+
+The RangeSlider is ideal for scenarios where users need to select numerical values within a range, such as price filters, quantity selectors, or any continuous value selection. It supports both single-thumb and dual-thumb modes with comprehensive state management and accessibility features.
+
+**Key Features:**
+- Single thumb and dual thumb selection modes
+- Multiple state variants (rest, focus, active, disabled, error)
+- Tooltip display on active state
+- Prefix and suffix support for icons or text
+- Error message display with validation
+- Full keyboard accessibility
+- RTL language support
+- Mobile-friendly touch targets
+
+## Import
+
+```jsx
+import { RangeSlider } from 'tagaddod-design-react';
+```
+
+## Props
+
+<ArgTypes of={RangeSlider} />
+
+## Basic Usage
+
+<Canvas of={RangeSliderStories.Default} />
+
+```jsx
+import { useState } from 'react';
+import { RangeSlider } from 'tagaddod-design-react';
+
+const BasicSlider = () => {
+  const [value, setValue] = useState([50]);
+  
+  return (
+    <RangeSlider
+      type="single thumb"
+      label="Volume"
+      value={value}
+      onValueChange={setValue}
+      min={0}
+      max={100}
+      step={1}
+      aria-label="Volume control"
+    />
+  );
+};
+```
+
+## Dual Thumb Range Mode
+
+Use dual thumb mode to create a range selector:
+
+<Canvas of={RangeSliderStories.DualThumbRest} />
+
+```jsx
+const [priceRange, setPriceRange] = useState([25, 75]);
+
+<RangeSlider
+  type="dual thumb"
+  label="Price Range"
+  value={priceRange}
+  onValueChange={setPriceRange}
+  min={0}
+  max={100}
+  aria-label="Price range"
+/>
+```
+
+## State Variants
+
+The RangeSlider supports multiple states that reflect different interaction modes:
+
+### Rest State
+<Canvas of={RangeSliderStories.SingleThumbRest} />
+
+### Focus State  
+<Canvas of={RangeSliderStories.SingleThumbFocus} />
+
+### Active State (with Tooltip)
+<Canvas of={RangeSliderStories.SingleThumbActive} />
+
+### Disabled State
+<Canvas of={RangeSliderStories.SingleThumbDisabled} />
+
+### Error State
+<Canvas of={RangeSliderStories.SingleThumbError} />
+
+## Prefix and Suffix Support
+
+Add icons or text before and after the slider:
+
+### With Prefix
+<Canvas of={RangeSliderStories.WithPrefix} />
+
+### With Suffix
+<Canvas of={RangeSliderStories.WithSuffix} />
+
+### With Both Prefix and Suffix
+<Canvas of={RangeSliderStories.WithPrefixAndSuffix} />
+
+```jsx
+<RangeSlider
+  type="single thumb"
+  label="Price"
+  prefix="$"
+  suffix="USD"
+  value={[50]}
+/>
+```
+
+## Interactive Demo
+
+<Canvas of={RangeSliderStories.InteractiveDemo} />
+
+## RTL Language Support
+
+The RangeSlider component provides comprehensive Right-to-Left (RTL) language support using Radix UI's native direction handling for optimal performance and user experience.
+
+### Basic RTL Support
+
+<Canvas of={RangeSliderStories.RTLExample} />
+
+```jsx
+// Basic RTL support with Arabic content
+<div dir="rtl">
+  <RangeSlider
+    type="dual thumb"
+    label="شريط التمرير للنطاق"
+    value={[30, 70]}
+    formatValue={(value) => `${value}%`}
+    aria-label="نسبة التقدم"
+  />
+</div>
+```
+
+### RTL with Prefix Support
+
+<Canvas of={RangeSliderStories.RTLWithPrefix} />
+
+```jsx
+// RTL slider with currency prefix
+<div dir="rtl">
+  <RangeSlider
+    type="dual thumb"
+    label="نطاق الراتب الشهري"
+    prefix="ر.س"
+    value={[3000, 8000]}
+    min={1000}
+    max={10000}
+    aria-label="نطاق الراتب"
+  />
+</div>
+```
+
+### RTL with Suffix Support
+
+<Canvas of={RangeSliderStories.RTLWithSuffix} />
+
+```jsx
+// RTL slider with percentage suffix
+<div dir="rtl">
+  <RangeSlider
+    type="single thumb"
+    label="مستوى الصوت"
+    suffix="%"
+    value={[75]}
+    min={0}
+    max={100}
+    aria-label="التحكم في مستوى الصوت"
+  />
+</div>
+```
+
+### Comprehensive RTL Implementation
+
+<Canvas of={RangeSliderStories.RTLComprehensiveDemo} />
+
+This demonstrates the complete RTL implementation with proper range fill direction, intuitive mouse interaction, and correct prefix/suffix positioning.
+
+### RTL vs LTR Comparison
+
+<Canvas of={RangeSliderStories.RTLVsLTRComparison} />
+
+**RTL Implementation Features:**
+
+#### **✅ Native Radix UI Direction Support**
+- Uses Radix UI's built-in `dir="rtl"` prop for optimal performance
+- Proper range fill direction (right-to-left)
+- Intuitive mouse interaction (moving right increases value)
+
+#### **🎯 Correct Layout Behavior**
+- **RTL Layout**: Suffix → Slider → Prefix
+- **LTR Layout**: Prefix → Slider → Suffix
+- Automatic layout switching based on `dir` attribute
+
+#### **🔧 Technical Implementation**
+```tsx
+// Component automatically detects RTL context
+<Slider.Root
+  dir={isRTL ? 'rtl' : 'ltr'}  // Native Radix UI direction support
+  // ... other props
+>
+```
+
+```css
+/* CSS handles prefix/suffix positioning */
+:global([dir="rtl"]) .sliderContainer {
+  flex-direction: row; /* Maintains proper order in RTL */
+}
+```
+
+**RTL Considerations:**
+- **Automatic Layout**: Proper text alignment and component positioning
+- **Arabic Font Optimization**: Uses `Tajawal` font with optimized line-height (1.2 vs 1.5 for English)
+- **Range Fill Direction**: Fills from right-to-left in RTL contexts
+- **Mouse Interaction**: Natural interaction patterns (right = increase, left = decrease)
+- **Performance**: Leverages native browser RTL behavior for optimal rendering
+
+### RTL Best Practices
+
+```jsx
+// Recommended RTL implementation
+const RTLSliderExample = () => {
+  const [priceRange, setPriceRange] = useState([500, 1500]);
+  
+  return (
+    <div dir="rtl">
+      <RangeSlider
+        type="dual thumb"
+        label="نطاق السعر"
+        prefix="ر.س"
+        suffix="SAR"
+        value={priceRange}
+        onValueChange={setPriceRange}
+        min={100}
+        max={2000}
+        step={50}
+        formatValue={(value) => value.toLocaleString('ar-SA')}
+        aria-label="نطاق الأسعار بالريال السعودي"
+      />
+    </div>
+  );
+};
+```
+
+### RTL Accessibility
+
+The RTL implementation maintains full accessibility compliance:
+
+```jsx
+// RTL with proper accessibility
+<RangeSlider
+  type="dual thumb"
+  label="نطاق الراتب"
+  prefix="ر.س"
+  value={[3000, 7000]}
+  aria-label="اختيار نطاق الراتب الشهري"
+  aria-describedby="salary-help"
+  dir="rtl"
+/>
+<div id="salary-help" style={{ textAlign: 'right' }}>
+  استخدم الأسهم أو اسحب لتحديد النطاق المطلوب
+</div>
+```
+
+**RTL Accessibility Features:**
+- Proper ARIA labels in Arabic
+- Right-to-left text alignment for labels and descriptions
+- Maintained keyboard navigation (arrows work intuitively)
+- Screen reader support with Arabic content
+- Consistent focus management in RTL layouts
+
+## Error Handling
+
+Display validation errors with proper messaging:
+
+```jsx
+<RangeSlider
+  type="single thumb"
+  state="error"
+  label="Invalid Range"
+  errorMessage="Value must be between 10 and 90"
+  value={[95]}
+/>
+```
+
+## Tooltip Functionality
+
+Tooltips automatically appear during active state to show current values:
+
+```jsx
+<RangeSlider
+  type="single thumb"
+  state="active"
+  label="Volume"
+  value={[75]}
+  formatValue={(value) => `${value}%`}
+  showTooltip={true}
+/>
+```
+
+## Accessibility
+
+The RangeSlider component implements comprehensive accessibility features:
+
+### Keyboard Navigation
+- **Arrow Keys**: Increment/decrement by step value
+- **Home**: Move to minimum value
+- **End**: Move to maximum value
+- **Page Up/Page Down**: Increment/decrement by larger steps
+
+### Screen Reader Support
+- Proper ARIA labels and roles
+- Value announcements on change
+- Range descriptions for dual-thumb sliders
+
+### Best Practices
+
+```jsx
+// Single value slider
+<RangeSlider
+  type="single thumb"
+  aria-label="Volume level"
+  label="Volume"
+  value={[65]}
+  onValueChange={setVolume}
+  formatValue={(value) => `${value}%`}
+/>
+
+// Range slider with descriptive labels
+<RangeSlider
+  type="dual thumb"
+  aria-label="Price range"
+  label="Price Range"
+  value={[40, 90]}
+  onValueChange={setPriceRange}
+  formatValue={(value) => `$${value}`}
+/>
+```
+
+### ARIA Implementation
+- `aria-label`: Describes the slider's purpose
+- `role="slider"`: Identifies the control type
+- `aria-valuemin/aria-valuemax`: Communicates the value range
+- `aria-valuenow`: Current value for screen readers
+
+## Styling and Customization
+
+### Design Token Integration
+
+The component uses the following design tokens for consistent brand appearance:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `--t-color-fill-brand-primary` | Thumb and range fill | #3959fe |
+| `--t-color-border-secondary` | Track background | #e0e2e6 |
+| `--t-color-text-primary` | Label text | #16161d |
+| `--t-color-text-disabled` | Disabled text | #adafbd |
+| `--t-color-fill-critical` | Error state | #d51e25 |
+| `--t-space-*` | Spacing and padding | Layout spacing |
+
+### Custom Styling
+
+```jsx
+// Apply custom class for styling
+<RangeSlider 
+  className="custom-slider"
+  type="single thumb"
+  label="Custom Styled"
+  value={[45]}
+/>
+```
+
+```css
+/* Custom CSS overrides */
+.custom-slider {
+  /* Customize container */
+}
+
+.custom-slider .root {
+  /* Customize slider root */
+}
+
+.custom-slider .thumb {
+  /* Customize thumb appearance */
+}
+```
+
+## Advanced Usage Patterns
+
+### Controlled vs Uncontrolled
+
+```jsx
+// Controlled (recommended for forms)
+const ControlledSlider = () => {
+  const [value, setValue] = useState([50]);
+  
+  return (
+    <RangeSlider
+      type="single thumb"
+      label="Controlled"
+      value={value}
+      onValueChange={setValue}
+      aria-label="Controlled slider"
+    />
+  );
+};
+
+// Uncontrolled (simple cases)
+const UncontrolledSlider = () => (
+  <RangeSlider
+    type="single thumb"
+    label="Uncontrolled"
+    defaultValue={[25]}
+    onValueChange={(value) => console.log('Value:', value)}
+    aria-label="Uncontrolled slider"
+  />
+);
+```
+
+### Form Integration
+
+```jsx
+const SettingsForm = () => {
+  const [settings, setSettings] = useState({
+    volume: [75],
+    priceRange: [100, 500]
+  });
+  
+  const updateSetting = (key, value) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
+  };
+  
+  return (
+    <form>
+      <RangeSlider
+        type="single thumb"
+        label="Volume"
+        value={settings.volume}
+        onValueChange={(value) => updateSetting('volume', value)}
+        formatValue={(value) => `${value}%`}
+        aria-label="Volume level"
+      />
+      
+      <RangeSlider
+        type="dual thumb"
+        label="Price Range"
+        value={settings.priceRange}
+        onValueChange={(value) => updateSetting('priceRange', value)}
+        min={0}
+        max={1000}
+        formatValue={(value) => `$${value}`}
+        aria-label="Price filter range"
+      />
+    </form>
+  );
+};
+```
+
+### Event Handling
+
+```jsx
+const EventHandlingExample = () => {
+  const [value, setValue] = useState([50]);
+  const [isChanging, setIsChanging] = useState(false);
+  
+  return (
+    <RangeSlider
+      type="single thumb"
+      label="Event Handling"
+      value={value}
+      onValueChange={(newValue) => {
+        setValue(newValue);
+        setIsChanging(true);
+      }}
+      onValueCommit={(finalValue) => {
+        setIsChanging(false);
+        // Save to server, trigger analytics, etc.
+        console.log('Final value:', finalValue);
+      }}
+      aria-label="Event handling example"
+    />
+  );
+};
+```
+
+### RTL Detection and Handling
+
+```jsx
+const RTLAwareSlider = () => {
+  const [value, setValue] = useState([25, 75]);
+  const [isRTL, setIsRTL] = useState(false);
+  
+  // Detect RTL context
+  useEffect(() => {
+    const detectRTL = () => {
+      if (typeof document === 'undefined') return false;
+      
+      // Check dir attribute on html, body, or closest parent
+      const htmlDir = document.documentElement.dir;
+      const bodyDir = document.body.dir;
+      
+      return htmlDir === 'rtl' || bodyDir === 'rtl';
+    };
+    
+    setIsRTL(detectRTL());
+    
+    // Listen for direction changes
+    const observer = new MutationObserver(() => {
+      setIsRTL(detectRTL());
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['dir']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  return (
+    <div dir={isRTL ? 'rtl' : 'ltr'}>
+      <RangeSlider
+        type="dual thumb"
+        label={isRTL ? "نطاق السعر" : "Price Range"}
+        prefix={isRTL ? "ر.س" : "$"}
+        suffix={isRTL ? "SAR" : "USD"}
+        value={value}
+        onValueChange={setValue}
+        formatValue={(val) => 
+          isRTL ? val.toLocaleString('ar-SA') : val.toLocaleString('en-US')
+        }
+        aria-label={isRTL ? "نطاق الأسعار" : "Price range selector"}
+      />
+    </div>
+  );
+};
+```
+
+## Component API Reference
+
+### RangeSlider Props
+
+```typescript
+interface RangeSliderProps {
+  /** The controlled value of the slider */
+  value?: number[];
+  
+  /** The default value when initially rendered */
+  defaultValue?: number[];
+  
+  /** Event handler called when the value changes */
+  onValueChange?: (value: number[]) => void;
+  
+  /** Event handler called when interaction ends */
+  onValueCommit?: (value: number[]) => void;
+  
+  /** Minimum value (default: 0) */
+  min?: number;
+  
+  /** Maximum value (default: 100) */
+  max?: number;
+  
+  /** Step increment (default: 1) */
+  step?: number;
+  
+  /** Type of slider - single or dual thumb */
+  type?: 'single thumb' | 'dual thumb';
+  
+  /** Current state of the slider */
+  state?: 'rest' | 'focus' | 'active' | 'disabled' | 'error';
+  
+  /** Whether the slider is disabled */
+  disabled?: boolean;
+  
+  /** Text label displayed above the slider */
+  label?: string;
+  
+  /** Content to display before the slider */
+  prefix?: React.ReactNode;
+  
+  /** Content to display after the slider */
+  suffix?: React.ReactNode;
+  
+  /** Error message to display below the slider */
+  errorMessage?: string;
+  
+  /** Custom formatter for displaying values in tooltip */
+  formatValue?: (value: number) => string;
+  
+  /** Aria label for accessibility */
+  'aria-label'?: string;
+  
+  /** Whether to show tooltip on active state */
+  showTooltip?: boolean;
+  
+  /** Additional class names */
+  className?: string;
+}
+```
+
+### Common Value Formatters
+
+```jsx
+// Percentage
+formatValue={(value) => `${value}%`}
+
+// Currency
+formatValue={(value) => `$${value.toLocaleString()}`}
+
+// Temperature
+formatValue={(value) => `${value}°C`}
+
+// Time duration
+formatValue={(value) => `${Math.floor(value / 60)}:${(value % 60).toString().padStart(2, '0')}`}
+
+// File size
+formatValue={(value) => `${(value / 1024).toFixed(1)} KB`}
+```
+
+## Testing
+
+### Unit Testing Examples
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { RangeSlider } from 'tagaddod-design-react';
+
+test('renders slider with correct initial value', () => {
+  render(
+    <RangeSlider 
+      type="single thumb"
+      defaultValue={[25]} 
+      aria-label="Test slider" 
+    />
+  );
+  
+  const slider = screen.getByRole('slider');
+  expect(slider).toHaveAttribute('aria-valuenow', '25');
+});
+
+test('calls onValueChange when slider moves', () => {
+  const handleChange = jest.fn();
+  
+  render(
+    <RangeSlider 
+      type="single thumb"
+      defaultValue={[50]} 
+      onValueChange={handleChange}
+      aria-label="Test slider"
+    />
+  );
+  
+  const slider = screen.getByRole('slider');
+  fireEvent.keyDown(slider, { key: 'ArrowRight' });
+  
+  expect(handleChange).toHaveBeenCalledWith([51]);
+});
+
+test('respects min and max boundaries', () => {
+  render(
+    <RangeSlider 
+      type="single thumb"
+      min={10}
+      max={90}
+      defaultValue={[50]}
+      aria-label="Bounded slider"
+    />
+  );
+  
+  const slider = screen.getByRole('slider');
+  expect(slider).toHaveAttribute('aria-valuemin', '10');
+  expect(slider).toHaveAttribute('aria-valuemax', '90');
+});
+```
+
+### Integration Testing
+
+```jsx
+test('dual thumb slider with proper ranges', () => {
+  const handleChange = jest.fn();
+  
+  render(
+    <RangeSlider 
+      type="dual thumb"
+      defaultValue={[25, 75]} 
+      onValueChange={handleChange}
+      aria-label="Range slider"
+    />
+  );
+  
+  const sliders = screen.getAllByRole('slider');
+  expect(sliders).toHaveLength(2);
+  
+  // Test range constraints
+  fireEvent.keyDown(sliders[0], { key: 'ArrowRight' });
+  expect(handleChange).toHaveBeenCalledWith([26, 75]);
+});
+```
+
+## Performance Considerations
+
+- **Controlled Updates**: Use `onValueCommit` for expensive operations instead of `onValueChange`
+- **Debouncing**: Consider debouncing API calls triggered by slider changes
+- **Value Formatting**: Memoize complex `formatValue` functions to prevent unnecessary re-renders
+
+```jsx
+// Efficient pattern for API integration
+const OptimizedSlider = () => {
+  const [value, setValue] = useState([50]);
+  const [debouncedValue, setDebouncedValue] = useState([50]);
+  
+  // Debounce API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [value]);
+  
+  // Only trigger API call on debounced value
+  useEffect(() => {
+    // API call with debouncedValue
+  }, [debouncedValue]);
+  
+  return (
+    <RangeSlider
+      type="single thumb"
+      label="Optimized"
+      value={value}
+      onValueChange={setValue}
+      aria-label="Optimized slider"
+    />
+  );
+};
+```
+
+## Browser Support
+
+- **Chrome**: 88+
+- **Firefox**: 85+
+- **Safari**: 14+
+- **Edge**: 88+
+
+**Features used:**
+- CSS Grid and Flexbox for layout
+- CSS custom properties for theming
+- Touch events for mobile interaction
+- Modern JavaScript features (optional chaining, nullish coalescing)
+
+## Troubleshooting
+
+### Common Issues
+
+**Slider not responding to keyboard input:**
+- Ensure the slider has focus (click on it first)
+- Verify `aria-label` is provided for proper accessibility
+- Check that `disabled` prop is not set to `true`
+
+**Values not updating correctly:**
+- Use controlled pattern with `value` and `onValueChange`
+- Ensure state updates are not being blocked
+- Check for conflicts with `defaultValue` when using controlled mode
+
+**State not reflecting correctly:**
+- Verify the `state` prop matches expected values
+- Check that `disabled` prop is properly coordinated with state
+- Ensure error messages are displayed when `state="error"`
+
+**Styling inconsistencies:**
+- Verify all required design tokens are available
+- Check for CSS specificity conflicts
+- Ensure proper theme context is provided
+
+**RTL layout issues:**
+- Confirm `dir="rtl"` is set on appropriate parent element
+- Verify the component uses Radix UI's native `dir` prop (not CSS-only solutions)
+- Check that range fill direction flows right-to-left correctly
+- Ensure prefix/suffix positioning follows RTL layout (suffix → slider → prefix)
+- Verify mouse interaction is intuitive (moving right increases value)
+- Confirm text content uses appropriate fonts for Arabic/RTL languages
+
+**RTL range fill not working correctly:**
+- Ensure you're using the native Radix UI `dir` prop implementation
+- Avoid conflicting CSS `direction: rtl` rules that can interfere with Radix UI
+- Check that `flex-direction: row` is used for the slider container in RTL
+- Verify the component properly detects RTL context through `dir` attribute detection
+
+**RTL prefix/suffix positioning wrong:**
+- Confirm the CSS uses `flex-direction: row` (not `row-reverse`) for RTL contexts
+- Check that the `dir="rtl"` attribute is properly set on parent container
+- Verify no conflicting CSS is overriding the RTL layout rules

@@ -1,0 +1,1128 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as PopoverStories from './Popover.stories';
+import { Popover, PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverClose } from './Popover';
+import { Button } from '../Button/Button';
+
+<Meta of={PopoverStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-36)
+- Basic import pattern (simple Popover)
+- Advanced imports (PopoverRoot, PopoverTrigger, etc.)
+- Props documentation
+
+🎯 BASIC USAGE (Lines 38-53)
+- Default implementation with content and positioning
+- Button trigger example
+
+🎨 TYPES (Lines 55-94)
+- Default Type (Lines 57-68): Standard popover
+- With Scrollbar (Lines 70-94): Overflow handling for long content
+
+📍 POSITIONS (Lines 96-138)
+- Top, Right, Bottom, Left positioning
+- side and align prop usage
+
+🏹 ARROW (Lines 140-160)
+- showArrow prop configuration
+- With/without arrow examples
+
+⚡ ANIMATION (Lines 162-182)
+- animationDuration customization
+- Performance considerations
+
+🔧 ADVANCED COMPOSITION (Lines 184-233)
+- PopoverRoot, PopoverTrigger, PopoverContent usage
+- Custom button integration
+- PopoverClose implementation
+
+📋 LISTBOX INTEGRATION (Lines 235-515)
+- Basic Listbox (Lines 237-257): Dropdown menu functionality
+- Listbox with Icons (Lines 259-279): Visual indicators
+- Mixed Icon Configuration (Lines 281-300): Selective icon display
+- Scrollable Listbox (Lines 302-320): Long lists with overflow
+- Enhanced Scrollable Dropdown (Lines 322-354): Complex file manager
+- Multiple Selection (Lines 356-376): Multi-select capability
+
+📏 MARGIN CUSTOMIZATION (Lines 377-441)
+- Predefined margins (none, small, medium, large)
+- Custom pixel values
+- Listbox margin configuration
+
+🎛️ ITEM PADDING (Lines 443-516)
+- Vertical and horizontal padding customization
+- Compact, spacious, and custom shapes
+- Scrollable list padding
+
+🔄 CONTROLLED MODE (Lines 518-544)
+- open and onOpenChange props
+- External state management
+
+💼 USE CASES (Lines 546-777)
+- Tooltips (Lines 548-558): Information display
+- Dropdown Menus (Lines 560-589): Action menus with listbox
+- Information Cards (Lines 591-607): Detailed content
+- Color Picker (Lines 609-633): Grid-based selection
+- File Manager Dropdown (Lines 635-657): Complex menu with dividers
+- User Profile Menu (Lines 659-678): Account management
+- Language Selector (Lines 680-702): Multi-language support
+
+🌍 INTERNATIONALIZATION (Lines 704-722)
+- RTL language support
+- Arabic content examples
+
+♿ ACCESSIBILITY (Lines 724-735)
+- Radix UI foundation
+- Focus management and keyboard navigation
+
+⚙️ TECHNICAL DETAILS (Lines 737-777)
+- CSS Variables (Lines 739-755): Design token reference
+- Architecture (Lines 757-773): Radix UI primitives
+- Browser Support (Line 775-777): Compatibility
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic popover: Lines 42-52
+- With scrollbar: Lines 77-93
+- Different positions: Lines 103-137
+- Listbox dropdown: Lines 244-256
+- With icons: Lines 268-278
+- Multiple selection: Lines 361-375
+- Custom margins: Lines 385-421
+- Controlled mode: Lines 525-543
+
+⚠️ LISTBOX NOTE:
+Popover includes powerful listbox integration with useListbox prop for creating accessible dropdown menus with icons, help text, multiple selection, and scrolling support.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Popover component capabilities and patterns.
+
+
+# Popover Component
+
+The Popover component displays floating content that appears when a user interacts with a trigger element.
+
+## Overview
+
+Popovers are used to display additional information or actions related to an element on the page without navigating away from the current context. They're commonly used for tooltips, dropdowns, menus, and other contextual information displays.
+
+## Import
+
+```jsx
+import { Popover } from '@tagaddod/react';
+```
+
+For advanced usage with more control over the composition:
+
+```jsx
+import { 
+  PopoverRoot, 
+  PopoverTrigger, 
+  PopoverContent, 
+  PopoverArrow, 
+  PopoverClose 
+} from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Popover} />
+
+## Basic Usage
+
+<Canvas of={PopoverStories.Default} />
+
+```jsx
+import { Popover, Button } from '@tagaddod/react';
+
+<Popover
+  content="This is a basic popover content"
+  side="bottom"
+  align="center"
+  showArrow={true}
+>
+  <Button>Click me</Button>
+</Popover>
+```
+
+## Types
+
+### Default
+
+<Canvas of={PopoverStories.Default} />
+
+```jsx
+<Popover
+  content="This is a basic popover content"
+  type="default"
+>
+  <Button>Default Popover</Button>
+</Popover>
+```
+
+### With Scrollbar
+
+For popover content that might exceed the maximum height, use the `with-scrollbar` type to display a scrollbar.
+
+<Canvas of={PopoverStories.WithScrollbar} />
+
+```jsx
+<Popover
+  content={
+    <div>
+      <p>This popover has a lot of content that might require scrolling.</p>
+      <p>You can see how the scrollbar appears when the content exceeds the maximum height.</p>
+      <p>This is useful for displaying larger amounts of information without taking up too much screen space.</p>
+      <p>The popover will automatically handle overflow content.</p>
+      <p>This is line 5 of the content.</p>
+      <p>This is line 6 of the content.</p>
+      <p>This is line 7 of the content.</p>
+      <p>This is line 8 of the content.</p>
+    </div>
+  }
+  type="with-scrollbar"
+>
+  <Button>Scrollable Popover</Button>
+</Popover>
+```
+
+## Positions
+
+You can position the popover relative to the trigger using the `side` and `align` props.
+
+<Canvas of={PopoverStories.Different_Positions} />
+
+```jsx
+// Top position
+<Popover
+  content="This popover appears on top"
+  side="top"
+  align="center"
+>
+  <Button>Top</Button>
+</Popover>
+
+// Right position
+<Popover
+  content="This popover appears on the right"
+  side="right"
+  align="center"
+>
+  <Button>Right</Button>
+</Popover>
+
+// Bottom position
+<Popover
+  content="This popover appears on the bottom"
+  side="bottom"
+  align="center"
+>
+  <Button>Bottom</Button>
+</Popover>
+
+// Left position
+<Popover
+  content="This popover appears on the left"
+  side="left"
+  align="center"
+>
+  <Button>Left</Button>
+</Popover>
+```
+
+## Arrow
+
+You can show or hide the arrow pointing to the trigger using the `showArrow` prop.
+
+```jsx
+// With arrow
+<Popover
+  content="This popover has an arrow"
+  showArrow={true}
+>
+  <Button>With Arrow</Button>
+</Popover>
+
+// Without arrow
+<Popover
+  content="This popover has no arrow"
+  showArrow={false}
+>
+  <Button>Without Arrow</Button>
+</Popover>
+```
+
+## Animation
+
+The popover has a default animation duration of 200ms. You can customize this with the `animationDuration` prop.
+
+```jsx
+// Faster animation
+<Popover
+  content="This popover animates quickly"
+  animationDuration={100}
+>
+  <Button>Fast Animation</Button>
+</Popover>
+
+// Slower animation
+<Popover
+  content="This popover animates slowly"
+  animationDuration={400}
+>
+  <Button>Slow Animation</Button>
+</Popover>
+```
+
+## Advanced Composition
+
+For more complex scenarios, you can use the individual popover components to create custom compositions.
+
+<Canvas of={PopoverStories.Compositions} />
+
+```jsx
+import { 
+  PopoverRoot, 
+  PopoverTrigger, 
+  PopoverContent, 
+  PopoverArrow, 
+  PopoverClose, 
+  Button 
+} from '@tagaddod/react';
+
+// With buttons
+<Popover
+  content={
+    <div>
+      <h4 style={{ margin: '0 0 0.5rem' }}>Popover Title</h4>
+      <p style={{ margin: '0 0 1rem' }}>This popover contains a title and action buttons.</p>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+        <PopoverClose asChild>
+          <Button variant="secondary" size="micro">Cancel</Button>
+        </PopoverClose>
+        <PopoverClose asChild>
+          <Button size="micro">Confirm</Button>
+        </PopoverClose>
+      </div>
+    </div>
+  }
+>
+  <Button>With Buttons</Button>
+</Popover>
+
+// Custom composition
+<PopoverRoot>
+  <PopoverTrigger asChild>
+    <Button>Custom Composition</Button>
+  </PopoverTrigger>
+  <PopoverContent sideOffset={5}>
+    <div style={{ padding: '0.5rem' }}>
+      <h4>Custom Components</h4>
+      <p>Using PopoverRoot, PopoverTrigger, and PopoverContent for more control.</p>
+      <PopoverArrow />
+    </div>
+  </PopoverContent>
+</PopoverRoot>
+```
+
+## Listbox Integration
+
+The Popover component now includes powerful listbox integration for creating dropdown menus with rich customization options.
+
+### Basic Listbox
+
+<Canvas of={PopoverStories.WithListbox} />
+
+```jsx
+<Popover
+  useListbox
+  listboxOptions={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' },
+    { label: 'Option 3', value: '3' },
+    { label: 'Option 4', value: '4' },
+    { label: 'Option 5', value: '5' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Select Option</Button>
+</Popover>
+```
+
+### Listbox with Icons
+
+<Canvas of={PopoverStories.WithListboxIcons} />
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxDefaultIcon="📄"
+  listboxOptions={[
+    { label: 'Documents', value: 'docs' },
+    { label: 'Images', value: 'images', icon: '🖼️' },
+    { label: 'Videos', value: 'videos', icon: '🎥' },
+    { label: 'Music', value: 'music', icon: '🎵' },
+    { label: 'Downloads', value: 'downloads' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>File Types</Button>
+</Popover>
+```
+
+### Mixed Icon Configuration
+
+<Canvas of={PopoverStories.WithMixedIcons} />
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons={false} // Global setting is off
+  listboxOptions={[
+    { label: 'Home', value: 'home', showIcon: true, icon: '🏠' },
+    { label: 'Profile', value: 'profile' }, // No icon
+    { label: 'Settings', value: 'settings', showIcon: true, icon: '⚙️' },
+    { label: 'Help', value: 'help' }, // No icon
+    { label: 'Logout', value: 'logout', showIcon: true, icon: '🚪' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Navigation</Button>
+</Popover>
+```
+
+### Scrollable Listbox
+
+<Canvas of={PopoverStories.WithScrollableListbox} />
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxOptions={Array.from({ length: 15 }, (_, i) => ({
+    label: `Option ${i + 1}`,
+    value: `option-${i + 1}`,
+    helpText: i % 3 === 0 ? `This is help text for option ${i + 1}` : undefined,
+  }))}
+  listboxMaxItems={6}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Long List</Button>
+</Popover>
+```
+
+### Enhanced Scrollable Dropdown
+
+<Canvas of={PopoverStories.EnhancedScrollableDropdown} />
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxShowIcons
+  listboxMaxItems={8}
+  margin="small"
+  listboxOptions={[
+    // Recent Files Section
+    { label: 'Document.pdf', value: 'doc1', icon: '📄', helpText: 'Modified 2 hours ago' },
+    { label: 'Presentation.pptx', value: 'pres1', icon: '📊', helpText: 'Modified 1 day ago' },
+    { label: 'Spreadsheet.xlsx', value: 'sheet1', icon: '📈', helpText: 'Modified 3 days ago' },
+    
+    // Favorites Section  
+    { label: 'Project Plans', value: 'fav1', icon: '⭐', divider: true },
+    { label: 'Team Photos', value: 'fav2', icon: '⭐' },
+    { label: 'Budget 2024', value: 'fav3', icon: '⭐' },
+    
+    // Applications Section
+    { label: 'Calculator', value: 'app1', icon: '🧮', divider: true },
+    { label: 'Calendar', value: 'app2', icon: '📅' },
+    { label: 'Notes', value: 'app3', icon: '📝' },
+    // ... more options
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Application Launcher</Button>
+</Popover>
+```
+
+### Multiple Selection
+
+<Canvas of={PopoverStories.WithMultipleSelection} />
+
+```jsx
+<Popover
+  useListbox
+  listboxMultiple
+  listboxSelectedValue={['1', '3']}
+  listboxOptions={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' },
+    { label: 'Option 3', value: '3' },
+    { label: 'Option 4', value: '4' },
+    { label: 'Option 5', value: '5' },
+  ]}
+  onListboxMultiSelect={(values) => console.log('Selected values:', values)}
+>
+  <Button>Multi-Select</Button>
+</Popover>
+```
+
+## Margin Customization
+
+You can customize the spacing inside the popover using the `margin` prop.
+
+<Canvas of={PopoverStories.CustomMargins} />
+
+```jsx
+// No margin
+<Popover
+  content="No margin"
+  margin="none"
+>
+  <Button>No Margin</Button>
+</Popover>
+
+// Predefined margins
+<Popover
+  content="Small margin"
+  margin="small"
+>
+  <Button>Small</Button>
+</Popover>
+
+<Popover
+  content="Medium margin (default)"
+  margin="medium"
+>
+  <Button>Medium</Button>
+</Popover>
+
+<Popover
+  content="Large margin"
+  margin="large"
+>
+  <Button>Large</Button>
+</Popover>
+
+// Custom pixel value
+<Popover
+  content="Custom 20px margin"
+  margin={20}
+>
+  <Button>Custom (20px)</Button>
+</Popover>
+```
+
+### Listbox with Custom Margins
+
+<Canvas of={PopoverStories.ListboxWithCustomMargins} />
+
+```jsx
+<Popover
+  useListbox
+  margin="none"
+  listboxOptions={[
+    { label: 'Compact Option 1', value: '1' },
+    { label: 'Compact Option 2', value: '2' },
+    { label: 'Compact Option 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>No Margin Listbox</Button>
+</Popover>
+```
+
+## Listbox Item Padding Customization
+
+You can customize the padding of individual listbox items using the `listboxItemPaddingVertical` and `listboxItemPaddingHorizontal` props.
+
+<Canvas of={PopoverStories.ListboxWithCustomPadding} />
+
+```jsx
+// Compact padding
+<Popover
+  useListbox
+  listboxItemPaddingVertical={8}
+  listboxItemPaddingHorizontal={12}
+  listboxOptions={[
+    { label: 'Compact Item 1', value: '1' },
+    { label: 'Compact Item 2', value: '2' },
+    { label: 'Compact Item 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Compact Padding</Button>
+</Popover>
+
+// Spacious padding
+<Popover
+  useListbox
+  listboxItemPaddingVertical={20}
+  listboxItemPaddingHorizontal={24}
+  listboxShowIcons
+  listboxDefaultIcon="📄"
+  listboxOptions={[
+    { label: 'Spacious Item 1', value: '1' },
+    { label: 'Spacious Item 2', value: '2' },
+    { label: 'Spacious Item 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Spacious Padding</Button>
+</Popover>
+
+// Custom shape (narrow height, wide sides)
+<Popover
+  useListbox
+  listboxItemPaddingVertical={4}
+  listboxItemPaddingHorizontal={32}
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'Narrow Height', value: '1', icon: '🔥' },
+    { label: 'Wide Sides', value: '2', icon: '⚡' },
+    { label: 'Custom Shape', value: '3', icon: '🎯' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Custom Shape</Button>
+</Popover>
+
+// Scrollable list with custom padding
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxItemPaddingVertical={16}
+  listboxItemPaddingHorizontal={20}
+  listboxMaxItems={5}
+  listboxShowIcons
+  listboxOptions={Array.from({ length: 12 }, (_, i) => ({
+    label: `Padded Option ${i + 1}`,
+    value: `option-${i + 1}`,
+    icon: i % 3 === 0 ? '📁' : i % 3 === 1 ? '📄' : '🖼️',
+    helpText: i % 4 === 0 ? `Help text for option ${i + 1}` : undefined,
+  }))}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Scrollable Custom Padding</Button>
+</Popover>
+```
+
+## Controlled Mode
+
+You can control the open state of the popover using the `open` and `onOpenChange` props.
+
+```jsx
+import { useState } from 'react';
+
+function ControlledPopover() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <div>
+      <Button onClick={() => setOpen(!open)}>
+        {open ? 'Close Popover' : 'Open Popover'}
+      </Button>
+      
+      <Popover
+        content="This is a controlled popover"
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <Button>Trigger</Button>
+      </Popover>
+    </div>
+  );
+}
+```
+
+## Use Cases
+
+### Tooltips
+
+```jsx
+<Popover
+  content="This is additional information about the action"
+  side="top"
+  showArrow={true}
+>
+  <Button>Hover for Info</Button>
+</Popover>
+```
+
+### Dropdown Menus
+
+```jsx
+// Traditional content approach
+<Popover
+  content={
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Edit</button>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Duplicate</button>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Delete</button>
+    </div>
+  }
+>
+  <Button>Menu</Button>
+</Popover>
+
+// Using listbox for better accessibility and features
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'Edit', value: 'edit', icon: '✏️' },
+    { label: 'Duplicate', value: 'duplicate', icon: '📋' },
+    { label: 'Delete', value: 'delete', icon: '🗑️' },
+  ]}
+  onListboxSelect={(value) => console.log('Action:', value)}
+>
+  <Button>Actions</Button>
+</Popover>
+```
+
+### Information Cards
+
+```jsx
+<Popover
+  content={
+    <div>
+      <h4>Item Details</h4>
+      <p>Status: Active</p>
+      <p>Created: June 1, 2023</p>
+      <p>Owner: John Doe</p>
+    </div>
+  }
+  side="right"
+>
+  <Button>View Details</Button>
+</Popover>
+```
+
+### Color Picker
+
+```jsx
+<Popover
+  content={
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+      {['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'teal'].map(color => (
+        <div
+          key={color}
+          style={{
+            width: '24px',
+            height: '24px',
+            backgroundColor: color,
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+          onClick={() => console.log(`Selected color: ${color}`)}
+        />
+      ))}
+    </div>
+  }
+>
+  <Button>Pick a Color</Button>
+</Popover>
+```
+
+### File Manager Dropdown
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxShowIcons
+  listboxMaxItems={8}
+  listboxOptions={[
+    { label: 'New Folder', value: 'new-folder', icon: '📁' },
+    { label: 'New Document', value: 'new-doc', icon: '📄', divider: true },
+    { label: 'Upload Files', value: 'upload', icon: '📤' },
+    { label: 'Download Selected', value: 'download', icon: '📥', divider: true },
+    { label: 'Copy', value: 'copy', icon: '📋' },
+    { label: 'Cut', value: 'cut', icon: '✂️' },
+    { label: 'Paste', value: 'paste', icon: '📌', divider: true },
+    { label: 'Properties', value: 'properties', icon: 'ℹ️' },
+  ]}
+  onListboxSelect={(value) => console.log('File action:', value)}
+>
+  <Button>File Options</Button>
+</Popover>
+```
+
+### User Profile Menu
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'John Doe', value: 'profile', icon: '👤', helpText: 'john.doe@company.com' },
+    { label: 'Account Settings', value: 'settings', icon: '⚙️', divider: true },
+    { label: 'Billing', value: 'billing', icon: '💳' },
+    { label: 'Help & Support', value: 'help', icon: '❓', divider: true },
+    { label: 'Sign Out', value: 'signout', icon: '🚪' },
+  ]}
+  onListboxSelect={(value) => console.log('Profile action:', value)}
+  side="bottom"
+  align="end"
+>
+  <Button>Profile</Button>
+</Popover>
+```
+
+### Language Selector
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxMaxItems={6}
+  listboxSelectedValue="en"
+  listboxOptions={[
+    { label: 'English', value: 'en', icon: '🇺🇸' },
+    { label: 'العربية', value: 'ar', icon: '🇸🇦' },
+    { label: 'Français', value: 'fr', icon: '🇫🇷' },
+    { label: 'Español', value: 'es', icon: '🇪🇸' },
+    { label: 'Deutsch', value: 'de', icon: '🇩🇪' },
+    { label: '中文', value: 'zh', icon: '🇨🇳' },
+    { label: '日本語', value: 'ja', icon: '🇯🇵' },
+    { label: '한국어', value: 'ko', icon: '🇰🇷' },
+  ]}
+  onListboxSelect={(value) => console.log('Language:', value)}
+>
+  <Button>Language</Button>
+</Popover>
+```
+
+## Internationalization and RTL Support
+
+The Popover component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper positioning, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Popover, Button } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Popover
+        content="محتوى منبثق باللغة العربية مع دعم كامل للغة العربية"
+        side="bottom"
+        align="start"
+        showArrow={true}
+      >
+        <Button>افتح المنبثقة</Button>
+      </Popover>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Popover component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts positioning and alignment for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Content Alignment**: Ensures proper text alignment within the popover
+5. **Positioning Logic**: Maintains proper popover placement in RTL layouts
+
+### Popover with Arabic Content
+
+The Popover component handles Arabic content with proper styling:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function InfoPopover() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+          <h4 style={{ margin: '0 0 8px', textAlign: isRTL ? 'right' : 'left' }}>
+            {isRTL ? 'تفاصيل المنتج' : 'Product Details'}
+          </h4>
+          <p style={{ margin: '0', textAlign: isRTL ? 'right' : 'left' }}>
+            {isRTL 
+              ? 'هذا المنتج متوفر بعدة ألوان وأحجام مختلفة. يمكنك اختيار المناسب لك.' 
+              : 'This product is available in multiple colors and sizes. You can choose what suits you best.'
+            }
+          </p>
+        </div>
+      }
+      side="bottom"
+      align="center"
+      showArrow={true}
+    >
+      <Button variant="secondary">
+        {isRTL ? 'عرض التفاصيل' : 'View Details'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Listbox Integration in RTL
+
+The powerful listbox integration works seamlessly in RTL:
+
+```jsx
+function RTLDropdownMenu() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      useListbox
+      listboxShowIcons
+      listboxOptions={[
+        { 
+          label: isRTL ? 'تحرير' : 'Edit', 
+          value: 'edit', 
+          icon: '✏️' 
+        },
+        { 
+          label: isRTL ? 'نسخ' : 'Duplicate', 
+          value: 'duplicate', 
+          icon: '📋' 
+        },
+        { 
+          label: isRTL ? 'مشاركة' : 'Share', 
+          value: 'share', 
+          icon: '📤' 
+        },
+        { 
+          label: isRTL ? 'حذف' : 'Delete', 
+          value: 'delete', 
+          icon: '🗑️' 
+        },
+      ]}
+      onListboxSelect={(value) => console.log('Selected:', value)}
+      side="bottom"
+      align={isRTL ? "end" : "start"}
+    >
+      <Button>
+        {isRTL ? 'الإجراءات' : 'Actions'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Multi-Level Popover Content in RTL
+
+For complex content with multiple sections:
+
+```jsx
+function ComplexRTLPopover() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ 
+          direction: isRTL ? 'rtl' : 'ltr',
+          padding: '4px 0'
+        }}>
+          <div style={{ 
+            padding: '8px 16px',
+            borderBottom: '1px solid var(--t-color-border-subtle)',
+            marginBottom: '8px'
+          }}>
+            <h4 style={{ 
+              margin: '0 0 4px',
+              textAlign: isRTL ? 'right' : 'left' 
+            }}>
+              {isRTL ? 'ملف المستخدم' : 'User Profile'}
+            </h4>
+            <p style={{ 
+              margin: '0',
+              fontSize: '14px',
+              color: 'var(--t-color-text-subtle)',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {isRTL ? 'أحمد محمد' : 'Ahmed Mohamed'}
+            </p>
+          </div>
+          
+          <div style={{ padding: '0 8px' }}>
+            {[
+              { key: 'settings', ar: 'الإعدادات', en: 'Settings' },
+              { key: 'profile', ar: 'الملف الشخصي', en: 'Profile' },
+              { key: 'help', ar: 'المساعدة', en: 'Help' },
+              { key: 'logout', ar: 'تسجيل الخروج', en: 'Logout' }
+            ].map(item => (
+              <button
+                key={item.key}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '8px',
+                  textAlign: isRTL ? 'right' : 'left',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer'
+                }}
+              >
+                {isRTL ? item.ar : item.en}
+              </button>
+            ))}
+          </div>
+        </div>
+      }
+      type="with-scrollbar"
+      side="bottom"
+      align="end"
+    >
+      <Button variant="secondary">
+        {isRTL ? 'القائمة' : 'Menu'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Form Popovers in RTL
+
+For forms and input validation in RTL:
+
+```jsx
+function FormPopoverRTL() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ 
+          direction: isRTL ? 'rtl' : 'ltr',
+          minWidth: '200px'
+        }}>
+          <h4 style={{ 
+            margin: '0 0 12px',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            {isRTL ? 'تصفية النتائج' : 'Filter Results'}
+          </h4>
+          
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ 
+              display: 'block',
+              marginBottom: '4px',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {isRTL ? 'الفئة' : 'Category'}
+            </label>
+            <select style={{ 
+              width: '100%',
+              padding: '6px',
+              direction: isRTL ? 'rtl' : 'ltr'
+            }}>
+              <option>{isRTL ? 'جميع الفئات' : 'All Categories'}</option>
+              <option>{isRTL ? 'تقنية' : 'Technology'}</option>
+              <option>{isRTL ? 'تصميم' : 'Design'}</option>
+            </select>
+          </div>
+          
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: isRTL ? 'flex-start' : 'flex-end',
+            gap: '8px'
+          }}>
+            <PopoverClose asChild>
+              <Button variant="secondary" size="small">
+                {isRTL ? 'إلغاء' : 'Cancel'}
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button size="small">
+                {isRTL ? 'تطبيق' : 'Apply'}
+              </Button>
+            </PopoverClose>
+          </div>
+        </div>
+      }
+      type="default"
+      side="bottom"
+      align="start"
+    >
+      <Button variant="outlined">
+        {isRTL ? 'تصفية' : 'Filter'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Set proper direction** on content containers using `direction` style
+3. **Adjust alignment** - use `align="end"` in RTL for natural positioning
+4. **Test with actual Arabic content** to ensure proper text rendering
+5. **Use `useTheme` hook** to access RTL state and theme information
+6. **Consider button placement** - adjust action button order for RTL
+7. **Test scrollable content** to ensure proper scrollbar positioning in RTL
+
+## Accessibility
+
+The Popover component follows accessibility best practices:
+
+- Built on Radix UI's Popover primitive for robust accessibility
+- Properly manages focus when opened and closed
+- Uses appropriate ARIA attributes for screen readers
+- Supports keyboard navigation with Tab and Escape keys
+- Ensures sufficient color contrast
+- Properly positions content to avoid clipping and ensure visibility
+- Handles animations with respect for reduced motion preferences
+
+## Implementation Details
+
+### CSS Variables
+
+The Popover component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-border-radius-300` | Border radius for the popover |
+| `--t-space-300` | Padding inside the popover |
+| `--t-color-surface-primary` | Background color |
+| `--t-shadow-popover` | Shadow for depth and elevation |
+| `--t-width-350` | Maximum width constraint |
+| `--t-height-350` | Maximum height for scrollable popovers |
+| `--t-z-index-popover` | Z-index for proper stacking |
+| `--t-color-border-subtle` | Border color |
+| `--t-color-fill-primary` | Arrow fill color |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The Popover component is built on Radix UI's Popover primitive, which provides:
+
+1. Focus management
+2. Proper positioning
+3. Collision detection
+4. Keyboard navigation
+5. Animation support
+
+The Tagaddod implementation extends this with:
+
+1. Design system integration with tokens
+2. RTL language support
+3. Scrollable content option
+4. Animation customization
+5. Simplified API for common cases
+
+### Browser Support
+
+The Popover component is compatible with all modern browsers and includes RTL language support. The animation performance is optimized using CSS properties like `will-change` and `transform-origin`.

@@ -1,0 +1,1971 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as CalendarStories from './Calendar.stories';
+
+<Meta of={CalendarStories} />
+
+# Calendar
+
+A flexible calendar component built on React DayPicker with comprehensive design system integration, RTL support, and multiple date selection capabilities. Features shadcn-like navigation, multiple month displays, and custom header system with unified controls.
+
+## When to Use
+
+Use the Calendar component when you need:
+- Standalone calendar displays for date selection
+- Custom date picker implementations with dropdown navigation
+- Calendar views for scheduling interfaces with multiple months
+- Date range selection in dashboards and analytics
+- Event calendar displays with custom validation
+- Inline date selection without popover containers
+
+## Import
+
+```jsx
+import { Calendar } from 'tagaddod-design-react';
+import type { CalendarProps, CalendarMode, CalendarCaptionLayout } from 'tagaddod-design-react';
+```
+
+## Component Structure
+
+The Calendar component provides a unified interface for date selection with customizable layouts:
+
+- **Header System**: Custom navigation with month/year dropdowns or labels
+- **Month Display**: Single or multiple month views with unified navigation
+- **Selection Modes**: Single, multiple, and range selection patterns
+- **RTL Support**: Complete Arabic language and layout support
+
+## Props
+
+### Calendar Props
+<ArgTypes of={CalendarStories} />
+
+## Basic Usage
+
+<Canvas of={CalendarStories.Default} />
+
+```jsx
+import { useState } from 'react';
+import { Calendar } from 'tagaddod-design-react';
+
+function DateSelection() {
+  const [selectedDate, setSelectedDate] = useState();
+
+  return (
+    <Calendar
+      mode="single"
+      selected={selectedDate}
+      onSelect={setSelectedDate}
+      showOutsideDays={false}
+      className="rounded-md border"
+    />
+  );
+}
+```
+
+## Selection Modes
+
+### Single Date Selection
+
+Select individual dates with visual feedback and proper focus management.
+
+<Canvas of={CalendarStories.Default} />
+
+```jsx
+function SingleDateCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+
+  return (
+    <div>
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        captionLayout="label"
+        showOutsideDays={false}
+      />
+
+      {selectedDate && (
+        <div className="mt-4 p-3 bg-surface-secondary rounded">
+          Selected: {selectedDate.toLocaleDateString()}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Multiple Date Selection
+
+Allow users to select multiple individual dates with batch operations.
+
+<Canvas of={CalendarStories.Multiple} />
+
+```jsx
+function MultipleDateCalendar() {
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  const clearSelection = () => setSelectedDates([]);
+  const selectWeekend = () => {
+    const today = new Date();
+    const weekends = [];
+    for (let i = 0; i < 14; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      if (date.getDay() === 0 || date.getDay() === 6) {
+        weekends.push(date);
+      }
+    }
+    setSelectedDates(weekends);
+  };
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-4">
+        <button onClick={clearSelection} className="btn-secondary">
+          Clear All
+        </button>
+        <button onClick={selectWeekend} className="btn-outline">
+          Select Weekends
+        </button>
+      </div>
+
+      <Calendar
+        mode="multiple"
+        selected={selectedDates}
+        onSelect={setSelectedDates}
+        showOutsideDays={true}
+        fixedWeeks={true}
+      />
+
+      <div className="mt-4 text-sm text-secondary">
+        {selectedDates.length} dates selected
+      </div>
+    </div>
+  );
+}
+```
+
+### Date Range Selection
+
+Enable contiguous date range selection with start, middle, and end styling.
+
+<Canvas of={CalendarStories.Range} />
+
+```jsx
+function RangeCalendar() {
+  const [range, setRange] = useState({ from: undefined, to: undefined });
+
+  const resetRange = () => setRange({ from: undefined, to: undefined });
+
+  const calculateDays = () => {
+    if (!range.from || !range.to) return 0;
+    const timeDiff = Math.abs(range.to - range.from);
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+  };
+
+  return (
+    <div>
+      <Calendar
+        mode="range"
+        selected={range}
+        onSelect={setRange}
+        numberOfMonths={2}
+        pagedNavigation={true}
+      />
+
+      <div className="mt-4 p-4 bg-surface-secondary rounded">
+        {range.from ? (
+          <div className="space-y-2">
+            <div>Start: {range.from.toLocaleDateString()}</div>
+            {range.to && (
+              <>
+                <div>End: {range.to.toLocaleDateString()}</div>
+                <div>Duration: {calculateDays()} days</div>
+              </>
+            )}
+            <button onClick={resetRange} className="btn-secondary text-sm">
+              Reset Range
+            </button>
+          </div>
+        ) : (
+          <div>Select a date range...</div>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+## Navigation and Layout Options
+
+### Dropdown Navigation
+
+Provides month and year dropdowns for quick navigation across large date ranges.
+
+<Canvas of={CalendarStories.WithDropdown} />
+
+```jsx
+function DropdownCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  return (
+    <div>
+      <Calendar
+        mode="single"
+        captionLayout="dropdown"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        month={currentMonth}
+        onMonthChange={setCurrentMonth}
+        startMonth={new Date(2020, 0)}
+        endMonth={new Date(2030, 11)}
+        showOutsideDays={false}
+      />
+
+      <div className="mt-4 text-center text-sm text-secondary">
+        Current view: {currentMonth.toLocaleDateString('en-US', {
+          month: 'long',
+          year: 'numeric'
+        })}
+      </div>
+    </div>
+  );
+}
+```
+
+### Multiple Months Display
+
+Show 2-3 months simultaneously with unified navigation for easier range selection.
+
+<Canvas of={CalendarStories.MultipleMonths} />
+
+```jsx
+function MultiMonthCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [numberOfMonths, setNumberOfMonths] = useState(2);
+
+  return (
+    <div>
+      <div className="flex items-center gap-4 mb-4">
+        <label className="text-sm font-medium">
+          Months to display:
+        </label>
+        <select
+          value={numberOfMonths}
+          onChange={(e) => setNumberOfMonths(Number(e.target.value))}
+          className="border rounded px-2 py-1"
+        >
+          <option value={1}>1 Month</option>
+          <option value={2}>2 Months</option>
+          <option value={3}>3 Months</option>
+        </select>
+      </div>
+
+      <Calendar
+        mode="single"
+        captionLayout="label"
+        numberOfMonths={numberOfMonths}
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        pagedNavigation={true}
+        showOutsideDays={false}
+      />
+    </div>
+  );
+}
+```
+
+### Multiple Months with Range Selection
+
+Optimized layout for range selection across multiple months with enhanced navigation.
+
+<Canvas of={CalendarStories.MultipleMonthsRange} />
+
+```jsx
+function MultiMonthRangeCalendar() {
+  const [range, setRange] = useState({ from: undefined, to: undefined });
+
+  const isRangeComplete = range.from && range.to;
+  const rangeDuration = isRangeComplete
+    ? Math.ceil(Math.abs(range.to - range.from) / (1000 * 60 * 60 * 24)) + 1
+    : 0;
+
+  return (
+    <div>
+      <Calendar
+        mode="range"
+        captionLayout="label"
+        numberOfMonths={3}
+        selected={range}
+        onSelect={setRange}
+        pagedNavigation={true}
+        showOutsideDays={true}
+        fixedWeeks={true}
+      />
+
+      {(range.from || range.to) && (
+        <div className="mt-4 p-4 bg-surface-secondary rounded-lg">
+          <div className="text-sm space-y-1">
+            {range.from && (
+              <div>Start: {range.from.toLocaleDateString()}</div>
+            )}
+            {range.to && (
+              <div>End: {range.to.toLocaleDateString()}</div>
+            )}
+            {isRangeComplete && (
+              <div className="font-medium">
+                Selected: {rangeDuration} days
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Interactive Features
+
+### Footer Content
+
+Add custom footer content for additional information, actions, or status display.
+
+<Canvas of={CalendarStories.WithFooter} />
+
+```jsx
+function CalendarWithFooter() {
+  const [selectedDate, setSelectedDate] = useState();
+  const today = new Date();
+
+  const daysBetween = selectedDate
+    ? Math.floor((selectedDate - today) / (1000 * 60 * 60 * 24))
+    : 0;
+
+  const footerContent = selectedDate ? (
+    <div className="text-center space-y-2">
+      <div>Selected: {selectedDate.toLocaleDateString()}</div>
+      {daysBetween === 0 && <div className="text-blue-600">Today</div>}
+      {daysBetween > 0 && <div>In {daysBetween} days</div>}
+      {daysBetween < 0 && <div>{Math.abs(daysBetween)} days ago</div>}
+    </div>
+  ) : (
+    <div className="text-center text-secondary">
+      Select a date to see details
+    </div>
+  );
+
+  return (
+    <Calendar
+      mode="single"
+      selected={selectedDate}
+      onSelect={setSelectedDate}
+      footer={footerContent}
+      showOutsideDays={true}
+    />
+  );
+}
+```
+
+### Disabled Dates
+
+Prevent selection of specific dates with custom validation logic.
+
+<Canvas of={CalendarStories.WithDisabledDates} />
+
+```jsx
+function DisabledDatesCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+
+  // Disable weekends and past dates
+  const isDateDisabled = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dayOfWeek = date.getDay();
+    const isPast = date < today;
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    return isPast || isWeekend;
+  };
+
+  // Custom holidays
+  const holidays = [
+    new Date(2024, 0, 1),  // New Year
+    new Date(2024, 6, 4),  // July 4th
+    new Date(2024, 11, 25) // Christmas
+  ];
+
+  const isHoliday = (date) => holidays.some(holiday =>
+    date.toDateString() === holiday.toDateString()
+  );
+
+  const isCompletelyDisabled = (date) =>
+    isDateDisabled(date) || isHoliday(date);
+
+  return (
+    <div>
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        disabled={isCompletelyDisabled}
+        showOutsideDays={false}
+        footer="Weekends, past dates, and holidays are disabled"
+      />
+
+      {selectedDate && (
+        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
+          ✓ Valid selection: {selectedDate.toLocaleDateString()}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Outside Days Display
+
+Show days from adjacent months for better context and visual continuity.
+
+<Canvas of={CalendarStories.WithOutsideDays} />
+
+```jsx
+function OutsideDaysCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [showOutside, setShowOutside] = useState(true);
+  const [fixedWeeks, setFixedWeeks] = useState(true);
+
+  return (
+    <div>
+      <div className="flex gap-4 mb-4">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showOutside}
+            onChange={(e) => setShowOutside(e.target.checked)}
+          />
+          Show outside days
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={fixedWeeks}
+            onChange={(e) => setFixedWeeks(e.target.checked)}
+          />
+          Fixed weeks (6 rows)
+        </label>
+      </div>
+
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        showOutsideDays={showOutside}
+        fixedWeeks={fixedWeeks}
+      />
+    </div>
+  );
+}
+```
+
+## Component Interactions
+
+The Calendar component integrates seamlessly with other design system components and external state management systems.
+
+### Form Integration with Validation
+
+```jsx
+import { useState } from 'react';
+import { Calendar, TextInput, Button } from 'tagaddod-design-react';
+import { IconCalendar } from '@tabler/icons-react';
+
+function BookingForm() {
+  const [checkIn, setCheckIn] = useState();
+  const [checkOut, setCheckOut] = useState();
+  const [guests, setGuests] = useState(1);
+  const [errors, setErrors] = useState({});
+
+  const validateDates = () => {
+    const newErrors = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (!checkIn) {
+      newErrors.checkIn = 'Check-in date is required';
+    } else if (checkIn < today) {
+      newErrors.checkIn = 'Check-in date cannot be in the past';
+    }
+
+    if (!checkOut) {
+      newErrors.checkOut = 'Check-out date is required';
+    } else if (checkIn && checkOut <= checkIn) {
+      newErrors.checkOut = 'Check-out must be after check-in';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validateDates()) {
+      console.log('Booking submitted:', { checkIn, checkOut, guests });
+    }
+  };
+
+  const isDateUnavailable = (date) => {
+    // Simulate unavailable dates
+    const unavailable = [
+      new Date(2024, 5, 15),
+      new Date(2024, 5, 16),
+      new Date(2024, 5, 20)
+    ];
+    return unavailable.some(unavailableDate =>
+      date.toDateString() === unavailableDate.toDateString()
+    );
+  };
+
+  return (
+    <div className="max-w-2xl p-6 border rounded-lg">
+      <h3 className="text-lg font-semibold mb-4">Hotel Booking</h3>
+
+      <div className="grid grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Check-in Date
+          </label>
+          <Calendar
+            mode="single"
+            selected={checkIn}
+            onSelect={setCheckIn}
+            disabled={isDateUnavailable}
+            captionLayout="dropdown"
+            startMonth={new Date()}
+            endMonth={new Date(2024, 11, 31)}
+            className={`border-2 ${errors.checkIn ? 'border-red-500' : 'border-gray-200'}`}
+          />
+          {errors.checkIn && (
+            <div className="text-red-500 text-sm mt-1">{errors.checkIn}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Check-out Date
+          </label>
+          <Calendar
+            mode="single"
+            selected={checkOut}
+            onSelect={setCheckOut}
+            disabled={isDateUnavailable}
+            captionLayout="dropdown"
+            startMonth={new Date()}
+            endMonth={new Date(2024, 11, 31)}
+            className={`border-2 ${errors.checkOut ? 'border-red-500' : 'border-gray-200'}`}
+          />
+          {errors.checkOut && (
+            <div className="text-red-500 text-sm mt-1">{errors.checkOut}</div>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <TextInput
+          label="Number of Guests"
+          type="number"
+          value={guests}
+          onChange={(e) => setGuests(Number(e.target.value))}
+          min={1}
+          max={10}
+        />
+      </div>
+
+      <div className="mt-6 flex justify-between items-center">
+        <div className="text-sm text-secondary">
+          {checkIn && checkOut && (
+            <>Duration: {Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))} nights</>
+          )}
+        </div>
+        <Button onClick={handleSubmit} variant="primary">
+          Book Now
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Dashboard Analytics with Date Range
+
+```jsx
+import { useState, useEffect } from 'react';
+import { Calendar, Select, Badge } from 'tagaddod-design-react';
+
+function AnalyticsDashboard() {
+  const [dateRange, setDateRange] = useState({ from: undefined, to: undefined });
+  const [metrics, setMetrics] = useState(null);
+  const [presetRange, setPresetRange] = useState('custom');
+
+  const presetRanges = {
+    'last7days': {
+      label: 'Last 7 Days',
+      range: {
+        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        to: new Date()
+      }
+    },
+    'last30days': {
+      label: 'Last 30 Days',
+      range: {
+        from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        to: new Date()
+      }
+    },
+    'thisMonth': {
+      label: 'This Month',
+      range: {
+        from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        to: new Date()
+      }
+    }
+  };
+
+  const handlePresetChange = (preset) => {
+    setPresetRange(preset);
+    if (preset !== 'custom' && presetRanges[preset]) {
+      setDateRange(presetRanges[preset].range);
+    }
+  };
+
+  useEffect(() => {
+    if (dateRange.from && dateRange.to) {
+      // Simulate API call
+      const daysDiff = Math.ceil((dateRange.to - dateRange.from) / (1000 * 60 * 60 * 24));
+      setMetrics({
+        pageViews: Math.floor(Math.random() * 10000 * daysDiff / 30),
+        users: Math.floor(Math.random() * 1000 * daysDiff / 30),
+        revenue: Math.floor(Math.random() * 5000 * daysDiff / 30)
+      });
+    }
+  }, [dateRange]);
+
+  const presetOptions = [
+    { value: 'custom', label: 'Custom Range' },
+    ...Object.entries(presetRanges).map(([key, { label }]) => ({
+      value: key,
+      label
+    }))
+  ];
+
+  return (
+    <div className="max-w-4xl p-6">
+      <h2 className="text-2xl font-bold mb-6">Analytics Dashboard</h2>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <div className="bg-white border rounded-lg p-4">
+            <h3 className="font-medium mb-4">Date Range</h3>
+
+            <Select
+              options={presetOptions}
+              value={presetRange}
+              onValueChange={handlePresetChange}
+              label="Quick Select"
+              className="mb-4"
+            />
+
+            <Calendar
+              mode="range"
+              selected={dateRange}
+              onSelect={(range) => {
+                setDateRange(range);
+                setPresetRange('custom');
+              }}
+              numberOfMonths={2}
+              captionLayout="dropdown"
+              startMonth={new Date(2023, 0)}
+              endMonth={new Date()}
+              className="w-full"
+            />
+
+            {dateRange.from && dateRange.to && (
+              <div className="mt-4 p-3 bg-blue-50 rounded text-sm">
+                <div>From: {dateRange.from.toLocaleDateString()}</div>
+                <div>To: {dateRange.to.toLocaleDateString()}</div>
+                <div className="font-medium">
+                  {Math.ceil((dateRange.to - dateRange.from) / (1000 * 60 * 60 * 24)) + 1} days
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {metrics ? (
+              <>
+                <div className="bg-white border rounded-lg p-6">
+                  <div className="text-2xl font-bold">{metrics.pageViews.toLocaleString()}</div>
+                  <div className="text-sm text-secondary">Page Views</div>
+                  <Badge variant="success" size="small" className="mt-2">
+                    +12.3%
+                  </Badge>
+                </div>
+
+                <div className="bg-white border rounded-lg p-6">
+                  <div className="text-2xl font-bold">{metrics.users.toLocaleString()}</div>
+                  <div className="text-sm text-secondary">Users</div>
+                  <Badge variant="warning" size="small" className="mt-2">
+                    -2.1%
+                  </Badge>
+                </div>
+
+                <div className="bg-white border rounded-lg p-6">
+                  <div className="text-2xl font-bold">${metrics.revenue.toLocaleString()}</div>
+                  <div className="text-sm text-secondary">Revenue</div>
+                  <Badge variant="success" size="small" className="mt-2">
+                    +8.7%
+                  </Badge>
+                </div>
+              </>
+            ) : (
+              <div className="md:col-span-3 text-center py-12 text-secondary">
+                Select a date range to view analytics
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Event Scheduling Interface
+
+```jsx
+import { useState } from 'react';
+import { Calendar, Modal, TextInput, Button, Badge } from 'tagaddod-design-react';
+
+function EventScheduler() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [events, setEvents] = useState({
+    '2024-06-15': [{ title: 'Team Meeting', time: '10:00 AM' }],
+    '2024-06-20': [
+      { title: 'Project Review', time: '2:00 PM' },
+      { title: 'Client Call', time: '4:00 PM' }
+    ],
+    '2024-06-25': [{ title: 'Workshop', time: '9:00 AM' }]
+  });
+  const [showAddEvent, setShowAddEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState({ title: '', time: '' });
+
+  const formatDateKey = (date) => date.toISOString().split('T')[0];
+
+  const getEventsForDate = (date) => {
+    const dateKey = formatDateKey(date);
+    return events[dateKey] || [];
+  };
+
+  const hasEvents = (date) => {
+    return getEventsForDate(date).length > 0;
+  };
+
+  const addEvent = () => {
+    if (!selectedDate || !newEvent.title || !newEvent.time) return;
+
+    const dateKey = formatDateKey(selectedDate);
+    setEvents(prev => ({
+      ...prev,
+      [dateKey]: [...(prev[dateKey] || []), { ...newEvent }]
+    }));
+
+    setNewEvent({ title: '', time: '' });
+    setShowAddEvent(false);
+  };
+
+  const removeEvent = (date, eventIndex) => {
+    const dateKey = formatDateKey(date);
+    setEvents(prev => ({
+      ...prev,
+      [dateKey]: prev[dateKey].filter((_, index) => index !== eventIndex)
+    }));
+  };
+
+  return (
+    <div className="max-w-4xl p-6">
+      <h2 className="text-2xl font-bold mb-6">Event Scheduler</h2>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+          <h3 className="font-medium mb-4">Select Date</h3>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            captionLayout="dropdown"
+            startMonth={new Date()}
+            endMonth={new Date(2024, 11, 31)}
+            modifiers={{
+              hasEvents: hasEvents
+            }}
+            modifiersStyles={{
+              hasEvents: {
+                backgroundColor: 'var(--t-color-fill-brand-secondary)',
+                color: 'var(--t-color-text-link)',
+                fontWeight: 'bold'
+              }
+            }}
+            footer={
+              <div className="text-sm text-center">
+                Dates with events are highlighted
+              </div>
+            }
+          />
+        </div>
+
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-medium">
+              Events for {selectedDate?.toLocaleDateString() || 'Select a date'}
+            </h3>
+            {selectedDate && (
+              <Button
+                size="small"
+                onClick={() => setShowAddEvent(true)}
+                variant="primary"
+              >
+                Add Event
+              </Button>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            {selectedDate ? (
+              getEventsForDate(selectedDate).length > 0 ? (
+                getEventsForDate(selectedDate).map((event, index) => (
+                  <div key={index} className="flex justify-between items-center p-3 border rounded">
+                    <div>
+                      <div className="font-medium">{event.title}</div>
+                      <div className="text-sm text-secondary">{event.time}</div>
+                    </div>
+                    <Button
+                      size="small"
+                      variant="outline"
+                      onClick={() => removeEvent(selectedDate, index)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-secondary">
+                  No events scheduled for this date
+                </div>
+              )
+            ) : (
+              <div className="text-center py-8 text-secondary">
+                Select a date to view events
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6">
+            <h4 className="font-medium mb-2">Upcoming Events</h4>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {Object.entries(events)
+                .filter(([dateKey]) => new Date(dateKey) >= new Date())
+                .sort(([a], [b]) => new Date(a) - new Date(b))
+                .slice(0, 5)
+                .map(([dateKey, dayEvents]) => (
+                  <div key={dateKey} className="text-sm p-2 bg-gray-50 rounded">
+                    <div className="font-medium">{new Date(dateKey).toLocaleDateString()}</div>
+                    {dayEvents.map((event, index) => (
+                      <div key={index} className="text-secondary">
+                        {event.time} - {event.title}
+                      </div>
+                    ))}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Modal isOpen={showAddEvent} onClose={() => setShowAddEvent(false)}>
+        <div className="p-6">
+          <h3 className="text-lg font-semibold mb-4">
+            Add Event - {selectedDate?.toLocaleDateString()}
+          </h3>
+
+          <div className="space-y-4">
+            <TextInput
+              label="Event Title"
+              value={newEvent.title}
+              onChange={(e) => setNewEvent(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="Enter event title"
+            />
+
+            <TextInput
+              label="Time"
+              type="time"
+              value={newEvent.time}
+              onChange={(e) => setNewEvent(prev => ({ ...prev, time: e.target.value }))}
+            />
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button variant="outline" onClick={() => setShowAddEvent(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={addEvent}>
+                Add Event
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+```
+
+## Internationalization and RTL Support
+
+The Calendar component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Calendar } from 'tagaddod-design-react';
+import { IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Calendar
+        mode="single"
+        captionLayout="dropdown"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        numberOfMonths={2}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Calendar component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts navigation arrow directions for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalCalendar() {
+  const { isRTL } = useTheme();
+  const [selectedRange, setSelectedRange] = useState({ from: undefined, to: undefined });
+
+  return (
+    <div>
+      <Calendar
+        mode="range"
+        selected={selectedRange}
+        onSelect={setSelectedRange}
+        numberOfMonths={2}
+        captionLayout="dropdown"
+      />
+
+      <div className="mt-4 flex justify-between">
+        <button className="flex items-center gap-2">
+          {isRTL ? <IconArrowRight size={16} /> : <IconArrowLeft size={16} />}
+          {isRTL ? 'السابق' : 'Previous'}
+        </button>
+
+        <button className="flex items-center gap-2">
+          {isRTL ? 'التالي' : 'Next'}
+          {isRTL ? <IconArrowLeft size={16} /> : <IconArrowRight size={16} />}
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Action
+```jsx
+// English: Next → (arrow points right)
+// Arabic: التالي ← (arrow points left, matching RTL reading direction)
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<button className="calendar-nav-button">
+  {isRTL ? 'الشهر التالي' : 'Next Month'}
+  <NextIcon size={16} />
+</button>
+```
+
+#### "Back" Action
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<button className="calendar-nav-button">
+  <BackIcon size={16} />
+  {isRTL ? 'الشهر السابق' : 'Previous Month'}
+</button>
+```
+
+### RTL Calendar Implementation
+
+<Canvas of={CalendarStories.RTLTest} />
+
+```jsx
+import { useState } from 'react';
+import { Calendar } from 'tagaddod-design-react';
+
+function RTLCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+
+  return (
+    <div dir="rtl" style={{ fontFamily: 'var(--t-font-family-arabic)' }}>
+      <h3 className="text-lg font-semibold mb-4" style={{
+        lineHeight: 'var(--t-line-height-arabic, 1.2)'
+      }}>
+        التقويم العربي
+      </h3>
+
+      <Calendar
+        mode="single"
+        captionLayout="dropdown"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        showOutsideDays={false}
+        footer={selectedDate
+          ? `التاريخ المحدد: ${selectedDate.toLocaleDateString('ar-SA')}`
+          : 'اختر تاريخاً من التقويم'
+        }
+      />
+
+      {selectedDate && (
+        <div className="mt-4 p-4 bg-surface-secondary rounded-lg text-right">
+          <div className="text-sm text-secondary mb-2">تفاصيل التاريخ:</div>
+          <div className="space-y-1">
+            <div>التاريخ الميلادي: {selectedDate.toLocaleDateString('en-US')}</div>
+            <div>التاريخ الهجري: {selectedDate.toLocaleDateString('ar-SA-u-ca-islamic')}</div>
+            <div>اليوم: {selectedDate.toLocaleDateString('ar-SA', { weekday: 'long' })}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+6. **Direction follows reading flow** - not physical direction on screen
+
+## Common Use Cases
+
+### 1. Hotel Booking System
+
+```jsx
+function HotelBookingCalendar() {
+  const [checkInOut, setCheckInOut] = useState({ from: undefined, to: undefined });
+  const [unavailableDates] = useState([
+    new Date(2024, 5, 15),
+    new Date(2024, 5, 16),
+    new Date(2024, 5, 22),
+    new Date(2024, 5, 23)
+  ]);
+
+  const isUnavailable = (date) =>
+    unavailableDates.some(unavailable =>
+      date.toDateString() === unavailable.toDateString()
+    );
+
+  const calculateRate = () => {
+    if (!checkInOut.from || !checkInOut.to) return null;
+    const nights = Math.ceil((checkInOut.to - checkInOut.from) / (1000 * 60 * 60 * 24));
+    const baseRate = 120;
+    return { nights, total: nights * baseRate };
+  };
+
+  const rate = calculateRate();
+
+  return (
+    <div className="max-w-md mx-auto">
+      <h3 className="text-lg font-semibold mb-4">Select Your Stay</h3>
+
+      <Calendar
+        mode="range"
+        selected={checkInOut}
+        onSelect={setCheckInOut}
+        numberOfMonths={2}
+        disabled={isUnavailable}
+        captionLayout="dropdown"
+        startMonth={new Date()}
+        endMonth={new Date(2024, 11, 31)}
+        modifiers={{
+          unavailable: isUnavailable
+        }}
+        modifiersStyles={{
+          unavailable: {
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            textDecoration: 'line-through'
+          }
+        }}
+      />
+
+      {rate && (
+        <div className="mt-6 p-4 border rounded-lg">
+          <div className="flex justify-between mb-2">
+            <span>Check-in:</span>
+            <span>{checkInOut.from.toLocaleDateString()}</span>
+          </div>
+          <div className="flex justify-between mb-2">
+            <span>Check-out:</span>
+            <span>{checkInOut.to.toLocaleDateString()}</span>
+          </div>
+          <div className="flex justify-between font-semibold text-lg pt-2 border-t">
+            <span>{rate.nights} nights:</span>
+            <span>${rate.total}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### 2. Project Timeline Planning
+
+```jsx
+function ProjectTimeline() {
+  const [milestones, setMilestones] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  const addMilestone = (date) => {
+    const title = prompt('Milestone title:');
+    if (title) {
+      setMilestones(prev => [...prev, { date, title }]);
+      setSelectedDates(prev => [...prev, date]);
+    }
+  };
+
+  const removeMilestone = (date) => {
+    setMilestones(prev => prev.filter(m => m.date.toDateString() !== date.toDateString()));
+    setSelectedDates(prev => prev.filter(d => d.toDateString() !== date.toDateString()));
+  };
+
+  const hasMilestone = (date) =>
+    milestones.some(m => m.date.toDateString() === date.toDateString());
+
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      <div>
+        <h3 className="font-semibold mb-4">Project Calendar</h3>
+        <Calendar
+          mode="multiple"
+          selected={selectedDates}
+          onSelect={(dates) => {
+            const newDates = dates || [];
+            const addedDates = newDates.filter(date =>
+              !selectedDates.some(selected =>
+                selected.toDateString() === date.toDateString()
+              )
+            );
+
+            if (addedDates.length > 0) {
+              addMilestone(addedDates[0]);
+            } else {
+              const removedDates = selectedDates.filter(selected =>
+                !newDates.some(date =>
+                  date.toDateString() === selected.toDateString()
+                )
+              );
+              if (removedDates.length > 0) {
+                removeMilestone(removedDates[0]);
+              }
+            }
+          }}
+          captionLayout="dropdown"
+          startMonth={new Date()}
+          endMonth={new Date(2024, 11, 31)}
+        />
+      </div>
+
+      <div>
+        <h3 className="font-semibold mb-4">Milestones</h3>
+        <div className="space-y-2">
+          {milestones
+            .sort((a, b) => a.date - b.date)
+            .map((milestone, index) => (
+              <div key={index} className="flex justify-between items-center p-3 border rounded">
+                <div>
+                  <div className="font-medium">{milestone.title}</div>
+                  <div className="text-sm text-secondary">
+                    {milestone.date.toLocaleDateString()}
+                  </div>
+                </div>
+                <button
+                  onClick={() => removeMilestone(milestone.date)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            ))
+          }
+          {milestones.length === 0 && (
+            <div className="text-center py-8 text-secondary">
+              Click dates to add milestones
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 3. Availability Scheduler
+
+```jsx
+function AvailabilityScheduler() {
+  const [availability, setAvailability] = useState({});
+  const [viewMode, setViewMode] = useState('week'); // 'week' or 'month'
+
+  const toggleAvailability = (date) => {
+    const dateKey = date.toISOString().split('T')[0];
+    setAvailability(prev => ({
+      ...prev,
+      [dateKey]: !prev[dateKey]
+    }));
+  };
+
+  const isAvailable = (date) => {
+    const dateKey = date.toISOString().split('T')[0];
+    return availability[dateKey] === true;
+  };
+
+  const bulkSetAvailability = (available) => {
+    const today = new Date();
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const updates = {};
+
+    for (let d = new Date(today); d <= nextMonth; d.setDate(d.getDate() + 1)) {
+      const dateKey = d.toISOString().split('T')[0];
+      updates[dateKey] = available;
+    }
+
+    setAvailability(prev => ({ ...prev, ...updates }));
+  };
+
+  return (
+    <div className="max-w-2xl">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-lg font-semibold">Set Your Availability</h3>
+        <div className="flex gap-2">
+          <button
+            onClick={() => bulkSetAvailability(true)}
+            className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm"
+          >
+            All Available
+          </button>
+          <button
+            onClick={() => bulkSetAvailability(false)}
+            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm"
+          >
+            All Unavailable
+          </button>
+        </div>
+      </div>
+
+      <Calendar
+        mode="single"
+        onDayClick={toggleAvailability}
+        captionLayout="dropdown"
+        numberOfMonths={2}
+        startMonth={new Date()}
+        endMonth={new Date(2024, 11, 31)}
+        modifiers={{
+          available: isAvailable,
+          unavailable: (date) => !isAvailable(date) && date >= new Date()
+        }}
+        modifiersStyles={{
+          available: {
+            backgroundColor: '#dcfce7',
+            color: '#166534',
+            fontWeight: 'bold'
+          },
+          unavailable: {
+            backgroundColor: '#fee2e2',
+            color: '#dc2626'
+          }
+        }}
+        footer={
+          <div className="text-sm text-center space-y-1">
+            <div>Click dates to toggle availability</div>
+            <div className="flex justify-center gap-4">
+              <span className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-green-200 rounded"></div>
+                Available
+              </span>
+              <span className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-red-200 rounded"></div>
+                Unavailable
+              </span>
+            </div>
+          </div>
+        }
+      />
+
+      <div className="mt-6 p-4 border rounded-lg">
+        <h4 className="font-medium mb-2">Summary</h4>
+        <div className="text-sm space-y-1">
+          <div>Available days: {Object.values(availability).filter(Boolean).length}</div>
+          <div>Unavailable days: {Object.values(availability).filter(v => v === false).length}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 4. Event Calendar with Filters
+
+```jsx
+function EventCalendarWithFilters() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [events] = useState({
+    '2024-06-15': [
+      { title: 'Team Meeting', category: 'work', time: '10:00 AM' },
+      { title: 'Lunch with Client', category: 'business', time: '12:30 PM' }
+    ],
+    '2024-06-20': [
+      { title: 'Birthday Party', category: 'personal', time: '6:00 PM' }
+    ],
+    '2024-06-25': [
+      { title: 'Conference', category: 'work', time: '9:00 AM' },
+      { title: 'Gym Session', category: 'personal', time: '7:00 PM' }
+    ]
+  });
+  const [activeFilters, setActiveFilters] = useState(['work', 'business', 'personal']);
+
+  const categories = {
+    work: { label: 'Work', color: 'blue' },
+    business: { label: 'Business', color: 'green' },
+    personal: { label: 'Personal', color: 'purple' }
+  };
+
+  const getFilteredEventsForDate = (date) => {
+    const dateKey = date.toISOString().split('T')[0];
+    const dayEvents = events[dateKey] || [];
+    return dayEvents.filter(event => activeFilters.includes(event.category));
+  };
+
+  const hasFilteredEvents = (date) => {
+    return getFilteredEventsForDate(date).length > 0;
+  };
+
+  const toggleFilter = (category) => {
+    setActiveFilters(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  return (
+    <div className="max-w-4xl">
+      <h3 className="text-lg font-semibold mb-4">Event Calendar</h3>
+
+      <div className="flex gap-2 mb-6">
+        {Object.entries(categories).map(([key, { label, color }]) => (
+          <button
+            key={key}
+            onClick={() => toggleFilter(key)}
+            className={`px-3 py-1 rounded text-sm border ${
+              activeFilters.includes(key)
+                ? `bg-${color}-100 border-${color}-300 text-${color}-800`
+                : 'bg-gray-100 border-gray-300 text-gray-600'
+            }`}
+          >
+            {label} ({Object.values(events).flat().filter(e => e.category === key).length})
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          captionLayout="dropdown"
+          modifiers={{
+            hasEvents: hasFilteredEvents
+          }}
+          modifiersStyles={{
+            hasEvents: {
+              backgroundColor: 'var(--t-color-fill-brand-secondary)',
+              fontWeight: 'bold'
+            }
+          }}
+        />
+
+        <div>
+          <h4 className="font-medium mb-4">
+            {selectedDate ? `Events on ${selectedDate.toLocaleDateString()}` : 'Select a date'}
+          </h4>
+
+          <div className="space-y-2">
+            {selectedDate && getFilteredEventsForDate(selectedDate).length > 0 ? (
+              getFilteredEventsForDate(selectedDate).map((event, index) => {
+                const category = categories[event.category];
+                return (
+                  <div key={index} className="p-3 border rounded flex justify-between items-center">
+                    <div>
+                      <div className="font-medium">{event.title}</div>
+                      <div className="text-sm text-secondary">{event.time}</div>
+                    </div>
+                    <span className={`px-2 py-1 rounded text-xs bg-${category.color}-100 text-${category.color}-800`}>
+                      {category.label}
+                    </span>
+                  </div>
+                );
+              })
+            ) : selectedDate ? (
+              <div className="text-center py-8 text-secondary">
+                No events match current filters
+              </div>
+            ) : (
+              <div className="text-center py-8 text-secondary">
+                Select a date to view events
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### 5. Recurring Appointment Scheduler
+
+```jsx
+function RecurringAppointments() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [recurringPattern, setRecurringPattern] = useState('none');
+  const [appointments, setAppointments] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+
+  const generateRecurringDates = (startDate, pattern, count = 10) => {
+    const dates = [startDate];
+
+    for (let i = 1; i < count; i++) {
+      const nextDate = new Date(startDate);
+
+      switch (pattern) {
+        case 'daily':
+          nextDate.setDate(startDate.getDate() + i);
+          break;
+        case 'weekly':
+          nextDate.setDate(startDate.getDate() + (i * 7));
+          break;
+        case 'monthly':
+          nextDate.setMonth(startDate.getMonth() + i);
+          break;
+        default:
+          continue;
+      }
+
+      dates.push(nextDate);
+    }
+
+    return dates;
+  };
+
+  const createAppointment = (title, time) => {
+    if (!selectedDate) return;
+
+    const dates = recurringPattern === 'none'
+      ? [selectedDate]
+      : generateRecurringDates(selectedDate, recurringPattern);
+
+    const newAppointments = dates.map(date => ({
+      date,
+      title,
+      time,
+      recurring: recurringPattern !== 'none',
+      pattern: recurringPattern
+    }));
+
+    setAppointments(prev => [...prev, ...newAppointments]);
+    setShowForm(false);
+  };
+
+  const hasAppointment = (date) => {
+    return appointments.some(apt =>
+      apt.date.toDateString() === date.toDateString()
+    );
+  };
+
+  const getAppointmentsForDate = (date) => {
+    return appointments.filter(apt =>
+      apt.date.toDateString() === date.toDateString()
+    );
+  };
+
+  return (
+    <div className="max-w-4xl">
+      <h3 className="text-lg font-semibold mb-4">Appointment Scheduler</h3>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            captionLayout="dropdown"
+            numberOfMonths={2}
+            modifiers={{
+              hasAppointment: hasAppointment
+            }}
+            modifiersStyles={{
+              hasAppointment: {
+                backgroundColor: 'var(--t-color-fill-brand-secondary)',
+                color: 'var(--t-color-text-link)',
+                fontWeight: 'bold'
+              }
+            }}
+          />
+
+          {selectedDate && (
+            <div className="mt-4">
+              <button
+                onClick={() => setShowForm(true)}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Schedule Appointment
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <h4 className="font-medium mb-4">
+            {selectedDate ? `Appointments on ${selectedDate.toLocaleDateString()}` : 'Select a date'}
+          </h4>
+
+          <div className="space-y-2 mb-6">
+            {selectedDate && getAppointmentsForDate(selectedDate).map((apt, index) => (
+              <div key={index} className="p-3 border rounded">
+                <div className="font-medium">{apt.title}</div>
+                <div className="text-sm text-secondary">{apt.time}</div>
+                {apt.recurring && (
+                  <div className="text-xs text-blue-600 mt-1">
+                    Recurring ({apt.pattern})
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {selectedDate && getAppointmentsForDate(selectedDate).length === 0 && (
+              <div className="text-center py-4 text-secondary">
+                No appointments scheduled
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h5 className="font-medium mb-2">Upcoming Appointments</h5>
+            <div className="space-y-1 max-h-48 overflow-y-auto">
+              {appointments
+                .filter(apt => apt.date >= new Date())
+                .sort((a, b) => a.date - b.date)
+                .slice(0, 5)
+                .map((apt, index) => (
+                  <div key={index} className="text-sm p-2 bg-gray-50 rounded">
+                    <div className="font-medium">{apt.title}</div>
+                    <div className="text-secondary">
+                      {apt.date.toLocaleDateString()} at {apt.time}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h4 className="font-semibold mb-4">
+              New Appointment - {selectedDate?.toLocaleDateString()}
+            </h4>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target);
+              createAppointment(
+                formData.get('title'),
+                formData.get('time')
+              );
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input
+                    name="title"
+                    type="text"
+                    required
+                    className="w-full border rounded px-3 py-2"
+                    placeholder="Appointment title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Time</label>
+                  <input
+                    name="time"
+                    type="time"
+                    required
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Recurring</label>
+                  <select
+                    value={recurringPattern}
+                    onChange={(e) => setRecurringPattern(e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="none">One-time</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="px-4 py-2 border rounded hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Create
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+The Calendar component follows WAI-ARIA guidelines and provides comprehensive keyboard and screen reader support for users with disabilities.
+
+### Keyboard Navigation
+
+- **Arrow Keys**: Navigate between dates within the calendar grid
+- **Tab**: Move between interactive elements (navigation buttons, dropdowns, dates)
+- **Shift + Tab**: Navigate backwards through interactive elements
+- **Enter/Space**: Select the focused date or activate focused button
+- **Page Up/Page Down**: Navigate between months
+- **Shift + Page Up/Down**: Navigate between years
+- **Home/End**: Jump to first/last day of the current month
+- **Ctrl + Home**: Jump to today's date
+- **Escape**: Clear selection (when applicable) or close dropdown
+
+### Screen Reader Support
+
+- **Semantic Structure**: Uses proper table structure with `<table>`, `<thead>`, `<tbody>`, and appropriate roles
+- **Date Announcements**: Each date is announced with full context (day, date, month, year)
+- **Selection State**: Current selection is announced when changed
+- **Range Selection**: Start and end dates are announced with range context
+- **Navigation Labels**: Month/year navigation controls have descriptive labels
+- **Status Updates**: Month and year changes are announced to screen readers
+- **Disabled Dates**: Unavailable dates are properly marked and announced
+
+### Focus Management
+
+- **Visible Focus**: Clear focus indicators on all interactive elements
+- **Logical Focus Order**: Tab order follows visual layout (left-to-right, top-to-bottom)
+- **Focus Retention**: Focus stays on calendar during month navigation
+- **Initial Focus**: Focuses on selected date or today when calendar opens
+- **Focus Restoration**: Returns focus to triggering element when calendar closes
+
+### WCAG 2.1 AA Compliance
+
+- **Color Contrast**: Minimum 4.5:1 contrast ratio for all text and interactive elements
+- **High Contrast Support**: Respects system high contrast preferences
+- **Reduced Motion**: Honors `prefers-reduced-motion` for animations
+- **Target Size**: Minimum 44px touch targets for mobile accessibility
+- **Text Resize**: Supports up to 200% text scaling without horizontal scrolling
+- **Multiple Ways**: Provides both mouse and keyboard interaction methods
+
+### Implementation Example
+
+```jsx
+function AccessibleCalendar() {
+  const [selectedDate, setSelectedDate] = useState();
+  const [announceText, setAnnounceText] = useState('');
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    // Announce selection to screen readers
+    setAnnounceText(`Selected ${date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })}`);
+  };
+
+  return (
+    <div>
+      {/* Screen reader announcements */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announceText}
+      </div>
+
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={handleDateSelect}
+        captionLayout="dropdown"
+        // Add descriptive labels
+        aria-label="Select a date"
+        // Provide context for screen readers
+        formatters={{
+          formatCaption: (date) => `Calendar for ${date.toLocaleDateString('en-US', {
+            month: 'long',
+            year: 'numeric'
+          })}`
+        }}
+        // Enhanced button labels
+        labels={{
+          labelPrevious: 'Go to previous month',
+          labelNext: 'Go to next month',
+          labelDay: (date) => `Select ${date.toLocaleDateString()}`,
+          labelWeekday: (weekday) => weekday,
+          labelMonthDropdown: 'Select month',
+          labelYearDropdown: 'Select year'
+        }}
+      />
+    </div>
+  );
+}
+```
+
+## Implementation Details
+
+### Technical Architecture
+
+The Calendar component is built on React DayPicker v9 with extensive customization for design system integration:
+
+```jsx
+// Core dependencies
+import { DayPicker } from 'react-day-picker'; // Date logic and calendar structure
+import { Select } from '../Select/Select';     // Custom dropdown navigation
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'; // Navigation icons
+
+// Custom header system for unified navigation
+const customComponents = {
+  MonthCaption: CustomHeader,  // Replaces default caption
+  Nav: CustomNavigation,       // Replaces default navigation
+  Chevron: DirectionalChevron  // RTL-aware arrows
+};
+```
+
+### Performance Optimizations
+
+- **Efficient Rendering**: Minimal DOM updates with React.memo on custom components
+- **Date Calculations**: Optimized date comparisons using timestamp comparison
+- **State Management**: Local state for UI, callbacks for external state sync
+- **Memory Management**: Cleanup of event listeners and timers
+- **Bundle Size**: Tree-shakeable exports and optional features
+
+### CSS Architecture
+
+```css
+/* Design token integration */
+.calendar {
+  font-family: var(--t-font-family-primary);
+  background: var(--t-color-surface-primary);
+  border-radius: var(--t-border-radius-300);
+  padding: var(--t-space-300);
+}
+
+/* RTL support with CSS logical properties */
+:global([dir="rtl"]) .calendar {
+  font-family: var(--t-font-family-arabic);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 640px) {
+  .dayButton {
+    width: var(--t-size-900); /* 36px on mobile */
+    height: var(--t-size-900);
+  }
+}
+```
+
+### Browser Support
+
+- **Modern Browsers**: Chrome 84+, Firefox 78+, Safari 14+, Edge 84+
+- **JavaScript Features**: ES2020, Intl.DateTimeFormat, Date objects
+- **CSS Features**: CSS Grid, Flexbox, CSS Custom Properties, CSS Logical Properties
+- **Accessibility**: Screen readers, keyboard navigation, high contrast mode
+- **Mobile**: Touch events, responsive design, iOS Safari, Chrome Mobile
+
+### Date Handling Best Practices
+
+```jsx
+// Always use Date constructor consistently
+const today = new Date();
+const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+
+// Compare dates by timestamp for accuracy
+const isSameDay = (date1, date2) =>
+  date1.toDateString() === date2.toDateString();
+
+// Handle timezone issues
+const createDateAtMidnight = (year, month, day) => {
+  const date = new Date(year, month, day);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+```
+
+## Related Components
+
+- **[DatePicker](?path=/docs/components-datepicker--docs)** - Uses Calendar in a popover for input-based date selection
+- **[Popover](?path=/docs/components-popover--docs)** - Container component for Calendar in DatePicker
+- **[TextInput](?path=/docs/components-textinput--docs)** - Input component paired with Calendar for date entry
+- **[Select](?path=/docs/components-select--docs)** - Dropdown component used in Calendar navigation
+- **[Modal](?path=/docs/components-modal--docs)** - Dialog container for Calendar in scheduling interfaces
+- **[Button](?path=/docs/components-button--docs)** - Action buttons used with Calendar in forms
+
+## Design Tokens
+
+The Calendar component integrates with the design system through comprehensive token usage:
+
+### Color Tokens
+```css
+/* Surface colors */
+--t-color-surface-primary: Calendar background
+--t-color-surface-secondary: Footer background
+--t-color-surface-hover: Day hover state
+
+/* Text colors */
+--t-color-text-primary: Date numbers
+--t-color-text-secondary: Weekday labels, footer
+--t-color-text-disabled: Disabled dates
+--t-color-text-on-fill: Selected date text
+
+/* Fill colors */
+--t-color-fill-brand: Selected dates
+--t-color-fill-brand-secondary: Today marker, range middle
+--t-color-border-secondary: Footer border
+```
+
+### Typography Tokens
+```css
+/* Font families */
+--t-font-family-primary: English text (Outfit)
+--t-font-family-arabic: RTL text (Tajawal)
+
+/* Typography scales */
+--t-typography-body-lg-default: Month caption
+--t-typography-body-sm-default: Date numbers
+--t-typography-caption-lg-default: Weekday labels
+
+/* Line heights */
+--t-line-height-english: 1.5 for English text
+--t-line-height-arabic: 1.2 for Arabic text
+```
+
+### Spacing Tokens
+```css
+/* Internal spacing */
+--t-space-300: Calendar padding
+--t-space-200: Element gaps
+--t-space-400: Month spacing
+--t-space-50: Weekday gaps
+
+/* Component sizes */
+--t-size-1000: Day button size (40px)
+--t-size-900: Mobile day size (36px)
+--t-size-800: Navigation button size (32px)
+```
+
+### Motion Tokens
+```css
+/* Transitions */
+--t-duration-fast: Hover transitions
+--t-easing-in-out: Smooth animations
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  transition-duration: 0.01ms !important;
+}
+```
+
+## Version History
+
+### Current Version (v2.0.0)
+- **Custom Header System**: Unified navigation for single and multiple months
+- **Shadcn-like Navigation**: Space-between layout with centered labels
+- **Enhanced RTL Support**: Complete Arabic integration with proper line-height
+- **Range Selection Improvements**: Fixed middle styling and today highlighting
+- **Multiple Month Navigation**: Integrated captions with custom header system
+- **Design Token Integration**: Full token-based styling system
+
+### Previous Versions
+- **v1.2.0**: Added RTL support and Arabic localization
+- **v1.1.0**: Multiple selection modes and dropdown navigation
+- **v1.0.0**: Initial release with basic calendar functionality
+
+The Calendar component represents a mature, accessible, and highly customizable date selection solution that integrates seamlessly with the Tagaddod Design System while providing comprehensive internationalization and responsive behavior.

@@ -1,0 +1,1466 @@
+# Table Cell Variants - AI Agent Implementation Guide
+
+**Version:** 1.0.0
+**Component:** tagaddod-design-react Table Cell System
+**Documentation Type:** AI Agent Optimized
+**Related Docs:** [Table-AI-AGENT-GUIDE.mdx](./Table-AI-AGENT-GUIDE.mdx)
+
+---
+
+## Quick Navigation Index
+
+### 📦 QUICK START (Lines 30-200)
+- QuickColumns Helper Functions
+- Pre-built Cell Variants
+- Basic Implementation Examples
+
+### 🎨 AVAILABLE CELL VARIANTS (Lines 201-450)
+- Text Cells (Single, Multi-line, Truncated, With Badge)
+- Badge Cells (Single, Multiple)
+- Number Cells (Standard, Updated/Compared)
+- Interactive Cells (Checkbox, Radio, Select, TextField)
+- Action Cells (Icon Buttons, Dropdown)
+
+### 🛠️ CUSTOM CELL CREATION (Lines 451-750)
+- Creating Custom Cell Components
+- Integration Patterns
+- Best Practices
+
+### 💼 REAL-WORLD EXAMPLES (Lines 751-1100)
+- E-commerce Product Tables
+- User Management Tables
+- Analytics/Metrics Tables
+- Inventory Systems
+
+### ⚡ ADVANCED TECHNIQUES (Lines 1101-1300)
+- Cell State Management
+- Performance Optimization
+- Complex Cell Interactions
+
+### 🌍 RTL & ACCESSIBILITY (Lines 1301-1400)
+- RTL Cell Rendering
+- Accessibility Guidelines
+
+---
+
+## Quick Start: QuickColumns
+
+The fastest way to create table columns with pre-configured cell variants.
+
+### Import
+
+```typescript
+import { QuickColumns } from 'tagaddod-design-react';
+```
+
+### Available QuickColumns
+
+```typescript
+// TEXT CELLS
+QuickColumns.text(key, header, size?)
+QuickColumns.textMultiline(key, header, size?)
+QuickColumns.textTruncated(key, header, size?)
+
+// NUMBERS
+QuickColumns.number(key, header, size?)
+QuickColumns.updatedNumber(key, header, size?)  // Shows old/new values
+
+// BADGES
+QuickColumns.badge(key, header, size?)
+QuickColumns.multipleBadges(key, header, size?)
+
+// INTERACTIVE
+QuickColumns.checkbox(key, header, onChange, size?)
+QuickColumns.select(key, header, options, onChange, size?)
+QuickColumns.textField(key, header, onChange, size?)
+
+// ACTIONS
+QuickColumns.actions(header, actions, size?)
+QuickColumns.actionDropdown(header, actions, size?)
+```
+
+### Basic Implementation Example
+
+```tsx
+import { Table, QuickColumns } from 'tagaddod-design-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+  status: { text: string; tone: 'success' | 'warning' | 'critical' };
+}
+
+const columns = [
+  QuickColumns.number('id', 'ID', 80),
+  QuickColumns.text('name', 'Product Name', 250),
+  QuickColumns.number('price', 'Price', 120),
+  QuickColumns.number('stock', 'Stock', 100),
+  QuickColumns.badge('status', 'Status', 120),
+  QuickColumns.actions('Actions', [
+    {
+      icon: <IconEdit size={16} />,
+      onClick: (row) => console.log('Edit:', row),
+      label: 'Edit',
+      tone: 'neutral'
+    },
+    {
+      icon: <IconTrash size={16} />,
+      onClick: (row) => console.log('Delete:', row),
+      label: 'Delete',
+      tone: 'critical'
+    }
+  ], 100),
+];
+
+const data: Product[] = [
+  {
+    id: 1,
+    name: 'Widget Pro',
+    price: 29.99,
+    stock: 150,
+    status: { text: 'Active', tone: 'success' }
+  },
+  // ... more rows
+];
+
+function ProductTable() {
+  return <Table data={data} columns={columns} title="Products" />;
+}
+```
+
+### QuickColumns with Custom Sizes
+
+```tsx
+const columns = [
+  QuickColumns.text('id', 'ID', 60),           // Narrow ID column
+  QuickColumns.text('name', 'Name', 300),      // Wide name column
+  QuickColumns.number('amount', 'Amount', 120), // Medium amount column
+  QuickColumns.badge('status', 'Status', 100),  // Badge column
+];
+```
+
+---
+
+## Available Cell Variants
+
+### Text Cells
+
+#### 1. TextSingleLineCell
+
+Single line of text with proper RTL support.
+
+```typescript
+import { TextSingleLineCell } from 'tagaddod-design-react';
+
+// Using QuickColumns
+QuickColumns.text('name', 'Name')
+
+// Manual column definition
+{
+  accessorKey: 'name',
+  header: 'Name',
+  cell: ({ getValue }) => (
+    <TextSingleLineCell value={getValue() as string} />
+  )
+}
+
+// Data structure
+interface Row {
+  name: string;  // Simple string
+}
+```
+
+**Features:**
+- Single line text display
+- Automatic RTL line-height adjustment
+- Shows "-" for empty values
+
+#### 2. TextMultilineCell
+
+Multiple lines of text with primary/secondary styling.
+
+```typescript
+// Using QuickColumns
+QuickColumns.textMultiline('description', 'Description')
+
+// Data structure
+interface Row {
+  description: string;  // Use "\n" for line breaks
+}
+
+// Example data
+{
+  description: "Primary line\nSecondary line\nTertiary line"
+}
+```
+
+**Rendering:**
+- First line: primary text color
+- Subsequent lines: secondary text color
+- Preserves line breaks
+
+#### 3. TextTruncatedCell
+
+Text with ellipsis and tooltip on overflow.
+
+```typescript
+// Using QuickColumns
+QuickColumns.textTruncated('description', 'Description')
+
+// Features
+- Automatic overflow detection
+- Tooltip appears only if text is truncated
+- Single line with ellipsis
+```
+
+**Use Cases:**
+- Long product descriptions
+- URLs or file paths
+- Email addresses in narrow columns
+
+#### 4. TextSingleLineWithBadgeCell
+
+Text with an accompanying badge and optional icon.
+
+```typescript
+import { TextSingleLineWithBadgeCell } from 'tagaddod-design-react';
+
+// Data structure
+interface Row {
+  product: {
+    text: string;
+    badge: string;
+    badgeVariant?: 'success' | 'warning' | 'critical' | 'info';
+    prefixIcon?: React.ReactNode;
+  };
+}
+
+// Column definition
+{
+  accessorKey: 'product',
+  header: 'Product',
+  cell: ({ getValue }) => (
+    <TextSingleLineWithBadgeCell value={getValue()} />
+  )
+}
+
+// Example data
+{
+  product: {
+    text: "Premium Widget",
+    badge: "New",
+    badgeVariant: "info",
+    prefixIcon: <IconStar size={16} />
+  }
+}
+```
+
+---
+
+### Badge Cells
+
+#### 1. BadgeCell
+
+Single badge with customizable tone.
+
+```typescript
+import { BadgeCell } from 'tagaddod-design-react';
+
+// Using QuickColumns
+QuickColumns.badge('status', 'Status')
+
+// Data structure
+interface Row {
+  status: {
+    text: string;
+    tone?: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic';
+  };
+}
+
+// Example data
+{
+  status: { text: 'Active', tone: 'success' }
+}
+```
+
+**Tone Guide:**
+- `success` - Green (active, completed, approved)
+- `warning` - Yellow (pending, review needed)
+- `critical` - Red (error, failed, rejected)
+- `info` - Blue (new, notification)
+- `default` - Gray (inactive, archived)
+- `magic` - Purple (premium, featured)
+
+#### 2. BadgeMultipleCell
+
+Display multiple badges in a single cell.
+
+```typescript
+// Using QuickColumns
+QuickColumns.multipleBadges('tags', 'Tags')
+
+// Data structure
+interface Row {
+  tags: Array<{
+    text: string;
+    tone?: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic';
+  }>;
+}
+
+// Example data
+{
+  tags: [
+    { text: 'Electronics', tone: 'info' },
+    { text: 'Featured', tone: 'magic' },
+    { text: 'On Sale', tone: 'success' }
+  ]
+}
+```
+
+---
+
+### Number Cells
+
+#### 1. Standard Number Cell
+
+Formatted number with tabular numerals.
+
+```typescript
+// Using QuickColumns
+QuickColumns.number('price', 'Price')
+
+// Features
+- Automatic thousand separators (toLocaleString)
+- Tabular numerals for alignment
+- Shows "-" for null/undefined
+```
+
+#### 2. UpdatedNumberCell
+
+Shows current value with optional previous value (strikethrough).
+
+```typescript
+import { UpdatedNumberCell } from 'tagaddod-design-react';
+
+// Using createCellColumn
+import { createCellColumn } from 'tagaddod-design-react';
+
+createCellColumn('updatedNumber', 'price', 'Price', 120)
+
+// Data structure - Simple
+interface Row {
+  price: number;  // Single value
+}
+
+// Data structure - Comparison
+interface Row {
+  price: {
+    primary: number;      // Current value (bold)
+    secondary?: number;   // Previous value (strikethrough)
+  };
+}
+
+// Example data
+{
+  price: {
+    primary: 49.99,    // New price
+    secondary: 59.99   // Old price (shown with strikethrough)
+  }
+}
+```
+
+**Use Cases:**
+- Price changes (old vs new)
+- Stock updates
+- Sales metrics (current vs previous)
+
+---
+
+### Interactive Cells
+
+#### 1. CheckboxCell
+
+Checkbox for row selection.
+
+```typescript
+// Using QuickColumns
+QuickColumns.checkbox('selected', 'Select', handleCheckboxChange)
+
+// Handler
+function handleCheckboxChange(value: boolean, row: any) {
+  console.log('Checkbox changed:', value, 'for row:', row);
+  // Update your selection state
+}
+
+// Data structure
+interface Row {
+  selected: boolean;
+}
+
+// Example implementation
+function SelectableTable() {
+  const [data, setData] = useState(initialData);
+
+  const handleCheckboxChange = (value: boolean, row: any) => {
+    setData(prevData =>
+      prevData.map(item =>
+        item.id === row.original.id
+          ? { ...item, selected: value }
+          : item
+      )
+    );
+  };
+
+  const columns = [
+    QuickColumns.checkbox('selected', 'Select', handleCheckboxChange),
+    QuickColumns.text('name', 'Name'),
+    // ... other columns
+  ];
+
+  return <Table data={data} columns={columns} />;
+}
+```
+
+#### 2. SelectCell
+
+Dropdown select for inline editing.
+
+```typescript
+// Using QuickColumns
+const statusOptions = [
+  { label: 'Active', value: 'active' },
+  { label: 'Inactive', value: 'inactive' },
+  { label: 'Pending', value: 'pending' },
+];
+
+QuickColumns.select('status', 'Status', statusOptions, handleStatusChange)
+
+// Handler
+function handleStatusChange(value: string, row: any) {
+  console.log('Status changed to:', value, 'for row:', row);
+  // Update via API or state
+}
+
+// Data structure
+interface Row {
+  status: string;  // Must match option values
+}
+```
+
+#### 3. RadioButtonCell
+
+Radio button group within a cell.
+
+```typescript
+import { RadioButtonCell } from 'tagaddod-design-react';
+
+const priorityOptions = [
+  { label: 'Low', value: 'low' },
+  { label: 'Medium', value: 'medium' },
+  { label: 'High', value: 'high' },
+];
+
+// Column definition
+{
+  accessorKey: 'priority',
+  header: 'Priority',
+  cell: ({ getValue, row }) => (
+    <RadioButtonCell
+      value={getValue() as string}
+      options={priorityOptions}
+      onChange={(value) => handlePriorityChange(value, row.original)}
+    />
+  )
+}
+```
+
+#### 4. TextFieldCell
+
+Inline text input with debounced updates.
+
+```typescript
+// Using QuickColumns
+QuickColumns.textField('notes', 'Notes', handleNotesChange)
+
+// Handler (called after 300ms debounce)
+function handleNotesChange(value: string, row: any) {
+  console.log('Notes updated:', value);
+  // Save to state or API
+}
+
+// Data structure
+interface Row {
+  notes: string;
+}
+
+// Features
+- 300ms debounce
+- Controlled input
+- Auto-sync on blur
+```
+
+---
+
+### Action Cells
+
+#### 1. ActionIconCell
+
+Icon buttons for row actions.
+
+```typescript
+import { ActionIconCell } from 'tagaddod-design-react';
+import { IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
+
+// Using QuickColumns
+QuickColumns.actions('Actions', [
+  {
+    icon: <IconEdit size={16} />,
+    onClick: (row) => handleEdit(row),
+    label: 'Edit',
+    variant: 'plain',
+    size: 'xLarge',
+    tone: 'neutral'
+  },
+  {
+    icon: <IconTrash size={16} />,
+    onClick: (row) => handleDelete(row),
+    label: 'Delete',
+    variant: 'plain',
+    size: 'xLarge',
+    tone: 'critical'
+  },
+  {
+    icon: <IconEye size={16} />,
+    onClick: (row) => handleView(row),
+    label: 'View',
+    variant: 'plain',
+    size: 'xLarge',
+    tone: 'neutral'
+  }
+])
+
+// Manual definition
+{
+  id: 'actions',
+  header: 'Actions',
+  cell: ({ row }) => (
+    <ActionIconCell
+      row={row.original}
+      actions={[
+        {
+          icon: <IconEdit size={16} />,
+          onClick: (row) => console.log('Edit', row),
+          label: 'Edit',
+          tone: 'neutral'
+        },
+        {
+          icon: <IconTrash size={16} />,
+          onClick: (row) => console.log('Delete', row),
+          label: 'Delete',
+          tone: 'critical'
+        }
+      ]}
+    />
+  )
+}
+```
+
+**Action Properties:**
+- `icon`: React element (typically Tabler icon)
+- `onClick`: Callback with row data
+- `label`: Accessibility label / tooltip
+- `variant`: 'primary' | 'outlined' | 'plain' (default: 'plain')
+- `size`: Button size (default: 'xLarge')
+- `tone`: Button tone (default: 'neutral')
+
+#### 2. ActionDropdownIconCell
+
+Dropdown menu for multiple actions.
+
+```typescript
+import { ActionDropdownIconCell } from 'tagaddod-design-react';
+
+// Using QuickColumns
+QuickColumns.actionDropdown('Actions', [
+  { label: 'Edit', onClick: (row) => handleEdit(row) },
+  { label: 'Duplicate', onClick: (row) => handleDuplicate(row) },
+  { label: 'Archive', onClick: (row) => handleArchive(row) },
+  { label: 'Delete', onClick: (row) => handleDelete(row) },
+])
+
+// Manual definition
+{
+  id: 'actions',
+  header: '',
+  size: 120,
+  cell: ({ row }) => (
+    <ActionDropdownIconCell
+      value={[
+        { label: 'Edit', onClick: (row) => console.log('Edit', row) },
+        { label: 'Duplicate', onClick: (row) => console.log('Duplicate', row) },
+        { label: 'Delete', onClick: (row) => console.log('Delete', row) },
+      ]}
+      row={row.original}
+    />
+  )
+}
+```
+
+**When to Use:**
+- 4+ actions per row
+- Space-constrained tables
+- Less frequently used actions
+
+---
+
+## Custom Cell Creation
+
+### Method 1: Simple Custom Component
+
+For basic custom rendering:
+
+```tsx
+// Define your cell component
+function PriceCell({ value }: { value: number }) {
+  const isRTL = document.dir === 'rtl';
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+    }}>
+      <span style={{
+        fontWeight: 600,
+        color: 'var(--t-color-text-primary)',
+        fontFeatureSettings: 'tnum',
+        fontVariantNumeric: 'tabular-nums'
+      }}>
+        ${value.toFixed(2)}
+      </span>
+      {value > 100 && (
+        <Badge tone="success" size="small">Premium</Badge>
+      )}
+    </div>
+  );
+}
+
+// Use in column definition
+const columns = [
+  {
+    accessorKey: 'price',
+    header: 'Price',
+    cell: ({ getValue }) => <PriceCell value={getValue() as number} />
+  }
+];
+```
+
+### Method 2: Using createCustomCellColumn
+
+For reusable custom cells:
+
+```tsx
+import { createCustomCellColumn } from 'tagaddod-design-react';
+
+// Progress bar cell component
+function ProgressBarCell({ value }: { value: number }) {
+  const isRTL = document.dir === 'rtl';
+  const percentage = Math.min(100, Math.max(0, value));
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-200)',
+      width: '100%'
+    }}>
+      <div style={{
+        flex: 1,
+        height: '8px',
+        backgroundColor: 'var(--t-color-fill-tertiary)',
+        borderRadius: 'var(--t-border-radius-100)',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        <div style={{
+          width: `${percentage}%`,
+          height: '100%',
+          backgroundColor: percentage >= 75
+            ? 'var(--t-color-fill-success)'
+            : percentage >= 50
+            ? 'var(--t-color-fill-warning)'
+            : 'var(--t-color-fill-critical)',
+          transition: 'width 0.3s ease',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }} />
+      </div>
+      <span style={{
+        fontSize: 'var(--t-font-size-75)',
+        color: 'var(--t-color-text-secondary)',
+        minWidth: '40px',
+        textAlign: isRTL ? 'left' : 'right',
+        fontFeatureSettings: 'tnum',
+        fontVariantNumeric: 'tabular-nums'
+      }}>
+        {percentage}%
+      </span>
+    </div>
+  );
+}
+
+// Create column
+const progressColumn = createCustomCellColumn(
+  'completion',
+  'Completion',
+  ProgressBarCell,
+  150
+);
+
+// Use in table
+const columns = [
+  QuickColumns.text('task', 'Task'),
+  progressColumn,
+  QuickColumns.text('assignee', 'Assignee'),
+];
+```
+
+### Method 3: Complex Interactive Cell
+
+For cells with state and interactions:
+
+```tsx
+// Star rating cell with editing
+function StarRatingCell({
+  value,
+  onChange,
+  row
+}: {
+  value: number;
+  onChange?: (value: number, row: any) => void;
+  row?: any;
+}) {
+  const [hoveredStar, setHoveredStar] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const displayRating = hoveredStar ?? value;
+
+  const handleClick = (rating: number) => {
+    onChange?.(rating, row);
+    setIsEditing(false);
+  };
+
+  return (
+    <div
+      style={{ display: 'flex', gap: '4px', cursor: 'pointer' }}
+      onMouseEnter={() => setIsEditing(true)}
+      onMouseLeave={() => {
+        setHoveredStar(null);
+        setIsEditing(false);
+      }}
+    >
+      {[1, 2, 3, 4, 5].map((star) => (
+        <IconStar
+          key={star}
+          size={16}
+          fill={star <= displayRating ? 'var(--t-color-icon-warning)' : 'none'}
+          color={star <= displayRating ? 'var(--t-color-icon-warning)' : 'var(--t-color-icon-secondary)'}
+          onMouseEnter={() => isEditing && setHoveredStar(star)}
+          onClick={() => handleClick(star)}
+        />
+      ))}
+      <span style={{
+        marginLeft: '8px',
+        fontSize: 'var(--t-font-size-75)',
+        color: 'var(--t-color-text-secondary)'
+      }}>
+        ({value}/5)
+      </span>
+    </div>
+  );
+}
+
+// Column with editable rating
+const ratingColumn = {
+  accessorKey: 'rating',
+  header: 'Rating',
+  size: 180,
+  cell: ({ getValue, row }) => (
+    <StarRatingCell
+      value={getValue() as number}
+      onChange={(newRating) => {
+        console.log('Rating changed to:', newRating);
+        // Update state or API
+      }}
+      row={row.original}
+    />
+  )
+};
+```
+
+### Method 4: Avatar Cell with Image
+
+```tsx
+function AvatarCell({
+  value
+}: {
+  value: { name: string; avatar?: string; email?: string }
+}) {
+  const isRTL = document.dir === 'rtl';
+  const initials = value.name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-200)'
+    }}>
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        backgroundColor: value.avatar ? 'transparent' : 'var(--t-color-fill-brand-secondary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        flexShrink: 0
+      }}>
+        {value.avatar ? (
+          <img
+            src={value.avatar}
+            alt={value.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <span style={{
+            fontSize: '12px',
+            fontWeight: 600,
+            color: 'var(--t-color-text-on-color)'
+          }}>
+            {initials}
+          </span>
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
+          fontWeight: 500,
+          color: 'var(--t-color-text-primary)',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+        }}>
+          {value.name}
+        </div>
+        {value.email && (
+          <div style={{
+            fontSize: 'var(--t-font-size-75)',
+            color: 'var(--t-color-text-secondary)',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
+            {value.email}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Column definition
+const userColumn = {
+  accessorKey: 'user',
+  header: 'User',
+  size: 250,
+  cell: ({ getValue }) => <AvatarCell value={getValue()} />
+};
+
+// Data structure
+interface Row {
+  user: {
+    name: string;
+    avatar?: string;
+    email?: string;
+  };
+}
+
+// Example data
+{
+  user: {
+    name: "John Doe",
+    avatar: "https://example.com/avatar.jpg",
+    email: "john@example.com"
+  }
+}
+```
+
+---
+
+## Real-World Examples
+
+### Example 1: E-commerce Product Table
+
+```tsx
+import { Table, QuickColumns } from 'tagaddod-design-react';
+import { IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
+
+interface Product {
+  id: number;
+  name: string;
+  sku: string;
+  price: {
+    primary: number;
+    secondary?: number;
+  };
+  stock: number;
+  category: {
+    text: string;
+    tone: 'info' | 'success' | 'warning';
+  };
+  status: {
+    text: string;
+    tone: 'success' | 'critical';
+  };
+  tags: Array<{
+    text: string;
+    tone: 'default' | 'info' | 'magic';
+  }>;
+}
+
+function ProductTable() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const handlePriceUpdate = (newPrice: number, row: Product) => {
+    // Update product price via API
+    updateProductPrice(row.id, newPrice);
+  };
+
+  const handleEdit = (row: Product) => {
+    // Open edit modal
+    console.log('Edit product:', row);
+  };
+
+  const handleDelete = (row: Product) => {
+    // Confirm and delete
+    console.log('Delete product:', row);
+  };
+
+  const columns = [
+    QuickColumns.number('id', 'ID', 60),
+    QuickColumns.text('name', 'Product Name', 250),
+    QuickColumns.text('sku', 'SKU', 120),
+    createCellColumn('updatedNumber', 'price', 'Price', 140),
+    QuickColumns.number('stock', 'Stock', 100),
+    QuickColumns.badge('category', 'Category', 120),
+    QuickColumns.badge('status', 'Status', 100),
+    QuickColumns.multipleBadges('tags', 'Tags', 200),
+    QuickColumns.actions('Actions', [
+      {
+        icon: <IconEye size={16} />,
+        onClick: (row) => console.log('View', row),
+        label: 'View',
+        tone: 'neutral'
+      },
+      {
+        icon: <IconEdit size={16} />,
+        onClick: handleEdit,
+        label: 'Edit',
+        tone: 'neutral'
+      },
+      {
+        icon: <IconTrash size={16} />,
+        onClick: handleDelete,
+        label: 'Delete',
+        tone: 'critical'
+      }
+    ], 120)
+  ];
+
+  return (
+    <Table
+      data={products}
+      columns={columns}
+      title="Products"
+      showSearch={true}
+      showFilters={true}
+      showPagination={true}
+    />
+  );
+}
+```
+
+### Example 2: User Management Table
+
+```tsx
+interface User {
+  id: number;
+  user: {
+    name: string;
+    avatar?: string;
+    email: string;
+  };
+  role: string;
+  status: string;
+  lastActive: string;
+  permissions: Array<{ text: string; tone: 'info' | 'success' }>;
+}
+
+// Custom Avatar Cell (from previous section)
+function AvatarCell({ value }: { value: { name: string; avatar?: string; email: string } }) {
+  // ... implementation from above
+}
+
+function UserManagementTable() {
+  const [users, setUsers] = useState<User[]>([]);
+
+  const roleOptions = [
+    { label: 'Admin', value: 'admin' },
+    { label: 'Manager', value: 'manager' },
+    { label: 'User', value: 'user' },
+    { label: 'Guest', value: 'guest' },
+  ];
+
+  const handleRoleChange = (newRole: string, row: User) => {
+    // Update user role via API
+    updateUserRole(row.id, newRole);
+  };
+
+  const columns = [
+    QuickColumns.number('id', 'ID', 60),
+    {
+      accessorKey: 'user',
+      header: 'User',
+      size: 250,
+      cell: ({ getValue }) => <AvatarCell value={getValue()} />
+    },
+    QuickColumns.select('role', 'Role', roleOptions, handleRoleChange, 150),
+    QuickColumns.badge('status', 'Status', 100),
+    QuickColumns.text('lastActive', 'Last Active', 150),
+    QuickColumns.multipleBadges('permissions', 'Permissions', 200),
+    QuickColumns.actionDropdown('Actions', [
+      { label: 'Edit Profile', onClick: (row) => console.log('Edit', row) },
+      { label: 'Reset Password', onClick: (row) => console.log('Reset', row) },
+      { label: 'Suspend User', onClick: (row) => console.log('Suspend', row) },
+      { label: 'Delete User', onClick: (row) => console.log('Delete', row) },
+    ], 120)
+  ];
+
+  return (
+    <Table
+      data={users}
+      columns={columns}
+      title="Users"
+      showSearch={true}
+      showFilters={true}
+    />
+  );
+}
+```
+
+### Example 3: Task Management with Progress
+
+```tsx
+interface Task {
+  id: number;
+  task: string;
+  assignee: {
+    name: string;
+    avatar?: string;
+  };
+  priority: string;
+  completion: number;  // 0-100
+  dueDate: string;
+  status: {
+    text: string;
+    tone: 'success' | 'warning' | 'critical';
+  };
+}
+
+// Progress Bar Cell (from custom cell section)
+function ProgressBarCell({ value }: { value: number }) {
+  // ... implementation from above
+}
+
+function TaskTable() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const priorityOptions = [
+    { label: 'Low', value: 'low' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'High', value: 'high' },
+    { label: 'Critical', value: 'critical' },
+  ];
+
+  const handlePriorityChange = (newPriority: string, row: Task) => {
+    updateTaskPriority(row.id, newPriority);
+  };
+
+  const columns = [
+    QuickColumns.number('id', 'ID', 60),
+    QuickColumns.text('task', 'Task', 300),
+    createCustomCellColumn('assignee', 'Assignee', AvatarCell, 200),
+    QuickColumns.select('priority', 'Priority', priorityOptions, handlePriorityChange, 120),
+    createCustomCellColumn('completion', 'Progress', ProgressBarCell, 150),
+    QuickColumns.text('dueDate', 'Due Date', 120),
+    QuickColumns.badge('status', 'Status', 100),
+  ];
+
+  return (
+    <Table
+      data={tasks}
+      columns={columns}
+      title="Tasks"
+      striped={false}
+      showPagination={true}
+    />
+  );
+}
+```
+
+### Example 4: Inventory with Inline Editing
+
+```tsx
+interface InventoryItem {
+  id: number;
+  product: string;
+  sku: string;
+  quantity: number;
+  reorderPoint: number;
+  supplier: string;
+  notes: string;
+  selected: boolean;
+}
+
+function InventoryTable() {
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+
+  const handleQuantityChange = (newValue: string, row: InventoryItem) => {
+    const quantity = parseInt(newValue, 10);
+    if (!isNaN(quantity)) {
+      updateInventoryQuantity(row.id, quantity);
+    }
+  };
+
+  const handleNotesChange = (newNotes: string, row: InventoryItem) => {
+    updateInventoryNotes(row.id, newNotes);
+  };
+
+  const handleSelectionChange = (selected: boolean, row: InventoryItem) => {
+    setInventory(prev =>
+      prev.map(item =>
+        item.id === row.id ? { ...item, selected } : item
+      )
+    );
+  };
+
+  const columns = [
+    QuickColumns.checkbox('selected', 'Select', handleSelectionChange, 60),
+    QuickColumns.number('id', 'ID', 60),
+    QuickColumns.text('product', 'Product', 200),
+    QuickColumns.text('sku', 'SKU', 100),
+    QuickColumns.textField('quantity', 'Qty', handleQuantityChange, 80),
+    QuickColumns.number('reorderPoint', 'Reorder Point', 120),
+    QuickColumns.text('supplier', 'Supplier', 150),
+    QuickColumns.textField('notes', 'Notes', handleNotesChange, 200),
+  ];
+
+  const selectedCount = inventory.filter(item => item.selected).length;
+
+  return (
+    <>
+      {selectedCount > 0 && (
+        <div style={{ padding: '16px', backgroundColor: 'var(--t-color-fill-secondary)' }}>
+          {selectedCount} items selected
+          <Button onClick={() => console.log('Bulk action')}>
+            Update Selected
+          </Button>
+        </div>
+      )}
+      <Table
+        data={inventory}
+        columns={columns}
+        title="Inventory"
+        showSearch={true}
+        showPagination={true}
+      />
+    </>
+  );
+}
+```
+
+---
+
+## Advanced Techniques
+
+### Cell State Management
+
+For cells that need to maintain their own state:
+
+```tsx
+function EditableCell({
+  value: initialValue,
+  row,
+  onChange
+}: {
+  value: string;
+  row: any;
+  onChange: (value: string, row: any) => void;
+}) {
+  const [value, setValue] = useState(initialValue);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Sync with external changes
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  const handleSave = () => {
+    if (value !== initialValue) {
+      onChange(value, row);
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setValue(initialValue);
+    setIsEditing(false);
+  };
+
+  if (!isEditing) {
+    return (
+      <div
+        onClick={() => setIsEditing(true)}
+        style={{ cursor: 'pointer', minHeight: '32px', display: 'flex', alignItems: 'center' }}
+      >
+        {value || <span style={{ color: 'var(--t-color-text-disabled)' }}>Click to edit</span>}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <TextInput
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') handleSave();
+          if (e.key === 'Escape') handleCancel();
+        }}
+        autoFocus
+      />
+      <Button size="micro" onClick={handleSave}>✓</Button>
+      <Button size="micro" variant="plain" tone="critical" onClick={handleCancel}>✕</Button>
+    </div>
+  );
+}
+```
+
+### Performance Optimization
+
+For large tables with complex cells:
+
+```tsx
+import { memo, useMemo } from 'react';
+
+// 1. Memoize cell components
+const MemoizedAvatarCell = memo(AvatarCell);
+const MemoizedProgressCell = memo(ProgressBarCell);
+
+// 2. Memoize columns
+const columns = useMemo(() => [
+  QuickColumns.number('id', 'ID', 60),
+  {
+    accessorKey: 'user',
+    header: 'User',
+    size: 250,
+    cell: memo(({ getValue }) => (
+      <MemoizedAvatarCell value={getValue()} />
+    ))
+  },
+  {
+    accessorKey: 'progress',
+    header: 'Progress',
+    size: 150,
+    cell: memo(({ getValue }) => (
+      <MemoizedProgressCell value={getValue() as number} />
+    ))
+  },
+], []);
+
+// 3. Use callback refs for expensive operations
+const handleActionClick = useCallback((row: any) => {
+  // Expensive operation
+}, []);
+
+// 4. Virtualize for 1000+ rows
+<Table
+  data={data}
+  columns={columns}
+  enableScrollArea={true}
+  scrollAreaHeight="600px"
+/>
+```
+
+### Complex Cell Interactions
+
+Cell that opens a modal:
+
+```tsx
+function DetailCell({ row }: { row: any }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button
+        variant="plain"
+        size="small"
+        onClick={(e) => {
+          e.stopPropagation();  // Prevent row click
+          setIsModalOpen(true);
+        }}
+      >
+        View Details
+      </Button>
+
+      <Modal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        title={`Details for ${row.name}`}
+      >
+        <div>
+          {/* Detailed view of row data */}
+          <pre>{JSON.stringify(row, null, 2)}</pre>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+// Column
+{
+  id: 'details',
+  header: 'Details',
+  cell: ({ row }) => <DetailCell row={row.original} />
+}
+```
+
+---
+
+## RTL & Accessibility
+
+### RTL Cell Guidelines
+
+All custom cells MUST include RTL support:
+
+```tsx
+function CustomCell({ value }: { value: any }) {
+  // 1. Detect RTL
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+
+  // 2. Apply line-height style
+  const lineHeightStyle = {
+    lineHeight: isRTL
+      ? 'var(--t-line-height-arabic, 1.2)'
+      : 'var(--t-line-height-english, 1.5)'
+  };
+
+  // 3. Apply to all text elements
+  return (
+    <div style={{
+      ...lineHeightStyle,
+      textAlign: isRTL ? 'right' : 'left',
+      direction: isRTL ? 'rtl' : 'ltr',
+      fontFamily: isRTL
+        ? 'var(--t-font-family-arabic)'
+        : 'var(--t-font-family-primary)'
+    }}>
+      {value}
+    </div>
+  );
+}
+```
+
+### Accessibility Requirements
+
+```tsx
+// 1. Action cells must have accessible labels
+<Button
+  prefixIcon={<IconEdit />}
+  aria-label="Edit row"  // Required for icon-only buttons
+  onClick={handleEdit}
+/>
+
+// 2. Interactive cells must be keyboard accessible
+<div
+  tabIndex={0}
+  role="button"
+  onClick={handleClick}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick();
+    }
+  }}
+>
+  Click me
+</div>
+
+// 3. State changes must be announced
+<div
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  {statusMessage}
+</div>
+```
+
+---
+
+## Cell Variant Summary
+
+### Pre-built Variants
+
+| Variant | QuickColumn Method | Use Case |
+|---------|-------------------|----------|
+| TextSingleLineCell | `QuickColumns.text()` | Simple text display |
+| TextMultilineCell | `QuickColumns.textMultiline()` | Multi-line descriptions |
+| TextTruncatedCell | `QuickColumns.textTruncated()` | Long text with tooltip |
+| BadgeCell | `QuickColumns.badge()` | Status indicators |
+| BadgeMultipleCell | `QuickColumns.multipleBadges()` | Tags, categories |
+| CheckboxCell | `QuickColumns.checkbox()` | Row selection |
+| SelectCell | `QuickColumns.select()` | Inline dropdowns |
+| TextFieldCell | `QuickColumns.textField()` | Inline text editing |
+| UpdatedNumberCell | `createCellColumn('updatedNumber')` | Price changes, comparisons |
+| ActionIconCell | `QuickColumns.actions()` | Row action buttons |
+| ActionDropdownIconCell | `QuickColumns.actionDropdown()` | Multiple actions menu |
+
+### Custom Cell Checklist
+
+When creating custom cells:
+
+- [ ] Import and use design tokens (CSS variables)
+- [ ] Implement RTL detection and line-height adjustment
+- [ ] Add proper TypeScript types
+- [ ] Handle null/undefined values gracefully
+- [ ] Use `memo()` for performance (if complex)
+- [ ] Add accessibility labels for interactive elements
+- [ ] Test with both LTR and RTL
+- [ ] Ensure proper keyboard navigation
+- [ ] Use tabular numerals for numbers (`fontFeatureSettings: 'tnum'`)
+- [ ] Stop event propagation for interactive elements inside clickable rows
+
+---
+
+**End of Table Cell Variants Guide**
+
+For main Table documentation, see: [Table-AI-AGENT-GUIDE.mdx](./Table-AI-AGENT-GUIDE.mdx)

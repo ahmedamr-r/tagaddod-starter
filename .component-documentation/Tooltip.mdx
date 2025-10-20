@@ -1,0 +1,484 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TooltipStories from './Tooltip.stories';
+
+<Meta of={TooltipStories} />
+
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+🎯 BASIC USAGE (Lines 10-16)
+- Default tooltip implementation
+- Automatic positioning feature
+
+📖 WHEN TO USE (Lines 18-30)
+- Icon-only buttons explanation
+- Form field context
+- Abbreviated text clarification
+- Truncated content display
+- Mobile considerations
+
+📋 EXAMPLES (Lines 31-78)
+- Basic Usage (Line 33): Default implementation
+- Automatic Positioning (Line 37): Smart placement
+- Positioning (Lines 41-48): Top, Right, Bottom, Left
+- Alignment (Lines 50-56): Start, Center, End
+- With Icons (Lines 58-63): Icon buttons
+- Long Content (Line 67): Text wrapping
+- Multiple Tooltips (Line 71): Group usage
+- All Positions (Line 75): Complete showcase
+
+🌍 RTL SUPPORT (Lines 79-83)
+- Right-to-left layout support
+- Text alignment and positioning
+
+⚙️ IMPLEMENTATION (Lines 85-132)
+- TooltipProvider (Lines 87-103): Required wrapper
+- Basic Tooltip (Lines 105-111): Auto-positioning
+- Custom Positioning (Lines 113-124): Side and alignment
+- Disabled State (Lines 126-132): Conditional display
+
+♿ ACCESSIBILITY (Lines 134-140)
+- Screen reader announcements
+- Focus management
+- Content guidelines
+
+📋 PROPS (Lines 142-143)
+- Component properties reference
+
+🎨 DESIGN TOKENS (Lines 145-155)
+- CSS variables and styling tokens
+- Background, text, typography
+- Spacing and border radius
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic tooltip: Lines 108-110
+- Custom position: Lines 116-123
+- With TooltipProvider: Lines 96-101
+- Icon button: Lines 58-63
+- RTL content: Line 83
+
+⚠️ PROVIDER NOTE:
+Tooltip requires TooltipProvider wrapper at application level to enable functionality. Always wrap your app or tooltip group with TooltipProvider.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Tooltip component capabilities and patterns.
+
+
+# Tooltip
+
+A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
+
+<Canvas of={TooltipStories.Default} />
+
+## Usage
+
+Tooltips are used to provide additional context or helpful information about UI elements without cluttering the interface. They should be concise and appear quickly when users need them.
+
+**Automatic Positioning**: By default, tooltips automatically position themselves based on available viewport space. You can optionally specify a preferred side if needed.
+
+### When to use tooltips
+
+- To explain the purpose of icon-only buttons
+- To provide additional context for form fields
+- To clarify abbreviated text or technical terms
+- To show the full text when content is truncated
+
+### When not to use tooltips
+
+- For critical information that users must see
+- On mobile devices where hover interactions don't exist
+- When the tooltip content is longer than a few sentences
+
+## Examples
+
+### Basic Usage
+
+<Canvas of={TooltipStories.Default} />
+
+### Automatic Positioning
+
+<Canvas of={TooltipStories.AutoPositioning} />
+
+### Positioning
+
+Tooltips can be positioned on any side of the trigger element:
+
+<Canvas of={TooltipStories.Top} />
+<Canvas of={TooltipStories.Right} />
+<Canvas of={TooltipStories.Bottom} />
+<Canvas of={TooltipStories.Left} />
+
+### Alignment
+
+Control how the tooltip aligns relative to its trigger:
+
+<Canvas of={TooltipStories.AlignStart} />
+<Canvas of={TooltipStories.AlignCenter} />
+<Canvas of={TooltipStories.AlignEnd} />
+
+### With Icons
+
+Tooltips work well with icon buttons and informational elements:
+
+<Canvas of={TooltipStories.WithIcon} />
+<Canvas of={TooltipStories.IconOnlyTrigger} />
+
+### Long Content
+
+Tooltips automatically wrap longer content:
+
+<Canvas of={TooltipStories.LongContent} />
+
+### Multiple Tooltips
+
+<Canvas of={TooltipStories.MultipleTooltips} />
+
+### All Positions
+
+<Canvas of={TooltipStories.AllPositions} />
+
+## Internationalization and RTL Support
+
+The Tooltip component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper positioning, and directional tooltip display.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Tooltip, Button } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <TooltipProvider>
+        <Tooltip content="معلومات مفيدة حول هذا الزر">
+          <Button>زر عربي</Button>
+        </Tooltip>
+      </TooltipProvider>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Tooltip component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Text Alignment**: Changes to right-aligned text for Arabic content
+3. **Position Mirroring**: Tooltip positions adapt naturally to RTL reading patterns
+4. **Line Height**: Applies appropriate line height for Arabic text rendering
+5. **Layout Direction**: Maintains proper visual hierarchy in RTL contexts
+
+### Icon Button Tooltips in RTL
+
+For icon buttons with Arabic tooltips:
+
+<Canvas of={TooltipStories.RtlContent} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconSave, IconDelete, IconEdit } from '@tabler/icons-react';
+
+function RTLIconButtons() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      gap: '12px', 
+      direction: isRTL ? 'rtl' : 'ltr' 
+    }}>
+      <Tooltip content={isRTL ? 'حفظ المستند' : 'Save document'}>
+        <Button variant="outlined" size="sm">
+          <IconSave size={16} />
+        </Button>
+      </Tooltip>
+      
+      <Tooltip content={isRTL ? 'تحرير المحتوى' : 'Edit content'}>
+        <Button variant="outlined" size="sm">
+          <IconEdit size={16} />
+        </Button>
+      </Tooltip>
+      
+      <Tooltip content={isRTL ? 'حذف العنصر' : 'Delete item'} side="top">
+        <Button variant="outlined" size="sm">
+          <IconDelete size={16} />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+```
+
+### Form Field Tooltips in RTL
+
+For form fields with contextual help in Arabic:
+
+```jsx
+function RTLFormTooltips() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {isRTL ? 'كلمة المرور' : 'Password'}
+            <Tooltip 
+              content={isRTL ? 'يجب أن تحتوي على 8 أحرف على الأقل مع أرقام ورموز' : 'Must contain at least 8 characters with numbers and symbols'}
+              side={isRTL ? "left" : "right"}
+            >
+              <IconHelp size={14} style={{ color: 'var(--t-color-text-subtle)' }} />
+            </Tooltip>
+          </label>
+          <TextInput type="password" />
+        </div>
+        
+        <div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {isRTL ? 'البريد الإلكتروني' : 'Email'}
+            <Tooltip 
+              content={isRTL ? 'سنستخدم هذا البريد للتواصل معك' : 'We will use this email to contact you'}
+              side={isRTL ? "left" : "right"}
+            >
+              <IconInfo size={14} style={{ color: 'var(--t-color-text-subtle)' }} />
+            </Tooltip>
+          </label>
+          <TextInput type="email" />
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Data Display Tooltips in RTL
+
+For data tables and information displays:
+
+```jsx
+function RTLDataTooltips() {
+  const { isRTL } = useTheme();
+  
+  const data = isRTL ? [
+    { name: 'أحمد محمد', role: 'مطور أول', status: 'متاح' },
+    { name: 'فاطمة أحمد', role: 'مصممة UI/UX', status: 'مشغول' },
+    { name: 'محمود علي', role: 'مدير المنتج', status: 'في اجتماع' }
+  ] : [
+    { name: 'Ahmed Mohamed', role: 'Senior Developer', status: 'Available' },
+    { name: 'Fatima Ahmed', role: 'UI/UX Designer', status: 'Busy' },
+    { name: 'Mahmoud Ali', role: 'Product Manager', status: 'In meeting' }
+  ];
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th>{isRTL ? 'الاسم' : 'Name'}</th>
+            <th>{isRTL ? 'الوظيفة' : 'Role'}</th>
+            <th>{isRTL ? 'الحالة' : 'Status'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <Tooltip 
+                  content={isRTL ? `الملف الشخصي لـ ${item.name}` : `${item.name}'s profile`}
+                >
+                  <span style={{ textDecoration: 'underline', cursor: 'help' }}>
+                    {item.name}
+                  </span>
+                </Tooltip>
+              </td>
+              <td>{item.role}</td>
+              <td>
+                <Tooltip 
+                  content={isRTL ? `آخر تحديث: منذ 5 دقائق` : `Last updated: 5 minutes ago`}
+                >
+                  <Badge variant={item.status === (isRTL ? 'متاح' : 'Available') ? 'success' : 'secondary'}>
+                    {item.status}
+                  </Badge>
+                </Tooltip>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+```
+
+### Truncated Content Tooltips in RTL
+
+For showing full text when content is truncated:
+
+```jsx
+function RTLTruncatedTooltips() {
+  const { isRTL } = useTheme();
+  
+  const longTexts = isRTL ? [
+    'هذا نص طويل جداً يحتوي على معلومات مهمة ولكنه مقطوع في العرض المحدود',
+    'عنوان طويل للمقال يتحدث عن التكنولوجيا الحديثة وتأثيرها على المجتمع',
+    'وصف مفصل للمنتج يشمل جميع الخصائص والمميزات التي يقدمها'
+  ] : [
+    'This is a very long text that contains important information but is truncated in limited display',
+    'Long article title discussing modern technology and its impact on society',
+    'Detailed product description including all features and benefits it offers'
+  ];
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr', maxWidth: '300px' }}>
+      <h3>{isRTL ? 'محتوى مقطوع' : 'Truncated Content'}</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {longTexts.map((text, index) => (
+          <Tooltip key={index} content={text}>
+            <div style={{
+              padding: '8px',
+              border: '1px solid var(--t-color-border-secondary)',
+              borderRadius: '4px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              cursor: 'help'
+            }}>
+              {text}
+            </div>
+          </Tooltip>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+### Position Adjustment in RTL
+
+Tooltip positions adapt automatically to RTL reading patterns:
+
+```jsx
+function RTLPositionTooltips() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ 
+      direction: isRTL ? 'rtl' : 'ltr',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: '16px',
+      padding: '40px'
+    }}>
+      <Tooltip 
+        content={isRTL ? 'أعلى' : 'Top'} 
+        side="top"
+      >
+        <Button>{isRTL ? 'أعلى' : 'Top'}</Button>
+      </Tooltip>
+      
+      <Tooltip 
+        content={isRTL ? 'يمين' : 'Right'} 
+        side={isRTL ? "left" : "right"}
+      >
+        <Button>{isRTL ? 'يمين' : 'Right'}</Button>
+      </Tooltip>
+      
+      <Tooltip 
+        content={isRTL ? 'أسفل' : 'Bottom'} 
+        side="bottom"
+      >
+        <Button>{isRTL ? 'أسفل' : 'Bottom'}</Button>
+      </Tooltip>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and wrapping
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider tooltip positioning** - choose sides that feel natural for RTL reading patterns
+5. **Test in form contexts** where tooltips provide contextual help
+6. **Validate truncated content** to ensure full text is readable in tooltips
+7. **Test multi-line content** to ensure proper line height and spacing
+
+## Implementation
+
+### TooltipProvider
+
+Wrap your application or tooltip group with `TooltipProvider` to enable tooltip functionality:
+
+```tsx
+import { TooltipProvider, Tooltip } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <TooltipProvider>
+      <Tooltip content="Helpful information">
+        <button>Hover me</button>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+```
+
+### Basic Tooltip (Auto-positioning)
+
+```tsx
+<Tooltip content="This explains what the button does">
+  <Button>Action</Button>
+</Tooltip>
+```
+
+### Custom Positioning
+
+```tsx
+<Tooltip
+  content="Tooltip content"
+  side="right"
+  align="start"
+  sideOffset={12}
+>
+  <Button>Positioned tooltip</Button>
+</Tooltip>
+```
+
+### Disabled State
+
+```tsx
+<Tooltip content="This won't show" disabled>
+  <Button>Disabled tooltip</Button>
+</Tooltip>
+```
+
+## Accessibility
+
+- Tooltips are announced by screen readers when the trigger receives focus
+- Use `aria-label` on trigger elements when the tooltip provides essential information
+- Ensure tooltip content is concise and meaningful
+- Tooltips automatically hide when focus leaves the trigger element
+
+## Props
+
+<ArgTypes of={TooltipStories} />
+
+## Design Tokens
+
+The tooltip component uses the following design tokens:
+
+- `--t-color-overlay-dark-85`: Background color (semi-transparent dark)
+- `--color-text-on-bg-fill`: Text color (white)
+- `--t-typography-body-sm-default`: Typography (font family, size, weight)
+- `--t-font-family-primary`: Font family for LTR text
+- `--t-font-family-arabic`: Font family for RTL text
+- `--t-space-200`: Internal padding
+- `--t-border-radius-200`: Border radius

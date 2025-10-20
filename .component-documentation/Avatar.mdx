@@ -1,0 +1,423 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as AvatarStories from './Avatar.stories';
+import { Avatar } from './Avatar';
+
+<Meta of={AvatarStories} />
+
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-57)
+- With Image (Lines 27-37): Profile pictures
+- With Initial (Lines 39-48): First letter display
+- With Fallback Icon (Lines 50-56): Default user icon
+
+🎭 AVATAR TYPES (Lines 58-98)
+- Image Avatar (Lines 62-74): User profile pictures
+- Initial Avatar (Lines 76-87): Name first letter
+- Icon Avatar (Lines 89-97): Default fallback
+
+📏 SIZES (Lines 99-117)
+- Four sizes: sm (24px), md (32px), lg (40px), xl (64px)
+- Use cases and dimensions table
+
+⚠️ ERROR HANDLING (Lines 119-143)
+- Image loading states and fallbacks
+- Custom delay with delayMs prop
+- Automatic fallback behavior
+
+🌍 INTERNATIONALIZATION (Lines 145-161)
+- RTL language support
+- Arabic text handling
+- Proper alignment for all languages
+
+💼 USE CASES (Lines 163-243)
+- User Profiles (Lines 165-180): Profile displays
+- Comment Sections (Lines 182-196): Discussion threads
+- User Lists (Lines 198-214): Directory listings
+- Avatar Groups (Lines 216-243): Multiple user display
+
+♿ ACCESSIBILITY (Lines 245-251)
+- Alt text requirements
+- Radix UI accessibility features
+- Screen reader support
+
+⚙️ TECHNICAL DETAILS (Lines 253-289)
+- CSS Variables (Lines 255-269): Design tokens used
+- Architecture (Lines 271-285): Radix UI foundation
+- Browser Support (Lines 287-289)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Image avatar: Lines 32-36 (type="image", src, alt)
+- Initial avatar: Lines 44-47 (type="initial", initial="U")
+- Icon avatar: Line 55 (type="icon")
+- Different sizes: Lines 106-109
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Avatar component capabilities and patterns.
+
+
+# Avatar Component
+
+The Avatar component displays a user's profile picture, initials, or a fallback icon when no image or initial is available.
+
+## Overview
+
+The Avatar component is used to represent people in the interface, displaying either a profile image, the user's initial, or a generic user icon as a fallback. It supports multiple sizes and handles image loading states.
+
+## Import
+
+```jsx
+import { Avatar } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Avatar} />
+
+## Basic Usage
+
+### With Image
+
+<Canvas of={AvatarStories.WithImage} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  alt="User profile picture"
+/>
+```
+
+### With Initial
+
+<Canvas of={AvatarStories.WithInitial} />
+
+```jsx
+<Avatar 
+  type="initial"
+  initial="U"
+/>
+```
+
+### With Fallback Icon
+
+<Canvas of={AvatarStories.WithIcon} />
+
+```jsx
+<Avatar type="icon" />
+```
+
+## Types
+
+The Avatar component supports three types:
+
+### Image Avatar
+
+Displays a user's profile picture.
+
+<Canvas of={AvatarStories.WithImage} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  alt="User profile picture"
+/>
+```
+
+### Initial Avatar
+
+Displays the first letter of a user's name.
+
+<Canvas of={AvatarStories.WithInitial} />
+
+```jsx
+<Avatar 
+  type="initial"
+  initial="U"
+/>
+```
+
+### Icon Avatar
+
+Displays a default user icon when no image or initial is available.
+
+<Canvas of={AvatarStories.WithIcon} />
+
+```jsx
+<Avatar type="icon" />
+```
+
+## Sizes
+
+The Avatar component comes in four sizes:
+
+<Canvas of={AvatarStories.SizeVariants} />
+
+```jsx
+<Avatar size="sm" type="initial" initial="S" />
+<Avatar size="md" type="initial" initial="M" />
+<Avatar size="lg" type="initial" initial="L" />
+<Avatar size="xl" type="initial" initial="X" />
+```
+
+| Size | Dimensions | Use Case |
+|------|------------|----------|
+| `sm` | 24px | Dense UI elements, compact lists |
+| `md` | 32px | Default size, most UI contexts |
+| `lg` | 40px | Featured content, headers |
+| `xl` | 64px | Profile pages, detailed views |
+
+## Handling Image Loading and Errors
+
+The Avatar component automatically handles image loading states and errors:
+
+<Canvas of={AvatarStories.WithFallback} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://invalid-image-url.com/not-found.jpg"
+  alt="User profile with fallback"
+  // Will show fallback icon after 600ms
+/>
+```
+
+You can customize the delay before showing the fallback with the `delayMs` prop:
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://example.com/profile.jpg"
+  alt="User profile"
+  delayMs={1000} // Wait 1 second before showing fallback
+/>
+```
+
+## Internationalization and RTL Support
+
+The Avatar component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and Arabic text rendering.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Avatar } from 'tagaddod-design-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Avatar 
+        type="initial"
+        initial="أ"
+        size="lg"
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Avatar component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font for initial avatars
+2. **Line Height**: Applies appropriate line height for Arabic text rendering in initial display
+3. **Layout Direction**: Maintains proper positioning in RTL mode
+4. **Text Alignment**: Ensures proper vertical centering of Arabic initials
+5. **Fallback Behavior**: Consistent fallback handling in both LTR and RTL modes
+
+### Arabic Initial Handling
+
+The Avatar component handles Arabic initials with proper font and line height adjustments:
+
+<Canvas of={AvatarStories.WithArabicInitial} />
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+
+function UserAvatar({ user }) {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Avatar 
+      type={user.profileImage ? "image" : "initial"}
+      src={user.profileImage}
+      initial={isRTL ? user.arabicName?.charAt(0) : user.englishName?.charAt(0)}
+      alt={isRTL ? `صورة ${user.arabicName}` : `${user.englishName}'s profile picture`}
+      size="md"
+    />
+  );
+}
+```
+
+### RTL Layout Examples
+
+For user profiles in RTL layouts:
+
+```jsx
+function UserProfile() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Avatar 
+        type="initial"
+        initial={isRTL ? "م" : "M"}
+        size="lg"
+      />
+      <div style={{ textAlign: isRTL ? 'right' : 'left' }}>
+        <h3>{isRTL ? 'محمد أحمد' : 'Mohamed Ahmed'}</h3>
+        <p>{isRTL ? 'مدير المنتج' : 'Product Manager'}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider context-aware initials** - use Arabic names for Arabic initials in RTL mode
+5. **Provide proper alt text** in the appropriate language for accessibility
+6. **Test avatar groups** in RTL mode to ensure proper spacing and alignment
+
+## Use Cases
+
+### User Profiles
+
+```jsx
+<div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+  <Avatar 
+    type="image"
+    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+    alt="User profile"
+    size="lg"
+  />
+  <div>
+    <h3>John Doe</h3>
+    <p>Product Manager</p>
+  </div>
+</div>
+```
+
+### Comment Sections
+
+```jsx
+<div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+  <Avatar 
+    type="initial"
+    initial="J"
+    size="md"
+  />
+  <div>
+    <p><strong>John Doe</strong> • 2 hours ago</p>
+    <p>This looks great! I'm excited to try it out.</p>
+  </div>
+</div>
+```
+
+### User Lists
+
+```jsx
+<ul style={{ listStyle: 'none', padding: 0 }}>
+  {users.map(user => (
+    <li key={user.id} style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+      <Avatar 
+        type={user.avatar ? "image" : "initial"}
+        src={user.avatar}
+        initial={user.name.charAt(0)}
+        size="sm"
+      />
+      <span>{user.name}</span>
+    </li>
+  ))}
+</ul>
+```
+
+### Avatar Groups
+
+```jsx
+<div style={{ display: 'flex' }}>
+  {users.slice(0, 3).map((user, index) => (
+    <div
+      key={user.id}
+      style={{ marginLeft: index === 0 ? 0 : '-8px' }}
+    >
+      <Avatar 
+        type={user.avatar ? "image" : "initial"}
+        src={user.avatar}
+        initial={user.name.charAt(0)}
+        size="md"
+      />
+    </div>
+  ))}
+  {users.length > 3 && (
+    <div style={{ marginLeft: '-8px' }}>
+      <Avatar 
+        type="initial"
+        initial={`+${users.length - 3}`}
+        size="md"
+      />
+    </div>
+  )}
+</div>
+```
+
+## Accessibility
+
+- Include meaningful `alt` text for image avatars to describe the user
+- The component uses Radix UI's Avatar primitive, which provides accessible fallbacks
+- Initial avatars are properly labeled for screen readers through the Avatar implementation
+- Focus states are properly managed for keyboard navigation
+- Color contrast meets WCAG standards for readability of initials
+
+## Implementation Details
+
+### CSS Variables
+
+The Avatar component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-size-*` | Dimensions for different avatar sizes |
+| `--t-border-radius-full` | Circular border radius |
+| `--t-color-fill-brand-secondary` | Background color for non-image avatars |
+| `--t-color-text-primary` | Text color for initials |
+| `--t-font-family-primary` | Font family for initial text |
+| `--t-font-weight-medium` | Font weight for initial text |
+| `--t-font-size-*` | Font sizes for different avatar sizes |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The component is built on Radix UI's Avatar component which provides:
+
+1. Proper handling of image loading states
+2. Automatic fallback rendering when images fail to load
+3. Accessible implementation with proper ARIA attributes
+
+The Tagaddod implementation extends this with:
+
+1. Design system integration with tokens
+2. Support for multiple sizes
+3. Initial avatar option with proper text rendering
+4. RTL language support
+5. Consistent styling across all variants
+
+### Browser Support
+
+The Avatar component is compatible with all modern browsers and includes RTL language support.

@@ -1,0 +1,1047 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as CardStories from './Card.stories';
+import { Card } from './Card';
+import { Button } from '../Button/Button';
+
+<Meta of={CardStories} />
+
+# 🚨 AI CODING AGENT - CRITICAL IMPLEMENTATION GUIDE 🚨
+
+## CARD COMPONENT ARCHITECTURE - READ FIRST
+```
+┌─────────────────────────────────────┐
+│ HEADER (Optional Props)             │ ← header prop for titles/actions
+├─────────────────────────────────────┤
+│ BODY (Your Content Goes Here)      │ ← children prop ONLY
+├─────────────────────────────────────┤
+│ FOOTER (Optional Props)             │ ← footer prop for actions/metadata
+└─────────────────────────────────────┘
+```
+
+## ❌ CRITICAL MISTAKES TO AVOID
+1. **❌ NEVER create manual header/footer divs in children**
+2. **❌ NEVER add styling wrappers around entire content**
+3. **❌ NEVER use custom padding containers unless necessary**
+4. **❌ NEVER create `<div className="card-header">` in children**
+5. **❌ NEVER ignore the equal padding principle**
+
+## ✅ CORRECT IMPLEMENTATION PATTERN
+```jsx
+// ✅ CORRECT - Basic card with equal padding on all sides
+<Card>
+  <p>Simple content with automatic equal padding (top, bottom, left, right)</p>
+</Card>
+
+// ✅ CORRECT - Card with header and footer (props-based)
+<Card
+  header="Card Title"              // Use header prop
+  footer="Footer content"          // Use footer prop
+>
+  {/* ONLY main content goes here */}
+  <div>Main card content</div>
+  {/* NO HEADERS OR FOOTERS HERE */}
+</Card>
+
+// ✅ CORRECT - Interactive card with proper hover effects
+<Card
+  variant="elevated"
+  interactive={true}              // 0.2s ease-in-out + surface-hover bg
+  header="Interactive Card"
+>
+  <p>Content with smooth hover transitions</p>
+</Card>
+
+// ✅ CORRECT - Clickable card with drop shadow
+<Card
+  variant="outlined"
+  clickable={true}               // Enhanced hover: shadow + 2px lift
+  onClick={handleClick}
+  header="Clickable Card"
+>
+  <p>Click anywhere on this card</p>
+</Card>
+
+// ❌ WRONG - Manual header/footer creation
+<Card>
+  <div className="header">Title</div>    {/* ❌ DON'T DO THIS */}
+  <div>Content</div>
+  <div className="footer">Actions</div>  {/* ❌ DON'T DO THIS */}
+</Card>
+```
+
+## 🎯 AI IMPLEMENTATION CHECKLIST
+- [ ] Use `children` for main content ONLY
+- [ ] Use `header` prop for titles, not manual divs
+- [ ] Use `footer` prop for actions/metadata, not manual divs
+- [ ] **Remember: Equal 12px padding on all sides by default (var(--t-space-300))**
+- [ ] Use `interactive={true}` for hover effects without drop shadow
+- [ ] Use `clickable={true}` for enhanced hover with drop shadow + lift
+- [ ] Choose appropriate variant: `elevated` (default), `outlined`, `ghost`
+- [ ] All animations are 0.2s ease-in-out automatically
+
+## 🔑 KEY CARD PRINCIPLES
+1. **Equal 12px Padding**: All cards use 12px (var(--t-space-300)) on all sides regardless of size
+2. **0.2s Transitions**: All hover effects use 0.2s ease-in-out for smooth animations
+3. **Surface-Hover Background**: Interactive/clickable cards get background change on hover
+4. **Drop Shadow Enhancement**: Only clickable cards get drop shadow on hover
+5. **Composition Pattern**: Header/footer via props, content via children
+6. **Size Affects Gaps**: Small/Medium/Large control internal spacing, not padding
+
+---
+
+# Card Component
+
+The Card component is a versatile container that serves as a flexible building block for any content. It provides optional header and footer sections while maintaining a consistent visual design with equal padding on all sides.
+
+## Import
+```jsx
+import { Card } from 'tagaddod-design-react';
+```
+
+## Props
+<ArgTypes of={Card} />
+
+## Basic Usage
+<Canvas of={CardStories.Default} />
+
+```jsx
+// DEFAULT: Simple card with equal padding
+<Card>
+  <p>Content with automatic equal padding on all sides</p>
+</Card>
+```
+
+## ❌ COMMON AI AGENT MISTAKES
+
+### Mistake 1: Manual Header/Footer Creation
+```jsx
+// ❌ WRONG - Don't create manual headers/footers
+<Card>
+  <div style={{fontWeight: 'bold', marginBottom: '16px'}}>Manual Header</div>
+  <p>Content here</p>
+  <div style={{marginTop: '16px', borderTop: '1px solid #ccc'}}>Manual Footer</div>
+</Card>
+
+// ✅ CORRECT - Use header and footer props
+<Card
+  header="Proper Header"          // Use header prop
+  footer="Proper Footer"          // Use footer prop
+>
+  <p>Content here</p>
+</Card>
+```
+
+### Mistake 2: Ignoring Interactive vs Clickable Differences
+```jsx
+// ❌ WRONG - Confusing interactive and clickable
+<Card interactive={true} onClick={handleClick}>
+  <p>This won't get proper clickable effects</p>
+</Card>
+
+// ✅ CORRECT - Interactive for hover only (no drop shadow)
+<Card interactive={true}>
+  <p>Hover effects: surface-hover background, 1px lift, 0.2s ease-in-out</p>
+</Card>
+
+// ✅ CORRECT - Clickable for full interaction (with drop shadow)
+<Card clickable={true} onClick={handleClick}>
+  <p>Enhanced hover: surface-hover background, drop shadow, 2px lift, 0.2s ease-in-out</p>
+</Card>
+```
+
+### Mistake 3: Breaking Equal Padding Principle
+```jsx
+// ❌ WRONG - Adding unequal padding
+<Card>
+  <div style={{padding: '20px 10px 5px 15px'}}>  {/* Unequal padding */}
+    <p>Inconsistent spacing</p>
+  </div>
+</Card>
+
+// ✅ CORRECT - Let Card handle equal padding
+<Card>
+  <p>Card automatically provides equal padding on all sides</p>
+</Card>
+
+// ✅ CORRECT - Custom equal padding if needed
+<Card containerPadding="24px">  {/* Equal on all sides */}
+  <p>Custom but still equal padding</p>
+</Card>
+```
+
+## STEP-BY-STEP IMPLEMENTATION
+
+### Step 1: Basic Content Card
+```jsx
+// Start with simple content - Card provides equal padding automatically
+<Card variant="elevated">
+  <div>
+    <h3>Dashboard Overview</h3>
+    <p>Key metrics and statistics for your application.</p>
+  </div>
+</Card>
+```
+
+### Step 2: Add Header and Footer
+```jsx
+// Add structure with header and footer props
+<Card
+  variant="elevated"
+  header={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconDashboard size={20} />
+      <span>Dashboard Overview</span>
+    </div>
+  }
+  footer={
+    <Button variant="primary" size="small">
+      View Details
+    </Button>
+  }
+>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+    <div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>1,234</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Users</div>
+    </div>
+    <div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>567</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Orders</div>
+    </div>
+    <div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>89%</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Uptime</div>
+    </div>
+  </div>
+</Card>
+```
+
+### Step 3: Make It Interactive
+```jsx
+// Add smooth hover effects with 0.2s ease-in-out
+<Card
+  variant="outlined"
+  interactive={true}                    // Surface-hover bg + 1px lift
+  header="Interactive Analytics"
+  footer="Hover to see smooth animation"
+>
+  <div>
+    <p>This card responds to hover with:</p>
+    <ul>
+      <li>Surface-hover background color</li>
+      <li>1px upward transform</li>
+      <li>0.2s ease-in-out transition</li>
+      <li>No drop shadow (interactive only)</li>
+    </ul>
+  </div>
+</Card>
+```
+
+### Step 4: Make It Clickable
+```jsx
+// Add enhanced clickable effects
+<Card
+  variant="elevated"
+  clickable={true}                      // Enhanced hover + drop shadow
+  onClick={() => navigateToDetails()}
+  header="Clickable Navigation Card"
+  footer={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <span>Click anywhere</span>
+      <IconArrowRight size={16} />
+    </div>
+  }
+>
+  <div>
+    <p>This card is fully clickable with enhanced effects:</p>
+    <ul>
+      <li>Surface-hover background color</li>
+      <li>Drop shadow (var(--t-shadow-200))</li>
+      <li>2px upward transform</li>
+      <li>0.2s ease-in-out transition</li>
+      <li>Active state: 1px transform with 0.1s transition</li>
+    </ul>
+  </div>
+</Card>
+```
+
+## Animation and Hover Effects
+
+### Interactive Cards (Surface Hover Only)
+<Canvas of={CardStories.Interactive} />
+```jsx
+// Interactive: Hover effects without drop shadow
+<Card
+  variant="elevated"
+  interactive={true}                    // Surface-hover + 1px lift
+  header="Interactive Card"
+>
+  <p>Hover for smooth animation: surface-hover background, 1px lift, 0.2s ease-in-out</p>
+</Card>
+```
+
+### Clickable Cards (Enhanced Hover with Drop Shadow)
+<Canvas of={CardStories.ClickableCards} />
+```jsx
+// Clickable: Full interaction effects
+<Card
+  variant="outlined"
+  clickable={true}                      // Enhanced hover + drop shadow
+  onClick={() => handleCardClick()}
+  header="Clickable Navigation"
+  footer={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <span>Click anywhere</span>
+      <IconArrowRight size={16} />
+    </div>
+  }
+>
+  <p>Enhanced hover: surface-hover background, drop shadow, 2px lift, 0.2s ease-in-out</p>
+</Card>
+```
+
+### Animation Technical Details
+<Canvas of={CardStories.AnimationShowcase} />
+
+**Hover Effects:**
+- **Interactive Cards**: `background-color: var(--t-color-surface-hover)`, `transform: translateY(-1px)`, no shadow
+- **Clickable Cards**: `background-color: var(--t-color-surface-hover)`, `transform: translateY(-2px)`, `box-shadow: var(--t-shadow-200)`
+- **All Transitions**: `0.2s ease-in-out`
+- **Active State**: `transform: translateY(-1px)`, `transition: 0.1s ease-in-out`
+
+## Equal Padding Design
+
+### Default Equal Padding Behavior
+<Canvas of={CardStories.PaddingDemo} />
+
+The Card component provides **equal padding on all sides** by default:
+- **All sizes**: `12px` (var(--t-space-300)) on all sides (top, bottom, left, right)
+- **Consistent spacing**: Same padding regardless of size for predictable layouts
+- **Design token based**: Uses `var(--t-space-300)` which equals `0.75rem` (12px)
+
+```jsx
+// ✅ CORRECT - Equal padding automatically applied
+<Card size="medium">
+  <p>This content has exactly 12px padding on all four sides</p>
+</Card>
+
+// ✅ CORRECT - All sizes use the same 12px base padding
+<Card size="small">
+  <p>Small cards also have 12px padding on all sides</p>
+</Card>
+
+<Card size="large">
+  <p>Large cards maintain the same 12px padding for consistency</p>
+</Card>
+```
+
+### Custom Padding Control
+<Canvas of={CardStories.CustomPadding} />
+
+```jsx
+// Custom container padding (affects entire card)
+<Card containerPadding="24px">  {/* Equal 24px on all sides */}
+  <p>Custom equal padding</p>
+</Card>
+
+// Custom content padding (affects header, body, footer sections)
+<Card
+  header="Custom Content Padding"
+  contentPadding="20px 16px"        {/* 20px vertical, 16px horizontal */}
+>
+  <p>Different content section padding</p>
+</Card>
+
+// Mixed control for advanced layouts
+<Card
+  containerPadding="0"              {/* No outer padding */}
+  contentPadding="32px 24px 16px 24px"  {/* Top, right, bottom, left */}
+  header="Precise Control"
+>
+  <p>Advanced padding control for specific layouts</p>
+</Card>
+```
+
+## Variants and Sizes
+
+### Visual Variants
+<Canvas of={CardStories.Variants} />
+
+```jsx
+// Elevated: Default with shadow and subtle border
+<Card variant="elevated">
+  <p>Professional look with elevation</p>
+</Card>
+
+// Outlined: Clean with visible border, no shadow
+<Card variant="outlined">
+  <p>Clean, minimal appearance</p>
+</Card>
+
+// Ghost: Minimal with no border or shadow
+<Card variant="ghost">
+  <p>Subtle, nearly invisible until interaction</p>
+</Card>
+```
+
+### Size Options
+<Canvas of={CardStories.Sizes} />
+
+```jsx
+// Small: Same base padding (12px), compact gaps
+<Card size="small" header="Compact">
+  <p>Tight layouts and sidebars</p>
+</Card>
+
+// Medium: Same base padding (12px), standard gaps
+<Card size="medium" header="Standard">
+  <p>Most common use case</p>
+</Card>
+
+// Large: Same base padding (12px), generous gaps
+<Card size="large" header="Spacious">
+  <p>Prominent content areas</p>
+</Card>
+```
+
+## Component Integration Examples
+
+### Analytics Dashboard
+<Canvas of={CardStories.AnalyticsCard} />
+
+```jsx
+<Card
+  variant="elevated"
+  header={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconActivity size={20} />
+      <span>Analytics Overview</span>
+    </div>
+  }
+  footer={
+    <Button variant="plain" size="small" suffixIcon={<IconArrowRight size={14} />}>
+      View Details
+    </Button>
+  }
+>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center' }}>
+    <div>
+      <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>1,234</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Total Users</div>
+    </div>
+    <div>
+      <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>567</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Active Today</div>
+    </div>
+    <div>
+      <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>89%</div>
+      <div style={{ color: 'var(--t-color-text-secondary)' }}>Engagement</div>
+    </div>
+  </div>
+</Card>
+```
+
+### User Profile Management
+<Canvas of={CardStories.UserProfileCard} />
+
+```jsx
+<Card
+  variant="outlined"
+  clickable={true}
+  onClick={() => navigateToProfile()}
+  header={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Avatar size="medium" />
+      <div>
+        <div style={{ fontWeight: 'bold' }}>Sarah Johnson</div>
+        <div style={{ fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>Product Manager</div>
+      </div>
+      <Badge variant="success" style={{ marginLeft: 'auto' }}>Online</Badge>
+    </div>
+  }
+  footer={
+    <div style={{ display: 'flex', gap: '8px' }}>
+      <Button variant="primary" size="small">Message</Button>
+      <Button variant="outlined" size="small">View Profile</Button>
+    </div>
+  }
+>
+  <p>Experienced product manager with 8+ years in tech. Currently leading the design system initiative.</p>
+</Card>
+```
+
+### Settings and Configuration
+<Canvas of={CardStories.SettingsCard} />
+
+```jsx
+<Card
+  variant="elevated"
+  header={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconSettings size={20} />
+      <span>Account Settings</span>
+    </div>
+  }
+>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Email Notifications</span>
+      <Button variant="outlined" size="small">Configure</Button>
+    </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Privacy Settings</span>
+      <Button variant="outlined" size="small">Manage</Button>
+    </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span>Security</span>
+      <Button variant="outlined" size="small">Update</Button>
+    </div>
+  </div>
+</Card>
+```
+
+## Internationalization and RTL Support
+
+The Card component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Card } from 'tagaddod-design-react';
+import { IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Card header="رأس البطاقة">
+        محتوى البطاقة باللغة العربية
+      </Card>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Card component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts icon placement for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
+
+<Canvas of={CardStories.RTLSupport} />
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalCard() {
+  const { isRTL } = useTheme();
+
+  const ArrowIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+  return (
+    <Card
+      header={isRTL ? 'الإعدادات' : 'Settings'}
+      footer={
+        <Button suffixIcon={<ArrowIcon />}>
+          {isRTL ? 'التالي' : 'Next'}
+        </Button>
+      }
+    >
+      {isRTL ? 'محتوى البطاقة' : 'Card content'}
+    </Card>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Action
+```jsx
+// English: Next → (arrow points right)
+// Arabic: التالي ← (arrow points left, matching RTL reading direction)
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<Card
+  footer={
+    <Button variant="primary" suffixIcon={<NextIcon />}>
+      {isRTL ? 'التالي' : 'Next'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+#### "Back" Action
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<Card
+  footer={
+    <Button variant="outlined" prefixIcon={<BackIcon />}>
+      {isRTL ? 'رجوع' : 'Back'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+#### "More Info" or "Expand" Action
+```jsx
+// For expand/collapse or "more info" actions
+const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
+
+<Card
+  footer={
+    <Button variant="plain" suffixIcon={<ExpandIcon />}>
+      {isRTL ? 'المزيد' : 'More'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+6. **Direction follows reading flow** - not physical direction on screen
+
+## Common Use Cases
+
+### 1. Dashboard Analytics Cards
+```jsx
+function DashboardMetrics() {
+  const metrics = [
+    { title: 'Total Users', value: '12,345', change: '+5.2%' },
+    { title: 'Revenue', value: '$89,432', change: '+12.8%' },
+    { title: 'Conversion', value: '3.4%', change: '-0.8%' }
+  ];
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+      {metrics.map((metric) => (
+        <Card
+          key={metric.title}
+          variant="elevated"
+          size="medium"
+          clickable={true}
+          onClick={() => navigateToMetricDetails(metric.title)}
+          header={
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <IconTrendingUp size={20} />
+              <span>{metric.title}</span>
+            </div>
+          }
+          footer={
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: '0.875rem'
+            }}>
+              <span style={{ color: 'var(--t-color-text-tertiary)' }}>vs last month</span>
+              <span style={{
+                color: metric.change.startsWith('+') ? 'var(--t-color-text-success)' : 'var(--t-color-text-error)'
+              }}>
+                {metric.change}
+              </span>
+            </div>
+          }
+        >
+          <div style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>
+            {metric.value}
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+```
+
+### 2. User Profile/Team Member Cards
+```jsx
+function TeamMemberCard({ member }) {
+  return (
+    <Card
+      variant="outlined"
+      size="medium"
+      interactive={true}
+      header={
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Avatar size="medium" src={member.avatar} />
+          <div>
+            <div style={{ fontWeight: 'bold' }}>{member.name}</div>
+            <div style={{ fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>
+              {member.role}
+            </div>
+          </div>
+          <Badge
+            variant={member.status === 'online' ? 'success' : 'secondary'}
+            style={{ marginLeft: 'auto' }}
+          >
+            {member.status}
+          </Badge>
+        </div>
+      }
+      footer={
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button variant="primary" size="small" onClick={() => startChat(member.id)}>
+            Message
+          </Button>
+          <Button variant="outlined" size="small" onClick={() => viewProfile(member.id)}>
+            View Profile
+          </Button>
+        </div>
+      }
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <p style={{ margin: 0, fontSize: '0.875rem' }}>{member.bio}</p>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {member.skills.map((skill) => (
+            <Badge key={skill} variant="secondary" size="small">{skill}</Badge>
+          ))}
+        </div>
+      </div>
+    </Card>
+  );
+}
+```
+
+### 3. Form Section Cards
+```jsx
+function SettingsForm() {
+  const [settings, setSettings] = useState({
+    notifications: true,
+    darkMode: false,
+    language: 'en'
+  });
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '600px' }}>
+      <Card
+        variant="elevated"
+        size="large"
+        header={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <IconSettings size={20} />
+            <span>Account Preferences</span>
+          </div>
+        }
+        footer={
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+            <Button variant="outlined" onClick={() => resetSettings()}>Reset</Button>
+            <Button variant="primary" onClick={() => saveSettings(settings)}>Save Changes</Button>
+          </div>
+        }
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontWeight: '500' }}>Email Notifications</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>
+                Receive updates and alerts via email
+              </div>
+            </div>
+            <Switch
+              checked={settings.notifications}
+              onCheckedChange={(checked) => setSettings(prev => ({ ...prev, notifications: checked }))}
+            />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontWeight: '500' }}>Dark Mode</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>
+                Use dark theme for better night viewing
+              </div>
+            </div>
+            <Switch
+              checked={settings.darkMode}
+              onCheckedChange={(checked) => setSettings(prev => ({ ...prev, darkMode: checked }))}
+            />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontWeight: '500' }}>Language</div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>
+                Choose your preferred language
+              </div>
+            </div>
+            <Select
+              value={settings.language}
+              onValueChange={(value) => setSettings(prev => ({ ...prev, language: value }))}
+              options={[
+                { value: 'en', label: 'English' },
+                { value: 'ar', label: 'العربية' },
+                { value: 'es', label: 'Español' }
+              ]}
+            />
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+```
+
+### 4. Action/CTA Cards
+```jsx
+function ActionCards() {
+  const actions = [
+    {
+      icon: IconPlus,
+      title: 'Create New Project',
+      description: 'Start a new project from scratch or use a template',
+      action: 'Get Started',
+      onClick: () => navigateToProjectCreation()
+    },
+    {
+      icon: IconUpload,
+      title: 'Import Existing',
+      description: 'Import data from your existing tools and services',
+      action: 'Import Now',
+      onClick: () => navigateToImport()
+    },
+    {
+      icon: IconUsers,
+      title: 'Invite Team',
+      description: 'Collaborate with team members on projects',
+      action: 'Send Invites',
+      onClick: () => navigateToInvites()
+    }
+  ];
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+      {actions.map((action) => {
+        const IconComponent = action.icon;
+        return (
+          <Card
+            key={action.title}
+            variant="ghost"
+            size="large"
+            clickable={true}
+            onClick={action.onClick}
+            header={
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  padding: '8px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--t-color-surface-brand)',
+                  color: 'var(--t-color-text-inverse)'
+                }}>
+                  <IconComponent size={20} />
+                </div>
+                <span style={{ fontWeight: '600' }}>{action.title}</span>
+              </div>
+            }
+            footer={
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--t-color-text-brand)' }}>
+                <span style={{ fontWeight: '500' }}>{action.action}</span>
+                <IconArrowRight size={16} />
+              </div>
+            }
+          >
+            <p style={{ margin: 0, color: 'var(--t-color-text-secondary)' }}>
+              {action.description}
+            </p>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+### 5. Content Preview Cards
+```jsx
+function ContentPreviewCard({ article }) {
+  return (
+    <Card
+      variant="elevated"
+      size="medium"
+      clickable={true}
+      onClick={() => navigateToArticle(article.id)}
+      header={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ margin: 0, marginBottom: '4px' }}>{article.title}</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', color: 'var(--t-color-text-secondary)' }}>
+              <span>By {article.author}</span>
+              <span>•</span>
+              <span>{article.publishDate}</span>
+            </div>
+          </div>
+          <Badge variant={article.status === 'published' ? 'success' : 'warning'}>
+            {article.status}
+          </Badge>
+        </div>
+      }
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {article.tags.map((tag) => (
+              <Badge key={tag} variant="secondary" size="small">{tag}</Badge>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', color: 'var(--t-color-text-tertiary)' }}>
+            <IconEye size={14} />
+            <span>{article.views}</span>
+          </div>
+        </div>
+      }
+    >
+      <p style={{ margin: 0, lineHeight: 1.5 }}>
+        {article.excerpt}
+      </p>
+    </Card>
+  );
+}
+```
+
+## Layout Patterns
+
+### Full Width Layout
+<Canvas of={CardStories.FullWidth} />
+
+```jsx
+// Full width cards for dashboard headers
+<Card
+  fullWidth={true}
+  variant="outlined"
+  size="large"
+  header="Dashboard Overview"
+  footer="Last updated 5 minutes ago"
+>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+    {/* Dashboard content */}
+  </div>
+</Card>
+```
+
+### Grid Layout
+<Canvas of={CardStories.GridLayout} />
+
+```jsx
+// Responsive grid layout
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '16px'
+}}>
+  <Card variant="elevated" header="Metric 1">
+    <div>42 Active Projects</div>
+  </Card>
+  <Card variant="outlined" header="Metric 2">
+    <div>15 Updates Today</div>
+  </Card>
+  <Card variant="ghost" header="Metric 3">
+    <div>98% Uptime</div>
+  </Card>
+</div>
+```
+
+## Component Integration
+
+The Card component works seamlessly with other design system components:
+
+- **Buttons**: For actions in headers and footers
+- **Badges**: For status indicators and tags
+- **Avatars**: For user representation
+- **Icons**: For visual hierarchy and actions
+- **Select/Input**: For embedded forms
+- **Switch/Checkbox**: For settings toggles
+
+## Accessibility
+
+- **Keyboard Navigation**: Interactive and clickable cards are focusable with Tab
+- **Screen Reader Support**: Proper semantic structure with header/body/footer
+- **ARIA Labels**: When clickable, cards include appropriate ARIA attributes
+- **High Contrast**: All text meets WCAG contrast requirements
+- **Reduced Motion**: Respects `prefers-reduced-motion` for animations
+- **Focus Indicators**: Clear focus rings for keyboard navigation
+
+## Performance Considerations
+
+- **React.memo**: Component is optimized to prevent unnecessary re-renders
+- **CSS Modules**: Efficient styling with scoped CSS classes
+- **Minimal DOM**: Clean HTML structure without wrapper elements
+- **Optimized Animations**: Hardware-accelerated transforms for smooth performance
+- **Bundle Size**: Lightweight implementation with tree-shaking support
+
+---
+
+## 🎯 QUICK REFERENCE FOR AI AGENTS
+
+### ✅ DO THIS (DEFAULT):
+```jsx
+// Basic card with equal padding
+<Card>
+  <p>Content with automatic equal padding on all sides</p>
+</Card>
+
+// Card with header and footer (props-based)
+<Card
+  header="Card Title"              // Use header prop
+  footer="Footer content"          // Use footer prop
+>
+  <div>Main content only</div>
+</Card>
+
+// Interactive card (hover effects only)
+<Card
+  interactive={true}              // Surface-hover + 1px lift
+  header="Interactive Card"
+>
+  <p>Hover for smooth animation</p>
+</Card>
+
+// Clickable card (enhanced hover + drop shadow)
+<Card
+  clickable={true}               // Enhanced hover + drop shadow + 2px lift
+  onClick={handleClick}
+  header="Clickable Card"
+>
+  <p>Click anywhere on this card</p>
+</Card>
+```
+
+### ❌ NEVER DO THIS:
+```jsx
+<Card>
+  <div className="header">Title</div>     {/* ❌ Use header prop */}
+  <div>Content</div>
+  <div className="footer">Actions</div>   {/* ❌ Use footer prop */}
+</Card>
+
+<Card interactive={true} onClick={handleClick}>  {/* ❌ Use clickable={true} for clicks */}
+  <p>Wrong interaction pattern</p>
+</Card>
+
+<Card>
+  <div style={{padding: '20px 10px 5px 15px'}}>  {/* ❌ Breaks equal padding */}
+    <p>Unequal padding</p>
+  </div>
+</Card>
+```
+
+**Remember:** Equal 12px padding on all sides (var(--t-space-300)), header/footer via props, 0.2s ease-in-out animations, interactive vs clickable distinction!

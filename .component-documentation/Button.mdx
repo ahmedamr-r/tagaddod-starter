@@ -1,0 +1,596 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ButtonStories from './Button.stories';
+import { Button } from './Button';
+import { IconPlus, IconSearch, IconArrowRight } from '@tabler/icons-react';
+
+<Meta of={ButtonStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-25)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-38)
+- Default implementation
+- Event handling
+
+🎨 VARIANTS (Lines 40-84)
+- Primary (Lines 46-54): Main actions
+- Tonal (Lines 56-64): Alternative actions  
+- Outlined (Lines 66-74): Subtle actions
+- Plain (Lines 76-84): Minimalist style
+
+🌈 TONES (Lines 86-134)
+- Default/Brand (Lines 90-94)
+- Critical (Lines 96-104): Destructive actions
+- Success (Lines 106-114): Positive actions
+- Neutral (Lines 116-124): Standard actions
+- Magic (Lines 126-134): Premium actions
+
+📏 SIZES (Lines 136-166)
+- xLarge (56px), Large (48px), Medium (40px), Small (32px), xSmall (28px)
+- Auto-sizing icons and optimized spacing
+
+⚡ STATES (Lines 168-219)
+- Loading (Lines 170-190): Async operations
+- Disabled (Lines 192-209): Unavailable state
+- Full Width (Lines 211-219): Container-wide buttons
+
+🎭 ICONS (Lines 221-285)
+- Auto-sizing based on button size
+- Prefix icons (Lines 229-239)
+- Suffix icons (Lines 241-251)
+- Both icons (Lines 253-268)
+- Icon-only (Lines 270-285)
+
+🌍 RTL/I18N (Lines 287-393)
+- ThemeProvider integration (Lines 293-315)
+- Automatic RTL adjustments (Lines 317-327) 
+- Directional icon handling (Lines 329-393)
+- Best practices and examples
+
+♿ ACCESSIBILITY (Lines 307-313)
+- Keyboard navigation, ARIA labels
+
+💼 COMMON PATTERNS (Lines 315-356)
+- Form actions (Lines 319-326)
+- Data operations (Lines 328-356)
+
+🔧 CUSTOMIZATION (Lines 358-370)
+- Custom classes and attributes
+
+⚙️ TECHNICAL DETAILS (Lines 372-402)
+- CSS variables (Lines 374-389)
+- Render logic (Lines 391-399)
+- Browser support (Lines 400-402)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic button: Line 32
+- With variants: Lines 53, 63, 73, 83
+- With tones: Lines 103, 113, 123, 133
+- With icons: Lines 236, 248, 260, 278
+- RTL with directional icons: Lines 345, 357, 369
+- Loading state: Line 177
+- Disabled state: Line 199
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Button component capabilities and patterns.
+
+
+# Button Component
+
+The Button component is a versatile UI element that triggers actions or events when clicked by users. It supports various visual styles through variants and tones, accommodates five different sizes with automatic icon scaling, and includes loading states, icons, and full-width layouts.
+
+## Overview
+
+Buttons are primary interactive elements in user interfaces, allowing users to trigger actions, submit forms, navigate, or make selections. The Tagaddod Design System provides a comprehensive Button component with consistent styling, behavior, and automatic icon sizing.
+
+## Import
+
+```jsx
+import { Button } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Button} />
+
+## Basic Usage
+
+<Canvas of={ButtonStories.Default} />
+
+```jsx
+// Default button (primary variant)
+<Button>Button</Button>
+
+// With callback
+<Button onClick={() => console.log('Button clicked')}>
+  Click Me
+</Button>
+```
+
+## Variants
+
+Buttons come in four visual variants that represent different levels of emphasis.
+
+<Canvas of={ButtonStories.AllVariantsAndTones} />
+
+### Primary
+
+Use Primary buttons for the main action in a section or form.
+
+<Canvas of={ButtonStories.Primary} />
+
+```jsx
+<Button variant="primary">Primary Button</Button>
+```
+
+### Tonal
+
+Tonal buttons for alternative or secondary actions with a filled background.
+
+<Canvas of={ButtonStories.Tonal} />
+
+```jsx
+<Button variant="tonal">Tonal Button</Button>
+```
+
+### Outlined
+
+Outlined buttons have a subtle appearance with borders for less prominent actions.
+
+<Canvas of={ButtonStories.Outlined} />
+
+```jsx
+<Button variant="outlined">Outlined Button</Button>
+```
+
+### Plain
+
+Plain buttons are minimalist with no background or border until hovered.
+
+<Canvas of={ButtonStories.Plain} />
+
+```jsx
+<Button variant="plain">Plain Button</Button>
+```
+
+## Tones
+
+Tones provide different color treatments that convey semantic meaning.
+
+### Default (Brand)
+
+The default tone uses brand colors.
+
+<Canvas of={ButtonStories.Default} />
+
+### Critical
+
+Use for destructive or high-risk actions (delete, remove).
+
+<Canvas of={ButtonStories.Critical} />
+
+```jsx
+<Button tone="critical">Critical Button</Button>
+```
+
+### Success
+
+Indicates positive or successful actions.
+
+<Canvas of={ButtonStories.Success} />
+
+```jsx
+<Button tone="success">Success Button</Button>
+```
+
+### Neutral
+
+For standard, non-branded actions.
+
+<Canvas of={ButtonStories.Neutral} />
+
+```jsx
+<Button tone="neutral">Neutral Button</Button>
+```
+
+### Magic
+
+For special or premium actions.
+
+<Canvas of={ButtonStories.Magic} />
+
+```jsx
+<Button tone="magic">Magic Button</Button>
+```
+
+## Sizes
+
+The Button component supports five sizes with automatic icon scaling and optimized spacing:
+
+<Canvas of={ButtonStories.AllSizes} />
+
+| Size | Height | Padding | Font | Icon Size | Gap |
+|------|--------|---------|------|-----------|-----|
+| xLarge | 56px | 24px | body-lg-medium | 20×20px | 6px |
+| large | 48px | 20px | body-md-medium | 16×16px | 6px |
+| medium | 40px | 16px | body-md-medium | 16×16px | 4px |
+| small | 32px | 12px | body-sm-medium | 14×14px | 4px |
+| xSmall | 28px | 10px | caption-lg-medium | 12×12px | 4px |
+
+```jsx
+<Button size="xLarge">X-Large Button</Button>
+<Button size="large">Large Button</Button>
+<Button size="medium">Medium Button</Button>
+<Button size="small">Small Button</Button>
+<Button size="xSmall">X-Small Button</Button>
+```
+
+### Icon Auto-Sizing
+
+Icons automatically resize based on button size - you don't need to specify icon sizes manually:
+
+<Canvas of={ButtonStories.IconButtonAllSizes} />
+
+## States
+
+### Loading
+
+Shows a centered spinner and disables interaction. The button maintains its original width and full opacity during loading state.
+
+<Canvas of={ButtonStories.Loading} />
+
+```jsx
+<Button loading>Loading Button</Button>
+```
+
+#### Loading Variations
+
+<Canvas of={ButtonStories.LoadingVariants} />
+
+#### Loading with Different Sizes
+
+<Canvas of={ButtonStories.LoadingSizes} />
+
+#### Loading with Icons
+
+<Canvas of={ButtonStories.LoadingWithIcons} />
+
+### Disabled
+
+Indicates that a button action is unavailable. Each variant has a specific disabled appearance matching the design system.
+
+<Canvas of={ButtonStories.Disabled} />
+
+```jsx
+<Button disabled>Disabled Button</Button>
+```
+
+#### Disabled Variants
+
+<Canvas of={ButtonStories.DisabledVariants} />
+
+All button variants have specific disabled styles:
+- **Primary**: Light gray background with disabled text color
+- **Tonal**: Transparent background with disabled text color
+- **Outlined**: Transparent background with disabled border and text
+- **Plain**: Transparent background with disabled text color
+
+### Full Width
+
+Stretches the button to 100% of its container's width.
+
+<Canvas of={ButtonStories.FullWidth} />
+
+```jsx
+<Button fullWidth>Full Width Button</Button>
+```
+
+## Icon Usage
+
+Buttons can include icons before (prefix) or after (suffix) the text, or display only an icon. Icons automatically resize based on button size, so you don't need to specify sizes manually.
+
+### With Prefix Icon
+
+<Canvas of={ButtonStories.WithPrefixIcon} />
+
+```jsx
+import { IconPlus } from '@tabler/icons-react';
+
+<Button prefixIcon={<IconPlus />}>
+  Add Item
+</Button>
+```
+
+### With Suffix Icon
+
+<Canvas of={ButtonStories.WithSuffixIcon} />
+
+```jsx
+import { IconArrowRight } from '@tabler/icons-react';
+
+<Button suffixIcon={<IconArrowRight />}>
+  Next Step
+</Button>
+```
+
+### With Both Icons
+
+<Canvas of={ButtonStories.WithBothIcons} />
+
+```jsx
+import { IconSearch, IconArrowRight } from '@tabler/icons-react';
+
+<Button 
+  prefixIcon={<IconSearch />}
+  suffixIcon={<IconArrowRight />}
+>
+  Search Results
+</Button>
+```
+
+### Icon-Only Button
+
+When creating icon-only buttons, always provide an accessible name using `aria-label`. The button will automatically become square and center the icon.
+
+<Canvas of={ButtonStories.IconOnly} />
+
+```jsx
+import { IconPlus } from '@tabler/icons-react';
+
+<Button 
+  prefixIcon={<IconPlus />}
+  aria-label="Add item"
+/>
+```
+
+### Icon Variants
+
+<Canvas of={ButtonStories.IconOnlyVariants} />
+
+## Internationalization and RTL Support
+
+The Button component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Button } from 'tagaddod-design-react';
+import { IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Button prefixIcon={<IconArrowRight />}>
+        زر عربي
+      </Button>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Button component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts icon placement for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Spinner Position**: Maintains proper loading spinner positioning in RTL mode
+5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
+
+<Canvas of={ButtonStories.RtlText} />
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from 'tagaddod-design-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalButton() {
+  const { isRTL } = useTheme();
+  
+  // Use arrow pointing in the correct direction for the language
+  const ArrowIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  
+  return (
+    <Button suffixIcon={<ArrowIcon />}>
+      {isRTL ? 'التالي' : 'Next'}
+    </Button>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Button
+```jsx
+// English: Next → (arrow points right)
+// Arabic: التالي ← (arrow points left, matching RTL reading direction)
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<Button variant="primary" suffixIcon={<NextIcon />}>
+  {isRTL ? 'التالي' : 'Next'}
+</Button>
+```
+
+#### "Back" Button  
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<Button variant="outlined" prefixIcon={<BackIcon />}>
+  {isRTL ? 'رجوع' : 'Back'}
+</Button>
+```
+
+#### "More Info" or "Expand" Button
+```jsx
+// For expand/collapse or "more info" buttons
+const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
+
+<Button variant="plain" suffixIcon={<ExpandIcon />}>
+  {isRTL ? 'المزيد' : 'More'}
+</Button>
+```
+
+### Complete RTL Integration Example
+
+```jsx
+import { ThemeProvider, Button, useTheme } from 'tagaddod-design-react';
+import { 
+  IconArrowLeft, 
+  IconArrowRight, 
+  IconPlus,
+  IconCheck 
+} from '@tabler/icons-react';
+
+function MyApp() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <ButtonGroup />
+    </ThemeProvider>
+  );
+}
+
+function ButtonGroup() {
+  const { isRTL } = useTheme();
+  
+  const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+  
+  return (
+    <div style={{ display: 'flex', gap: '12px', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Button variant="outlined" prefixIcon={<BackIcon />}>
+        {isRTL ? 'رجوع' : 'Back'}
+      </Button>
+      
+      <Button prefixIcon={<IconPlus />}>
+        {isRTL ? 'إضافة عنصر' : 'Add Item'}
+      </Button>
+      
+      <Button variant="primary" tone="success" suffixIcon={<NextIcon />}>
+        {isRTL ? 'التالي' : 'Continue'}
+      </Button>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+
+## Accessibility
+
+- Use semantic HTML button elements with appropriate type attributes (`button`, `submit`, or `reset`)
+- Maintain sufficient color contrast for all states and variants
+- Provide descriptive text or `aria-label` for icon-only buttons
+- Clearly indicate loading and disabled states
+- Support keyboard focus styles and navigation
+
+## Common Use Cases
+
+<Canvas of={ButtonStories.CommonUseCases} />
+
+### Form Actions
+
+```jsx
+<div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
+  <Button variant="outlined">Cancel</Button>
+  <Button variant="primary">Submit</Button>
+</div>
+```
+
+### Data Operations
+
+```jsx
+import { IconPlus, IconEdit, IconTrash } from '@tabler/icons-react';
+
+<div>
+  <Button 
+    variant="primary" 
+    prefixIcon={<IconPlus />}
+  >
+    Add Item
+  </Button>
+  
+  <Button 
+    variant="tonal" 
+    prefixIcon={<IconEdit />}
+  >
+    Edit
+  </Button>
+  
+  <Button 
+    variant="primary" 
+    tone="critical" 
+    prefixIcon={<IconTrash />}
+  >
+    Delete
+  </Button>
+</div>
+```
+
+## Customizing
+
+The Button component accepts additional class names and all standard HTML button attributes.
+
+```jsx
+<Button 
+  className="custom-button-class"
+  data-testid="submit-button"
+  onClick={handleSubmit}
+>
+  Custom Button
+</Button>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Button uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-100/150/250/300/400/500/600` | Padding and spacing |
+| `--t-font-family-primary` | Button text font |
+| `--t-typography-body-*/caption-*` | Typography tokens |
+| `--t-color-fill-*` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-border-radius-200` | Corner radius |
+| `--t-size-700/800/1000/1200/1400` | Height/width dimensions |
+| `--t-duration-base` | Animation duration |
+| `--t-easing-in-out` | Animation timing |
+
+### Rendering Logic
+
+1. The component automatically sizes icons based on button size using a size mapping
+2. Determines if it's icon-only by checking if there are no children but icon props exist
+3. Detects RTL mode from the document direction
+4. Applies appropriate classes and gap spacing based on size
+5. Renders content based on loading state:
+   - **Normal state**: Shows text and appropriately-sized icons
+   - **Loading state**: Renders hidden content to maintain width and displays centered spinner with full opacity
+
+### Browser Support
+
+The Button component is compatible with all modern browsers and includes RTL language support.

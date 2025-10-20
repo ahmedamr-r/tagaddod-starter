@@ -1,0 +1,302 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as DatePickerStories from './DatePicker.stories';
+
+<Meta of={DatePickerStories} />
+
+# DatePicker
+
+A comprehensive date picker component that combines a text input with a calendar popover for intuitive date selection. Built on the TextInput, Popover, and Calendar components with full RTL support and design system integration.
+
+## When to Use
+
+Use the DatePicker component when you need users to:
+- Select single dates (birth dates, appointments, deadlines)
+- Choose multiple dates (event planning, availability selection)
+- Pick date ranges (booking periods, report timeframes)
+- Input dates with validation and formatting
+- Work with forms requiring date input
+
+## Basic Usage
+
+<Canvas of={DatePickerStories.Default} />
+
+## Variants
+
+### Selection Modes
+
+#### Single Date Selection
+The default mode for selecting a single date.
+
+<Canvas of={DatePickerStories.Default} />
+
+#### Multiple Date Selection
+Allow users to select multiple individual dates.
+
+<Canvas of={DatePickerStories.Multiple} />
+
+#### Date Range Selection
+Enable users to select a date range with start and end dates.
+
+<Canvas of={DatePickerStories.Range} />
+
+### Size Variants
+
+DatePicker inherits all size variants from TextInput.
+
+<Canvas of={DatePickerStories.Sizes} />
+
+### Input Behavior
+
+#### Read-Only (Default)
+Prevents manual typing, calendar interaction only.
+
+<Canvas of={DatePickerStories.Default} />
+
+#### Editable
+Allows both manual typing and calendar selection.
+
+<Canvas of={DatePickerStories.Editable} />
+
+## Advanced Features
+
+### Form Integration with Validation
+
+<Canvas of={DatePickerStories.WithValidation} />
+
+### Date Restrictions
+
+Control selectable dates with min/max dates and custom disabled date logic.
+
+<Canvas of={DatePickerStories.WithRestrictions} />
+
+### Disabled Dates
+
+Prevent selection of specific dates (e.g., weekends, holidays).
+
+<Canvas of={DatePickerStories.WithDisabledDates} />
+
+### Custom Date Format
+
+<Canvas of={DatePickerStories.CustomFormat} />
+
+### Complete Form Example
+
+<Canvas of={DatePickerStories.FormIntegration} />
+
+## Internationalization and RTL Support
+
+The DatePicker component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper calendar positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, DatePicker } from 'tagaddod-design-react';
+import { IconCalendar } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <DatePicker
+        label="تاريخ الميلاد"
+        placeholder="اختر التاريخ"
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the DatePicker component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Calendar Positioning**: Adjusts popover alignment for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Icon Positioning**: Maintains proper calendar icon placement in RTL mode
+5. **Date Formatting**: Supports locale-specific date formatting
+
+### RTL Calendar Layout
+
+The calendar within DatePicker maintains standard Gregorian calendar layout in RTL mode, ensuring familiar date selection patterns while applying proper Arabic typography and spacing.
+
+<Canvas of={DatePickerStories.RTLTest} />
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Use standard Gregorian calendar** - no Hijri calendar conversion unless explicitly needed
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Consider date format localization** for Arabic locale display
+5. **Maintain familiar calendar interaction patterns** regardless of text direction
+
+## Popover Positioning
+
+Control where the calendar appears relative to the input.
+
+<Canvas of={DatePickerStories.PopoverPositions} />
+
+## Accessibility
+
+The DatePicker component follows WAI-ARIA guidelines and provides:
+
+### Keyboard Navigation
+- **Tab**: Move focus to the date input
+- **Enter/Space**: Open calendar when focused on input
+- **Arrow Down**: Open calendar when focused on input
+- **Escape**: Close calendar
+- **Arrow Keys**: Navigate calendar dates when open
+- **Enter/Space**: Select date in calendar
+- **Tab**: Navigate through calendar controls
+
+### Screen Reader Support
+- Proper labeling and descriptions
+- Live region announcements for date changes
+- Calendar state announcements (open/closed)
+- Selected date announcements
+- Validation error announcements
+
+### Focus Management
+- Focus returns to input after date selection
+- Visible focus indicators throughout interaction
+- Logical tab order maintenance
+
+### Implementation Examples
+
+```jsx
+// Accessible form integration
+<DatePicker
+  label="Appointment Date"
+  placeholder="Select appointment date"
+  helpText="Choose a date for your appointment"
+  errorMessage={error}
+  required
+  aria-describedby="appointment-help appointment-error"
+/>
+
+// Screen reader optimized
+<DatePicker
+  label="Birth Date"
+  placeholder="MM/DD/YYYY"
+  helpText="Enter or select your date of birth"
+  dateFormat="MM/dd/yyyy"
+/>
+```
+
+## Component Interactions
+
+### With Form Libraries
+
+```jsx
+// React Hook Form integration
+import { Controller } from 'react-hook-form';
+
+<Controller
+  name="birthDate"
+  control={control}
+  rules={{ required: 'Birth date is required' }}
+  render={({ field, fieldState }) => (
+    <DatePicker
+      {...field}
+      label="Birth Date"
+      errorMessage={fieldState.error?.message}
+    />
+  )}
+/>
+
+// Formik integration
+<Field name="appointmentDate">
+  {({ field, meta }) => (
+    <DatePicker
+      {...field}
+      label="Appointment Date"
+      errorMessage={meta.touched && meta.error ? meta.error : ''}
+    />
+  )}
+</Field>
+```
+
+### With Validation Libraries
+
+```jsx
+// With Yup validation
+const schema = yup.object().shape({
+  startDate: yup.date().required('Start date is required'),
+  endDate: yup.date()
+    .min(yup.ref('startDate'), 'End date must be after start date')
+    .required('End date is required')
+});
+
+// With custom validation
+const validateDateRange = (startDate, endDate) => {
+  if (!startDate || !endDate) return 'Both dates are required';
+  if (startDate > endDate) return 'Start date must be before end date';
+  return '';
+};
+```
+
+### Calendar Integration
+
+```jsx
+// Custom calendar configuration
+<DatePicker
+  label="Event Date"
+  calendarProps={{
+    captionLayout: 'dropdown',
+    numberOfMonths: 2,
+    showWeekNumber: true,
+    fixedWeeks: true
+  }}
+/>
+
+// Custom date formatting
+<DatePicker
+  label="Custom Format"
+  dateFormat="dd-MMM-yyyy"
+  formatDate={(date) => format(date, 'do MMMM yyyy')}
+  parseDate={(value) => parse(value, 'dd-MMM-yyyy', new Date())}
+/>
+```
+
+## Props
+
+<ArgTypes of={DatePickerStories} />
+
+## Related Components
+
+- **[TextInput](?path=/docs/components-textinput--docs)** - Base input component
+- **[Calendar](?path=/docs/components-calendar--docs)** - Calendar component used in popover
+- **[Popover](?path=/docs/components-popover--docs)** - Popover component for calendar display
+- **[Select](?path=/docs/components-select--docs)** - Alternative for predefined date options
+
+## Design Tokens
+
+The DatePicker component uses design tokens for consistent styling:
+
+- **Colors**: `--t-color-*` for backgrounds, borders, text, and states
+- **Spacing**: `--t-space-*` for padding, margins, and gaps  
+- **Typography**: `--t-typography-*` for text styles and line heights
+- **Borders**: `--t-border-radius-*` for corner rounding
+- **Shadows**: `--t-shadow-*` for popover elevation
+- **Motion**: `--t-duration-*` and `--t-easing-*` for transitions
+
+## Technical Notes
+
+### Date Handling
+- Uses `date-fns` for date parsing and formatting
+- Supports custom date formats and locales
+- Handles timezone considerations appropriately
+- Validates date input and provides error feedback
+
+### Performance
+- Calendar renders only when opened
+- Efficient date comparison and validation
+- Minimal re-renders with proper memoization
+- Supports large date ranges without performance issues
+
+### Dependencies
+- Requires `react-day-picker` for calendar functionality
+- Requires `date-fns` for date manipulation
+- Built on existing design system components
+- Fully tree-shakeable when unused
