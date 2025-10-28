@@ -65,7 +65,7 @@ Claude will:
 
 3. **Import and use:**
    ```tsx
-   import { TextInput, Button } from 'tagaddod-design-react'
+   import { TextInput, Button } from '@tagaddod-design/react'
 
    function LoginForm() {
      return (
@@ -101,7 +101,7 @@ For Arabic/RTL applications:
 
 ```tsx
 // src/main.tsx
-import { ThemeProvider } from 'tagaddod-design-react'
+import { ThemeProvider } from '@tagaddod-design/react'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -138,7 +138,7 @@ Ask Claude:
 Or implement manually using `.component-documentation/Table.mdx`:
 
 ```tsx
-import { Table, Button } from 'tagaddod-design-react'
+import { Table, Button } from '@tagaddod-design/react'
 
 const columns = [
   { header: 'Name', accessor: 'name' },
@@ -172,7 +172,7 @@ Ask Claude:
 Or implement manually using `.component-documentation/Modal.mdx`:
 
 ```tsx
-import { Modal, Button } from 'tagaddod-design-react'
+import { Modal, Button } from '@tagaddod-design/react'
 import { useState } from 'react'
 
 function DeleteButton() {
@@ -218,7 +218,7 @@ Ask Claude:
 Or implement manually:
 
 ```tsx
-import { TextInput, Button } from 'tagaddod-design-react'
+import { TextInput, Button } from '@tagaddod-design/react'
 import { useState } from 'react'
 
 function RegistrationForm() {
@@ -266,7 +266,7 @@ Ask Claude:
 Or implement manually using `.component-documentation/Sonner.mdx`:
 
 ```tsx
-import { toast, Toaster } from 'tagaddod-design-react'
+import { toast, Toaster } from '@tagaddod-design/react'
 
 // Add to App.tsx
 function App() {
@@ -442,24 +442,24 @@ See `.component-documentation/` for complete documentation (33 components):
 **Solution:** Check import path
 ```tsx
 // ✅ Correct
-import { Button } from 'tagaddod-design-react'
+import { Button } from '@tagaddod-design/react'
 
 // ❌ Wrong
-import { Button } from 'tagaddod-design-react/components/Button'
+import { Button } from '@tagaddod-design/react/components/Button'
 ```
 
 ### Issue: Styles not applied
 
 **Solution:** Ensure styles are imported in `main.tsx`
 ```tsx
-import 'tagaddod-design-react/styles'
+import '@tagaddod-design/react/styles'
 ```
 
 ### Issue: RTL not working
 
 **Solution:** Wrap app in ThemeProvider
 ```tsx
-import { ThemeProvider } from 'tagaddod-design-react'
+import { ThemeProvider } from '@tagaddod-design/react'
 
 <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
   <App />

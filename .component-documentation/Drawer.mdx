@@ -101,7 +101,7 @@ The Drawer component is a side panel that slides in from the edge of the screen 
 
 ## Import
 ```jsx
-import { Drawer, useDrawerContext } from 'tagaddod-design-react';
+import { Drawer, useDrawerContext } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -113,7 +113,7 @@ import { Drawer, useDrawerContext } from 'tagaddod-design-react';
 ```jsx
 // DEFAULT: Simple drawer without footer
 import { useState } from 'react';
-import { Drawer, Button } from 'tagaddod-design-react';
+import { Drawer, Button } from '@tagaddod-design/react';
 
 function MyComponent() {
   const [open, setOpen] = useState(false);
@@ -375,7 +375,7 @@ function MyComponent() {
 ### With Header Components
 <Canvas of={DrawerStories.SwappableHeaderAreas} />
 ```jsx
-import { Badge, Button } from 'tagaddod-design-react';
+import { Badge, Button } from '@tagaddod-design/react';
 
 <Drawer
   title="Document Title"
@@ -491,7 +491,7 @@ The Drawer automatically manages z-index for nested components through `DrawerCo
 <Canvas of={DrawerStories.UltimateZIndexTest} />
 
 ```jsx
-import { Drawer, Modal, Select, Button } from 'tagaddod-design-react';
+import { Drawer, Modal, Select, Button } from '@tagaddod-design/react';
 
 // ✅ CORRECT - Automatic z-index management
 function DrawerWithModal() {
@@ -550,7 +550,7 @@ Select Dropdowns:   z-index: 2147483647 (automatic)
 
 ### useDrawerContext Hook (Optional - For Custom Components)
 ```jsx
-import { useDrawerContext } from 'tagaddod-design-react';
+import { useDrawerContext } from '@tagaddod-design/react';
 
 function CustomComponentInDrawer() {
   const { isInsideDrawer, drawerZIndex } = useDrawerContext();
@@ -575,7 +575,7 @@ The Drawer component provides comprehensive Right-to-Left (RTL) language support
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Drawer, Button } from 'tagaddod-design-react';
+import { ThemeProvider, Drawer, Button } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -612,7 +612,7 @@ When RTL is enabled via ThemeProvider, the Drawer component automatically:
 **Important**: The Drawer automatically handles back arrow direction. The back button icon automatically points in the correct direction based on the current language:
 
 ```jsx
-import { Drawer, Button } from 'tagaddod-design-react';
+import { Drawer, Button } from '@tagaddod-design/react';
 
 function DirectionalDrawer() {
   // The drawer automatically handles back arrow direction internally:

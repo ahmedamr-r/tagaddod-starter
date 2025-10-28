@@ -355,7 +355,7 @@ function ComplexDashboard() {
 
 ```jsx
 // ❌ WRONG - Unnecessary complexity
-import { useDrawerContext } from 'tagaddod-design-react';
+import { useDrawerContext } from '@tagaddod-design/react';
 
 function MyComponent() {
   const { isInsideDrawer } = useDrawerContext();
@@ -398,7 +398,7 @@ function MyComponent() {
 </Drawer>
 ```
 
-**AI Agent Rule:** If all components are from `tagaddod-design-react`, nesting just works. Don't overthink it!
+**AI Agent Rule:** If all components are from `@tagaddod-design/react`, nesting just works. Don't overthink it!
 
 ---
 
@@ -411,7 +411,7 @@ function MyComponent() {
 Only use `useDrawerContext` if you're creating a **custom overlay component** that needs z-index awareness.
 
 ```jsx
-import { useDrawerContext } from 'tagaddod-design-react';
+import { useDrawerContext } from '@tagaddod-design/react';
 
 function CustomOverlayComponent() {
   const { isInsideDrawer, drawerZIndex } = useDrawerContext();

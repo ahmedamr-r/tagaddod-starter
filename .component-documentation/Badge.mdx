@@ -206,7 +206,7 @@ The Badge component provides comprehensive Right-to-Left (RTL) language support 
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Badge } from 'tagaddod-design-react';
+import { ThemeProvider, Badge } from '@tagaddod-design/react';
 import { IconInfo } from '@tabler/icons-react';
 
 function App() {
@@ -241,7 +241,7 @@ The Badge component handles Arabic status indicators with proper styling:
 <Canvas of={BadgeStories.RTL} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function StatusBadges() {
   const { isRTL } = useTheme();
@@ -267,7 +267,7 @@ function StatusBadges() {
 For badges with icons, the component automatically handles RTL icon positioning:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconCheck, IconClock, IconX, IconInfo } from '@tabler/icons-react';
 
 function IconBadges() {

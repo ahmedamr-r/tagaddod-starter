@@ -42,7 +42,7 @@ The Pagination component is a **CONTROLLED component** - you MUST manage state e
 ```jsx
 // ✅ CORRECT - Complete pagination with data slicing
 import { useState } from 'react';
-import { Pagination } from 'tagaddod-design-react';
+import { Pagination } from '@tagaddod-design/react';
 
 function UserList() {
   // Sample data (could be from API)
@@ -136,7 +136,7 @@ The Pagination component provides navigation controls for large datasets, allowi
 
 ## Import
 ```jsx
-import { Pagination } from 'tagaddod-design-react';
+import { Pagination } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -147,7 +147,7 @@ import { Pagination } from 'tagaddod-design-react';
 
 ```jsx
 import { useState } from 'react';
-import { Pagination } from 'tagaddod-design-react';
+import { Pagination } from '@tagaddod-design/react';
 
 function MyComponent() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -443,7 +443,7 @@ function OrderList() {
 ### Step 4: With Table Component
 ```jsx
 // Pagination integrated with Table component
-import { Table, Pagination } from 'tagaddod-design-react';
+import { Table, Pagination } from '@tagaddod-design/react';
 
 function DataTable() {
   const [data, setData] = useState([...]);

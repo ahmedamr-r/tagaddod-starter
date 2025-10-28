@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(npm run lint)",
+      "Bash(npm install)",
+      "Bash(npm run type-check)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev)",
+      "Bash(npm start)",
+      "Bash(git init)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git status)",
+      "Bash(git log:*)",
+      "Skill(tagaddod-design-system)",
+      "Skill(rtl-auto-switching)",
+      "Skill(rtl-custom-component-implementation)",
+      "mcp__brave-search__brave_web_search",
+      "mcp__brave-search__brave_local_search",
+      "mcp__fetch__fetch",
+      "mcp__Context7__resolve-library-id",
+      "mcp__Context7__get-library-docs",
+      "mcp__tavily-mcp__tavily-search",
+      "mcp__tavily-mcp__tavily-extract",
+      "mcp__sequential-thinking__sequentialthinking",
+      "mcp__figma-dev-mode-mcp-server__get_design_context",
+      "mcp__figma-dev-mode-mcp-server__get_screenshot",
+      "mcp__figma-dev-mode-mcp-server__get_code_connect_map",
+      "mcp__figma-dev-mode-mcp-server__get_variable_defs",
+      "mcp__ide__getDiagnostics",
+      "mcp__ide__executeCode",
+      "mcp__github__*",
+      "mcp__vercel__*"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -90,27 +90,28 @@ Result: Implementation provided in ~50 tokens (saved 2000 tokens)
 
 **Command**: `rtl-auto-switching`
 
-**Purpose**: Quick reference for RTL/LTR implementation patterns
+**Purpose**: Quick reference for RTL/LTR auto-switching in native Tagaddod components
 
 **When to Use**:
-- Need RTL implementation guidance
+- Need RTL implementation guidance for native Tagaddod components
 - Directional icon selection questions
 - Testing RTL switching
-- Arabic/English bilingual implementations
-- Clarification on auto-switching vs manual config
+- Arabic/English bilingual implementations for native components
+- Clarification on auto-switching behavior
 
 **Features**:
-- ✅ Universal auto-switching rule reference
+- ✅ Universal auto-switching rule reference (native components only)
 - ✅ Directional icon patterns (Next/Back/Expand/Collapse)
 - ✅ Common mistake examples
 - ✅ Testing strategies
-- ✅ Component-by-component RTL behavior table
+- ✅ Component-by-component RTL behavior table for native Tagaddod components
 
 **Quick Answers**:
-- Do components need manual RTL config? → **NO** (auto-switch)
+- Do native Tagaddod components need manual RTL config? → **NO** (auto-switch)
 - Do directional icons need manual selection? → **YES** (arrows/chevrons)
 - How to test RTL? → `document.documentElement.dir = 'rtl'`
-- Which components auto-switch? → **ALL** components
+- Which components auto-switch? → **ALL native Tagaddod components**
+- For custom components? → Use `rtl-custom-component-implementation` skill
 
 **Location**: `.claude/skills/rtl-auto-switching/SKILL.md`
 
@@ -140,6 +141,101 @@ Skill Response:
   - Example: const NextIcon = isRTL ? IconArrowLeft : IconArrowRight
   - Apply to Button: <Button suffixIcon={<NextIcon />}>Next</Button>
 Result: Clear pattern for directional icon selection
+```
+
+---
+
+### 3. **rtl-custom-component-implementation**
+
+**Command**: `rtl-custom-component-implementation`
+
+**Purpose**: Implement comprehensive RTL support for custom components (Tier 2-4 fallbacks)
+
+**When to Use**:
+- After Tier 1 check fails (component NOT in `.component-documentation/`)
+- Adapting Shadcn components to Tagaddod with RTL
+- Adapting Ant Design components to Tagaddod with RTL
+- Building custom components from scratch that need RTL/Arabic support
+- User explicitly requests Arabic/RTL for external components
+
+**Features**:
+- ✅ 6-step implementation workflow (line-height fix, logical properties, overrides, mirroring, tokens, verification)
+- ✅ Proven line-height fix pattern (TypeScript + CSS)
+- ✅ CSS logical properties reference (complete mapping)
+- ✅ Design token integration for all styling
+- ✅ Component category-specific patterns (forms, navigation, data display, layout, interactive)
+- ✅ Reference files: `line-height-fix-patterns.md`, `css-logical-properties.md`
+- ✅ Automatic integration with 4-tier discovery workflow
+
+**Workflow Integration**:
+```
+Tier 1: Check Tagaddod native → NOT FOUND
+    ↓
+Tier 2: Search Shadcn → FOUND
+    ↓
+🔴 ACTIVATE RTL SKILL → Apply 6-step workflow
+    ↓
+Component with RTL support ✓
+```
+
+**Location**: `.claude/skills/rtl-custom-component-implementation/SKILL.md`
+
+**Reference Files**:
+- `references/line-height-fix-patterns.md` - Copy-paste ready TypeScript + CSS patterns
+- `references/css-logical-properties.md` - Complete directional → logical property mapping
+
+#### Example Usage
+
+**Scenario 1**: Adapting Shadcn Alert Component
+```
+User: "I need an alert component with Arabic support"
+Agent: [Invokes tagaddod-design-system skill]
+Skill Process:
+  1. Check Tagaddod docs: Alert NOT FOUND
+  2. Search Shadcn: Alert component FOUND
+  3. Invoke rtl-custom-component-implementation skill
+RTL Skill Process:
+  1. Apply line-height fix (isRTL detection + lineHeightStyle)
+  2. Replace left/right with inline-start/end
+  3. Add ::before/::after pseudo-element trimming
+  4. Add :global([dir="rtl"]) overrides
+  5. Apply Tagaddod design tokens
+  6. Verify LTR ↔ RTL switching
+Result: Shadcn Alert component with full RTL support + Tagaddod styling
+```
+
+**Scenario 2**: Building Custom Breadcrumb
+```
+User: "Create a custom breadcrumb with RTL"
+Agent: [Invokes tagaddod-design-system skill]
+Skill Process:
+  1. Check Tagaddod docs: Breadcrumb NOT FOUND
+  2. Check Shadcn: NOT FOUND
+  3. Check Ant Design: NOT FOUND
+  4. Build custom component → Invoke RTL skill
+RTL Skill Process:
+  1. Implement base breadcrumb with flexbox
+  2. Apply line-height fix to all text elements
+  3. Use CSS logical properties (margin-inline-start, etc.)
+  4. Add separator flipping for RTL (/ → \ in Arabic)
+  5. Apply Tagaddod tokens (spacing, colors, typography)
+  6. Test with Arabic content
+Result: Custom breadcrumb with native RTL behavior
+```
+
+**Scenario 3**: RTL for Existing Custom Component
+```
+User: "Add RTL support to my custom Kanban component"
+Agent: [Invokes rtl-custom-component-implementation skill]
+RTL Skill Process:
+  1. Read Kanban component code
+  2. Identify all text elements → Apply lineHeightStyle
+  3. Replace directional CSS (left → inline-start, etc.)
+  4. Add RTL-specific overrides
+  5. Handle directional icons (arrows for drag)
+  6. Ensure design tokens used throughout
+  7. Verify column layout mirrors in RTL
+Result: Existing component now fully RTL-compatible
 ```
 
 ---
@@ -308,6 +404,8 @@ flowchart TD
 
 | Date | Skill | Update |
 |------|-------|--------|
+| 2025-10-27 | rtl-custom-component-implementation | Registered and documented new RTL custom component skill |
+| 2025-10-27 | SKILLS-INDEX | Added comprehensive documentation for 3rd skill |
 | 2025-10-19 | rtl-auto-switching | Updated references to .design-system-guides/ |
 | 2025-10-19 | tagaddod-design-system | Enhanced session memory caching documentation |
 | 2025-10-19 | SKILLS-INDEX | Created comprehensive skills index with flowcharts |
@@ -340,6 +438,8 @@ flowchart TD
 | RTL direction guidance | `rtl-auto-switching` | RTL-AUTO-SWITCHING.md |
 | Directional icons | `rtl-auto-switching` | RTL-AUTO-SWITCHING.md |
 | Custom component (not in Tagaddod) | `tagaddod-design-system` | COMPONENT-DISCOVERY-WORKFLOW.md |
+| RTL for Shadcn/Antd component | `rtl-custom-component-implementation` | SKILL.md + references/ |
+| RTL for custom-built component | `rtl-custom-component-implementation` | SKILL.md + references/ |
 | Design tokens reference | (Read directly) | DesignTokens.mdx |
 | Z-index nesting | (Auto-managed) | OVERLAY-SYSTEM-GUIDE.md |
 | Development commands | (Read directly) | CLAUDE.md |
@@ -400,14 +500,22 @@ flowchart TD
 - **Accuracy**: ⭐⭐⭐⭐⭐ (Clear auto-switching rules, no ambiguity)
 - **Coverage**: All components + directional icon patterns
 
+### rtl-custom-component-implementation
+
+- **Usage Frequency**: ⭐⭐⭐⭐ (High - used for all Tier 2-4 custom component implementations)
+- **Token Efficiency**: ⭐⭐⭐⭐⭐ (Comprehensive patterns prevent trial-and-error)
+- **Accuracy**: ⭐⭐⭐⭐⭐ (Proven patterns from Tagaddod native components)
+- **Coverage**: 6-step workflow + category-specific patterns + reference files
+
 ---
 
 ## 🎯 Summary
 
-### Total Skills: 2 Active Skills
+### Total Skills: 3 Active Skills
 
 1. **tagaddod-design-system** - Primary component implementation skill
 2. **rtl-auto-switching** - RTL/LTR pattern reference skill
+3. **rtl-custom-component-implementation** - RTL support for custom components (Tier 2-4)
 
 ### Comprehensive Documentation System
 

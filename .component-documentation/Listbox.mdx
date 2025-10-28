@@ -411,7 +411,7 @@ The Listbox component provides comprehensive Right-to-Left (RTL) language suppor
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Listbox } from 'tagaddod-design-react';
+import { ThemeProvider, Listbox } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -447,7 +447,7 @@ The Listbox component handles Arabic content with proper styling:
 <Canvas of={ListboxStories.ArabicRTL} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function MenuOptions() {
   const { isRTL } = useTheme();
@@ -483,7 +483,7 @@ function MenuOptions() {
 For options with icons, the component automatically handles RTL icon positioning:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconHome, IconUser, IconSettings } from '@tabler/icons-react';
 
 function NavigationMenu() {
@@ -523,7 +523,7 @@ Multi-select functionality with checkboxes works seamlessly in RTL:
 
 ```jsx
 import { useState } from 'react';
-import { useTheme, Checkbox } from 'tagaddod-design-react';
+import { useTheme, Checkbox } from '@tagaddod-design/react';
 
 function MultiSelectRTL() {
   const { isRTL } = useTheme();

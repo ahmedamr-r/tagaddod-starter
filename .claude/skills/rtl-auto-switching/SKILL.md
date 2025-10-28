@@ -1,17 +1,17 @@
 ---
 name: rtl-auto-switching
-description: Quick reference for RTL/LTR implementation patterns in Tagaddod Design System. Use when user asks about Arabic language support, RTL (right-to-left) direction, RTL layout, directional icons (arrows, chevrons), bilingual implementation, Hebrew support, or testing RTL switching. Explains which components auto-switch and which require manual configuration.
+description: Quick reference for RTL/LTR implementation patterns in Tagaddod Design System native components. Use when user asks about Arabic language support, RTL (right-to-left) direction, RTL layout, directional icons (arrows, chevrons), bilingual implementation, Hebrew support, or testing RTL switching. Explains auto-switching behavior for native Tagaddod components (zero config required).
 ---
 
-# RTL Auto-Switching Skill
+# RTL Auto-Switching for Native Tagaddod Components
 
-**Purpose**: Quick reference for RTL/LTR implementation in Tagaddod Design System
+**Quick reference for RTL/LTR implementation in Tagaddod Design System**
 
 ---
 
 ## 🎯 Universal Rule
 
-**ZERO manual configuration needed.** All components auto-switch based on `document.dir`.
+**ZERO manual configuration needed.** All Tagaddod native components auto-switch based on `document.dir`.
 
 ```javascript
 // Switch to RTL - everything adapts automatically
@@ -26,7 +26,7 @@ document.documentElement.dir = 'ltr';
 ## ✅ Correct Implementation Pattern
 
 ```tsx
-import { Sidebar, Drawer, TopBar, Button, Pagination } from 'tagaddod-design-react';
+import { Sidebar, Drawer, TopBar, Button, Pagination } from '@tagaddod-design/react';
 
 function App() {
   // ✅ CORRECT - Just use components, they auto-switch
@@ -60,7 +60,7 @@ const isRTL = document.dir === 'rtl';
 The **ONLY** thing requiring manual selection is directional icons (arrows):
 
 ```tsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function NavigationButtons() {
@@ -155,7 +155,7 @@ document.documentElement.dir = 'ltr';
 
 ### Method 2: ThemeProvider (Recommended)
 ```tsx
-import { ThemeProvider, useTheme } from 'tagaddod-design-react';
+import { ThemeProvider, useTheme } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -236,21 +236,6 @@ const { isRTL, setDirection } = useTheme();
 
 ---
 
-## 🔗 Full Documentation
-
-For comprehensive RTL guide with detailed examples:
-**Read**: `.design-system-guides/RTL-AUTO-SWITCHING.md`
-
-Covers:
-- Complete component behavior reference
-- Advanced directional icon patterns
-- ThemeProvider integration
-- Testing strategies
-- Common mistakes and solutions
-- Component-by-component detailed guides
-
----
-
 ## 💡 Key Takeaways
 
 1. **Components auto-switch** - Just use them normally
@@ -260,3 +245,40 @@ Covers:
 5. **Use ThemeProvider** - For centralized direction control
 
 **Remember**: If you're manually configuring `position` props based on RTL, you're doing it wrong!
+
+---
+
+## 🔗 For Custom Components (Tier 2-4)
+
+**This skill covers native Tagaddod components only** (from `.component-documentation/`).
+
+For **custom components** (Shadcn, Ant Design, or custom-built components from Tier 2-4), RTL implementation requires manual setup.
+
+**Use the dedicated skill**:
+```
+Skill: rtl-custom-component-implementation
+```
+
+This skill provides:
+- 6-step RTL implementation workflow
+- Line-height fix patterns (TypeScript + CSS)
+- CSS logical properties reference
+- Component category-specific patterns
+- Design token integration
+- Verification checklist
+
+---
+
+## 📖 Full RTL Documentation
+
+For comprehensive RTL guide covering all component behaviors:
+
+**Read**: `.design-system-guides/RTL-AUTO-SWITCHING.md`
+
+Covers:
+- Complete component behavior reference
+- Advanced directional icon patterns
+- ThemeProvider integration
+- Testing strategies
+- Common mistakes and solutions
+- Component-by-component detailed guides

@@ -96,7 +96,7 @@ SessionMemory = {
   components: {
     "Button": {
       source: "tagaddod",
-      imports: ["import { Button } from 'tagaddod-design-react'"],
+      imports: ["import { Button } from '@tagaddod-design/react'"],
       props: {
         variant: ["primary", "secondary", "tertiary", "plain"],
         size: ["small", "medium", "large"],
@@ -287,7 +287,7 @@ Use cached context to generate:
 1. Check memory: Button context NOT FOUND
 2. Read: .component-documentation/Button.mdx (complete file, ~500 lines)
 3. Extract & Cache:
-   - Imports: import { Button } from 'tagaddod-design-react'
+   - Imports: import { Button } from '@tagaddod-design/react'
    - Props: variant, size, tone, loading, disabled, prefixIcon, suffixIcon
    - Examples: 15+ usage patterns
    - RTL: Directional icon selection pattern
@@ -342,11 +342,18 @@ Tagaddod component NOT found in `.component-documentation/`
 
 ### Discovery Process
 
-**Step 1: Web Search for Shadcn**
+**Step 1: Search for Shadcn Component**
 
+**Step 1a: Try Shadcn MCP First (Priority)**
+```
+Tool: mcp__shadcn__* (Shadcn MCP tools)
+Action: Query Shadcn component library via MCP
+```
+
+**Step 1b: Fallback to Web Search (If MCP Unavailable/Fails)**
 ```
 Search Query: "shadcn [component-name] 2025 latest implementation react"
-Tools: Tavily Search MCP, Bright Data, or Brave Search
+Tools: mcp__tavily-mcp__tavily-search, WebSearch, or mcp__brave-search__*
 ```
 
 **Step 2: Extract Documentation**
@@ -406,7 +413,8 @@ Create component using:
 
 ```
 1. Check Tagaddod docs: Carousel.mdx NOT FOUND
-2. Search: "shadcn carousel 2025 latest implementation react"
+2a. Try Shadcn MCP: Query via mcp__shadcn__* tools
+2b. If MCP fails: Web search "shadcn carousel 2025 latest implementation react"
 3. Extract Shadcn carousel documentation
 4. Apply Tagaddod tokens:
    - Colors: var(--t-color-border-primary)
@@ -707,7 +715,7 @@ IF user communicates in Arabic OR requests Arabic content:
 - ⚠️ Directional icons (arrows/chevrons)
 
 ```tsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 const { isRTL } = useTheme();
@@ -723,7 +731,7 @@ const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
 #### Step 4: ThemeProvider Integration
 
 ```tsx
-import { ThemeProvider } from 'tagaddod-design-react';
+import { ThemeProvider } from '@tagaddod-design/react';
 
 <ThemeProvider
   defaultDirection="rtl"
@@ -751,7 +759,7 @@ import { ThemeProvider } from 'tagaddod-design-react';
 4. Extract & Cache:
    {
      source: "tagaddod",
-     imports: ["import { Button } from 'tagaddod-design-react'"],
+     imports: ["import { Button } from '@tagaddod-design/react'"],
      props: {
        variant: ["primary", "secondary", "tertiary", "plain"],
        size: ["small", "medium", "large"],
@@ -810,7 +818,8 @@ import { ThemeProvider } from 'tagaddod-design-react';
 
 ```
 1. Check Tagaddod docs: Carousel.mdx NOT FOUND
-2. Search: "shadcn carousel 2025 latest implementation react"
+2a. Try Shadcn MCP: Query via mcp__shadcn__* tools
+2b. If MCP fails: Web search "shadcn carousel 2025 latest implementation react"
 3. Extract Shadcn carousel documentation
 4. Apply Tagaddod tokens:
 

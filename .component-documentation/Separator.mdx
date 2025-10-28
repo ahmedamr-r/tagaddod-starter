@@ -353,7 +353,7 @@ The Separator component provides comprehensive Right-to-Left (RTL) language supp
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Separator } from 'tagaddod-design-react';
+import { ThemeProvider, Separator } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -391,7 +391,7 @@ The Separator component handles Arabic content with proper styling:
 <Canvas of={SeparatorStories.RTLExample} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function ArticleContent() {
   const { isRTL } = useTheme();
@@ -429,7 +429,7 @@ function ArticleContent() {
 For navigation menus and lists in RTL contexts:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function RTLNavigation() {
   const { isRTL } = useTheme();

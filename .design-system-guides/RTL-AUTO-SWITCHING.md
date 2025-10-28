@@ -363,7 +363,7 @@ const isRTL = document.dir === 'rtl';
 
 ```tsx
 // Just use components - they auto-switch
-import { Sidebar, Drawer, TopBar, Button } from 'tagaddod-design-react';
+import { Sidebar, Drawer, TopBar, Button } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -402,7 +402,7 @@ const isRTL = document.dir === 'rtl';
 This is the **ONLY** thing you need to handle manually:
 
 ```tsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function NavigationExample() {
@@ -521,7 +521,7 @@ document.documentElement.lang = 'en';
 ### Method 2: ThemeProvider (Recommended)
 
 ```tsx
-import { ThemeProvider, useTheme } from 'tagaddod-design-react';
+import { ThemeProvider, useTheme } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -574,9 +574,9 @@ Test each component in both directions:
 ### Basic Setup
 
 ```tsx
-import { ThemeProvider } from 'tagaddod-design-react';
+import { ThemeProvider } from '@tagaddod-design/react';
 import '@tagaddod-design/tokens/tokens.css';
-import 'tagaddod-design-react/styles';
+import '@tagaddod-design/react/styles';
 
 function Root() {
   return (
@@ -594,7 +594,7 @@ function Root() {
 ### Accessing Theme Context
 
 ```tsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function Component() {
   const {
@@ -773,6 +773,65 @@ const isRTL = document.dir === 'rtl';
 3. **Test both directions** → Verify in LTR and RTL
 
 That's it! 🎉
+
+---
+
+---
+
+## 🔗 Custom Component RTL Implementation
+
+**This guide covers native Tagaddod components only** (auto-switching behavior from `.component-documentation/`).
+
+For **custom components** (Shadcn, Ant Design, or custom-built from Tier 2-4), RTL implementation requires manual setup with a comprehensive 6-step workflow.
+
+### Use the Dedicated Skill
+
+```
+Skill: rtl-custom-component-implementation
+```
+
+This skill provides:
+
+- **6-step RTL implementation workflow**
+  1. Apply line-height fix (TypeScript + CSS patterns)
+  2. Use CSS logical properties (margin-inline-start, padding-inline-end, etc.)
+  3. Add RTL-specific overrides (`:global([dir="rtl"])` selectors)
+  4. Handle layout mirroring (flexbox, grid, directional icons)
+  5. Apply Tagaddod design tokens (colors, spacing, typography)
+  6. Verify implementation (LTR ↔ RTL switching tests)
+
+- **Reference Documentation**
+  - `references/line-height-fix-patterns.md` - Copy-paste ready TypeScript + CSS patterns
+  - `references/css-logical-properties.md` - Complete directional → logical property mapping
+
+- **Component Category Patterns**
+  - Form components (Input, Select, Checkbox)
+  - Navigation components (Menu, Breadcrumbs, Tabs)
+  - Data display (Table, Card, List)
+  - Layout components (Grid, Flexbox)
+  - Interactive components (Modal, Drawer, Dropdown)
+
+- **Complete Integration**
+  - Integrates with 4-tier component discovery workflow
+  - Design token application guidance
+  - Verification checklist
+
+### When to Use Custom Implementation Skill
+
+- After Tier 1 check fails (component NOT in `.component-documentation/`)
+- Adapting Shadcn components to Tagaddod
+- Adapting Ant Design components to Tagaddod
+- Building custom components from scratch
+- User explicitly requests Arabic/RTL for custom component
+
+### Quick Comparison
+
+| Component Type | Skill to Use | Configuration Required |
+|----------------|--------------|------------------------|
+| Native Tagaddod (Tier 1) | `rtl-auto-switching` | ❌ None - auto-switching |
+| Shadcn (Tier 2) | `rtl-custom-component-implementation` | ✅ 6-step manual workflow |
+| Ant Design (Tier 3) | `rtl-custom-component-implementation` | ✅ 6-step manual workflow |
+| Custom-built (Tier 4) | `rtl-custom-component-implementation` | ✅ 6-step manual workflow |
 
 ---
 

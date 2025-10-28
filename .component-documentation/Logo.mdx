@@ -88,7 +88,7 @@ The Logo component displays the Tagaddod brand logo with various size and color 
 ## Usage
 
 ```tsx
-import { Logo } from 'tagaddod-design-react';
+import { Logo } from '@tagaddod-design/react';
 
 // Basic usage
 <Logo />
@@ -245,7 +245,7 @@ The Logo component provides comprehensive Right-to-Left (RTL) language support w
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Logo } from 'tagaddod-design-react';
+import { ThemeProvider, Logo } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -277,7 +277,7 @@ When RTL is enabled via ThemeProvider, the Logo component automatically:
 The Logo component integrates properly with RTL navigation layouts:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function Navigation() {
   const { isRTL } = useTheme();

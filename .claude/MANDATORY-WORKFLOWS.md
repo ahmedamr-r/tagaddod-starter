@@ -97,7 +97,15 @@ Checkpoint: Have I identified the correct workflow? ✅ YES
 - [ ] **🛑 STOP HERE - Execute search first**
 - [ ] **Verbalize**: "Component not in Tagaddod. Executing TIER 1: Shadcn search..."
 - [ ] **TodoWrite**: Mark "Tier 1: Search Shadcn" as `in_progress`
-- [ ] **Tool**: `mcp__tavily-mcp__tavily-search`
+
+#### Step 1a: Try Shadcn MCP First (Priority)
+- [ ] **Tool**: `mcp__shadcn__*` (Shadcn MCP tools)
+- [ ] **Action**: Query Shadcn component library via MCP
+- [ ] **Wait for results** - DO NOT PROCEED until MCP query completes
+
+#### Step 1b: Fallback to Web Search (If MCP Fails)
+- [ ] **IF MCP unavailable/fails**: Proceed to web search
+- [ ] **Tool**: `mcp__tavily-mcp__tavily-search` OR `WebSearch` OR `mcp__brave-search__*`
 - [ ] **Query**: `"shadcn [component] 2025 latest implementation react typescript"`
 - [ ] **Max Results**: 5
 - [ ] **Wait for results** - DO NOT PROCEED until search completes
@@ -204,11 +212,19 @@ Checkpoint: Have I identified the correct workflow? ✅ YES
   - Borders: Replace with `var(--t-border-radius-*)` and `var(--t-border-width-*)`
   - Verbalize: "Replacing hardcoded values with design tokens..."
 
-- [ ] **STEP 3: Add RTL Support**
-  - Check: Does component need directional adjustments?
-  - If yes: Add RTL-aware styling
-  - Reference: `.design-system-guides/RTL-AUTO-SWITCHING.md`
-  - Verbalize: "Adding RTL support..."
+- [ ] **STEP 3: Add RTL Support (MANDATORY for Custom Components)**
+  - **🚨 CRITICAL**: Invoke `rtl-custom-component-implementation` skill
+  - Tool: `Skill` with command `"rtl-custom-component-implementation"`
+  - Wait for skill to load
+  - Verbalize: "Invoking RTL implementation skill for custom component..."
+  - Skill will apply:
+    - Line-height fix pattern (TypeScript + CSS)
+    - CSS logical properties
+    - RTL-specific overrides
+    - Layout mirroring
+    - Design token integration
+  - Reference: `.design-system-guides/RTL-AUTO-SWITCHING.md` for context
+  - Verbalize: "RTL support applied using proven patterns..."
 
 - [ ] **STEP 4: Verify Token Usage**
   - Check: Are ALL styles using design tokens?
@@ -345,6 +361,7 @@ If you detect a violation:
 | Component NOT in Tagaddod | This file → WORKFLOW #2 |
 | Styling/token selection | `.component-documentation/DesignTokens.mdx` |
 | RTL questions | `.design-system-guides/RTL-AUTO-SWITCHING.md` |
+| RTL for custom components | Invoke `rtl-custom-component-implementation` skill |
 | Z-index/overlay questions | `.design-system-guides/OVERLAY-SYSTEM-GUIDE.md` |
 | Component discovery details | `.design-system-guides/COMPONENT-DISCOVERY-WORKFLOW.md` |
 | AI behavior rules | `.claude/AI-BEHAVIOR-RULES.md` |

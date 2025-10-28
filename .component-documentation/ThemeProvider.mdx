@@ -37,7 +37,7 @@ The `ThemeProvider` includes an intelligent **bilingual font system** that autom
 ## Import
 
 ```jsx
-import { ThemeProvider, useTheme, useThemeClasses } from 'tagaddod-design-react';
+import { ThemeProvider, useTheme, useThemeClasses } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -51,7 +51,7 @@ Wrap your application with the `ThemeProvider` to enable theme and font support:
 <Canvas of={ThemeProviderStories.Default} />
 
 ```jsx
-import { ThemeProvider } from 'tagaddod-design-react';
+import { ThemeProvider } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -234,7 +234,7 @@ You can nest `ThemeProvider`s to apply different themes/fonts to specific sectio
 The `useTheme` hook provides access to the current theme context and methods to update it:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function ThemeSwitcher() {
   const { 
@@ -267,7 +267,7 @@ The `useThemeClasses` hook returns CSS class names and other utility values for 
 <Canvas of={ThemeProviderStories.WithThemeClasses} />
 
 ```jsx
-import { useThemeClasses } from 'tagaddod-design-react';
+import { useThemeClasses } from '@tagaddod-design/react';
 
 function ThemedComponent() {
   const { 

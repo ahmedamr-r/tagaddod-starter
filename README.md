@@ -1,356 +1,261 @@
-# Tagaddod Design System - Starter Template
+# Tagaddod Design System Template
 
-A production-ready **React + TypeScript + Vite** template with **Tagaddod Design System** integration and **Claude Code AI assistance**.
+**Production-ready starter template for building applications with Tagaddod Design System**
 
-This template is self-contained and ready to use as a standalone project.
+This is a clean, minimal template that provides everything you need to start building applications with the Tagaddod Design System. It comes pre-configured with TypeScript, Vite, and comprehensive component documentation.
 
----
+## 🎯 What's Included
 
-## ✨ Features
+1. **Pre-configured Vite + React + TypeScript setup** - Modern development environment ready to go
+2. **Tagaddod Design System integration** - All 33+ components ready to use
+3. **RTL/LTR support** - Built-in Arabic and English language support
+4. **Component documentation** - Complete .mdx documentation for all components
+5. **Claude AI skill** - Intelligent component implementation assistance
+6. **Design tokens** - Access to full design system token library
 
-- **🎨 Tagaddod Design System** - 33+ accessible React components
-- **🤖 Claude AI Integration** - Automated component implementation via skills
-- **📚 Component Documentation** - 33 comprehensive `.mdx` guides in `.component-documentation/`
-- **🌐 RTL Support** - Built-in Arabic/English internationalization
-- **⚡ Vite** - Lightning-fast development server
-- **📘 TypeScript** - Full type safety
-- **🎯 Design Tokens** - Consistent styling with CSS custom properties
+## 🏗️ Architecture
 
----
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Monorepo Root                                              │
+│                                                             │
+│  ┌──────────────┐         ┌──────────────┐                │
+│  │  Packages    │         │ Verdaccio    │                │
+│  │  /tokens     │────────▶│ Local NPM    │                │
+│  │  /react      │ publish │ Registry     │                │
+│  └──────────────┘         │ :4873        │                │
+│                           └──────────────┘                │
+│                                  │                          │
+│                                  │ npm install              │
+│                                  ▼                          │
+│                           ┌──────────────┐                │
+│                           │ apps/        │                │
+│                           │ template-test│                │
+│                           │ (This package)│               │
+│                           └──────────────┘                │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Node.js** 18+
-- **npm** or **yarn**
-
-### Installation
+### 1. Install Verdaccio (First Time Only)
 
 ```bash
-# Clone the repository (or download as ZIP)
-git clone https://github.com/YOUR-USERNAME/tagaddod-starter.git
-cd tagaddod-starter
+npm install -g verdaccio
+```
 
-# Install dependencies
+### 2. Start Verdaccio
+
+In one terminal window, from the monorepo root:
+
+```bash
+yarn registry:start
+```
+
+This will start Verdaccio at `http://localhost:4873`
+
+Visit the web UI: http://localhost:4873 (optional)
+
+### 3. Build and Publish Packages
+
+In another terminal window:
+
+```bash
+# Build all packages
+yarn build
+
+# Publish to local Verdaccio registry
+yarn registry:publish
+```
+
+### 4. Install Dependencies in Template Test
+
+```bash
+cd apps/template-test
 npm install
+```
 
-# Start development server
+### 5. Start Development Server
+
+```bash
 npm run dev
 ```
 
-Your app will be running at **http://localhost:5173**
+The app will open at http://localhost:3000
 
----
+## 📋 Common Workflows
 
-## 📂 Project Structure
+### Complete Testing Workflow
 
-```
-tagaddod-starter/
-├── .claude/                        # Claude Code AI skills
-│   └── skills/
-│       └── tagaddod-design-system.md  # Auto-reads component docs
-├── .component-documentation/       # 33 component guides
-│   ├── Button.mdx
-│   ├── Table.mdx
-│   ├── Modal.mdx
-│   ├── DesignTokens.mdx
-│   └── ... (30 more)
-├── src/
-│   ├── App.tsx                    # Main application
-│   ├── main.tsx                   # Entry point with ThemeProvider
-│   ├── components/ui/             # Component re-exports (optional)
-│   └── lib/                       # Utilities (RTL, theme helpers)
-├── scripts/
-│   └── check-docs-sync.js         # Verify documentation completeness
-├── CLAUDE.md                      # Claude Code instructions
-├── WORKFLOW.md                    # Development workflow guide
-└── package.json
+```bash
+# Terminal 1: Start Verdaccio (keep running)
+yarn registry:start
+
+# Terminal 2: Make changes, build, and test
+# 1. Edit components in packages/react
+# 2. Build and publish
+yarn build:react
+yarn registry:publish
+
+# 3. Update template-test package
+yarn registry:update-test
+
+# 4. See results
+cd apps/template-test && npm run dev
 ```
 
----
+### Quick Update Script
 
-## 🎯 Using Claude Code AI
+Use the automated workflow:
 
-This template includes a **specialized Claude skill** that automatically reads component documentation and generates correct implementations.
-
-### How It Works
-
-When you ask Claude Code to implement a component, it:
-
-1. **Detects** the component name from your request
-2. **Reads** `.component-documentation/[Component].mdx`
-3. **Extracts** exact import patterns, props, and examples
-4. **Generates** correct implementation code
-5. **Applies** design tokens and RTL support automatically
-
-### Example Usage
-
-```
-You: "I need a button with loading state"
-
-Claude: [Reads .component-documentation/Button.mdx]
-        [Generates implementation with loading prop]
-
-import { Button } from 'tagaddod-design-react'
-
-<Button variant="primary" loading={isLoading}>
-  Submit
-</Button>
+```bash
+yarn registry:test-workflow
 ```
 
-### Available Components (33)
+This runs: `build → publish → update template-test`
 
-See `.component-documentation/` for complete list:
+### Documentation Sync
 
-- **Forms**: Button, TextInput, Select, Checkbox, Switch, RangeSlider
-- **Data**: Table, Badge, Avatar, Card, Calendar, DatePicker
-- **Layout**: AspectRatio, Separator, Sidebar, Page
-- **Navigation**: Tabs, Listbox, Pagination, TopBar
+Documentation is automatically synced when you build the React package. To manually sync:
+
+```bash
+cd packages/react
+npm run copy-docs
+```
+
+For real-time documentation sync while developing:
+
+```bash
+# From monorepo root
+yarn watch:docs
+```
+
+## 🔧 Configuration
+
+### .npmrc
+
+The `.npmrc` file forces this package to use Verdaccio instead of workspace links:
+
+```ini
+registry=http://localhost:4873/
+@tagaddod-design:registry=http://localhost:4873/
+```
+
+### package.json Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run update:design-system` - Update design system packages from Verdaccio
+
+## 📦 Available Design System Components
+
+This package has access to all Tagaddod Design System components:
+
+- **Form Controls**: Button, TextInput, Select, Checkbox, Switch, RangeSlider, DatePicker, Calendar
+- **Layout**: AspectRatio, Separator, Card, Sidebar, TopBar
+- **Data Display**: Avatar, Badge, Table, Logo
+- **Navigation**: Tabs, Listbox, Pagination
 - **Overlays**: Modal, Drawer, Popover, Tooltip
-- **Feedback**: Sonner (toasts)
-- **Theming**: ThemeProvider, DesignTokens
+- **Feedback**: Sonner (notifications)
 
----
-
-## 🎨 Using Tagaddod Components
-
-### Basic Usage
+### Usage Example
 
 ```tsx
-import { Button, TextInput, Modal } from 'tagaddod-design-react'
+import { Button, Modal, Table } from '@tagaddod-design/react'
+import '@tagaddod-design/react/styles'
 
-function MyForm() {
+function App() {
   return (
     <div>
-      <TextInput label="Email" type="email" placeholder="Enter email" />
-      <Button variant="primary">Submit</Button>
+      <Button variant="primary">Click Me</Button>
     </div>
   )
 }
 ```
 
-### With RTL/Arabic Support
+## 🤖 AI Agent Integration
 
-```tsx
-import { ThemeProvider, Button } from 'tagaddod-design-react'
+This package includes a comprehensive `CLAUDE.md` file with instructions for Claude Code agents, including:
 
-function App() {
-  return (
-    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
-      <Button variant="primary">زر عربي</Button>
-    </ThemeProvider>
-  )
-}
-```
+- Component discovery protocol
+- Design token usage guidelines
+- RTL/Arabic support patterns
+- Documentation-first development workflow
 
-### Using Design Tokens
+The `.component-documentation/` folder contains detailed MDX guides for all components.
 
-```tsx
-// Custom styling with design tokens
-<div style={{
-  padding: 'var(--t-space-400)',
-  backgroundColor: 'var(--t-color-fill-primary)',
-  color: 'var(--t-color-text-primary)',
-  borderRadius: 'var(--t-border-radius-medium)'
-}}>
-  Content
-</div>
-```
+## 🐛 Troubleshooting
 
-See `.component-documentation/DesignTokens.mdx` for complete token reference.
+### "Cannot find module @tagaddod-design/react"
 
----
-
-## 📜 Available Scripts
+**Solution**: Packages not published to Verdaccio yet.
 
 ```bash
-# Development
-npm run dev           # Start dev server (port 5173)
-npm run build         # Build for production
-npm run preview       # Preview production build
-
-# Code Quality
-npm run lint          # Check code quality
-npm run lint:fix      # Auto-fix linting issues
-npm run type-check    # TypeScript type checking
-
-# Documentation
-npm run docs:check    # Verify component docs are synced
-npm run docs:list     # List available documentation files
+# From monorepo root
+yarn registry:publish
+cd apps/template-test
+npm install
 ```
 
----
+### "Connection refused to localhost:4873"
 
-## 🧩 Claude Skill Reference
-
-### Skill Location
-`.claude/skills/tagaddod-design-system.md`
-
-### What It Does
-- **Reads** local component documentation automatically
-- **Extracts** import patterns, props, and examples
-- **Generates** correct implementations
-- **Falls back** to Shadcn/Antd if component doesn't exist
-- **Applies** design tokens for custom components
-- **Supports** RTL/Arabic implementation
-
-### Skill Workflow
-
-```
-User Request
-    ↓
-Detect Component Name
-    ↓
-Read .component-documentation/[Component].mdx
-    ↓
-Extract: Imports, Props, Examples
-    ↓
-Generate Implementation Code
-    ↓
-[If not found: Search Shadcn → Antd → Build Custom]
-```
-
----
-
-## 🌐 RTL/Internationalization
-
-### Enable RTL Mode
-
-```tsx
-import { ThemeProvider } from 'tagaddod-design-react'
-
-function App() {
-  return (
-    <ThemeProvider
-      defaultDirection="rtl"    // 'ltr' or 'rtl'
-      defaultLocale="ar"         // 'en' or 'ar'
-      defaultBrand="tagaddod"
-    >
-      {/* Your app */}
-    </ThemeProvider>
-  )
-}
-```
-
-### Automatic Features
-- **Font switching**: Outfit (English) ↔ Tajawal (Arabic)
-- **Text alignment**: Automatic right-to-left
-- **Line heights**: Optimized for Arabic text
-- **Layout mirroring**: Directional components flip
-
-### Best Practices
-```css
-/* ✅ CORRECT - Logical properties */
-margin-inline-start: var(--t-space-400);
-text-align: start;
-
-/* ❌ WRONG - Fixed directions */
-margin-left: var(--t-space-400);
-text-align: left;
-```
-
----
-
-## 🎨 Design Tokens
-
-All styling uses **CSS custom properties** from Tagaddod Design System.
-
-### Token Categories
-
-**Colors:**
-```css
-var(--t-color-fill-primary)
-var(--t-color-text-primary)
-var(--t-color-border-primary)
-```
-
-**Spacing:**
-```css
-var(--t-space-0)      /* 0px */
-var(--t-space-100)    /* 4px */
-var(--t-space-400)    /* 16px */
-var(--t-space-800)    /* 32px */
-```
-
-**Typography:**
-```css
-var(--t-typography-heading-large)
-var(--t-typography-body-medium)
-var(--t-font-family-primary)
-var(--t-font-family-arabic)
-```
-
-**Layout:**
-```css
-var(--t-border-radius-medium)
-var(--t-shadow-small)
-```
-
-See `.component-documentation/DesignTokens.mdx` for complete reference (200+ tokens).
-
----
-
-## 📚 Documentation
-
-### Component Documentation
-All component documentation is in `.component-documentation/`:
+**Solution**: Verdaccio is not running.
 
 ```bash
-# View available docs
-npm run docs:list
-
-# Verify docs are synced
-npm run docs:check
+yarn registry:start
 ```
 
-Each `.mdx` file contains:
-- Component API (props, types)
-- Usage examples
-- RTL/Arabic support
-- Design token integration
-- Accessibility guidelines
+### Outdated package versions
 
-### Claude Code Guide
-See `CLAUDE.md` for:
-- Component documentation protocol
-- Design token usage rules
-- RTL implementation guidelines
-- Modular component architecture
+**Solution**: Update to latest from Verdaccio.
 
-### Workflow Guide
-See `WORKFLOW.md` for:
-- Development workflow
-- Claude skill usage
-- Component implementation patterns
-- Troubleshooting
-
----
-
-## 🔗 Links
-
-- **Design System Docs**: [Storybook](https://tagaddod-design-system.vercel.app/)
-- **Repository**: [GitHub](https://github.com/ahmedamr-r/tagaddod-design-system)
-- **npm Packages**: [tagaddod-design-react](https://www.npmjs.com/package/tagaddod-design-react)
-
----
-
-## 💡 Tips
-
-### For "Vibe Coders"
-Ask Claude Code to implement components - it will automatically read the documentation and generate correct code.
-
-### For Experienced Developers
-Browse `.component-documentation/` to understand component APIs, then import directly:
-```tsx
-import { Component } from 'tagaddod-design-react'
+```bash
+cd apps/template-test
+npm run update:design-system
 ```
 
-### For Arabic/RTL Projects
-1. Wrap app in `<ThemeProvider defaultDirection="rtl" defaultLocale="ar">`
-2. Use logical CSS properties (`margin-inline-start` instead of `margin-left`)
-3. Test both LTR and RTL modes
+### Documentation out of sync
+
+**Solution**: Manually trigger documentation copy.
+
+```bash
+cd packages/react
+npm run copy-docs
+```
+
+## 🔍 Differences from Production Template
+
+This testing package differs from the published template in:
+
+1. **Registry Configuration**: Uses local Verdaccio via `.npmrc`
+2. **Documentation Source**: Synced automatically from monorepo
+3. **Version Updates**: Uses `@latest` from local registry
+4. **Git Tracking**: Excluded from repository (`.gitignore`)
+
+## 📚 Additional Resources
+
+- [Verdaccio Documentation](https://verdaccio.org/docs/what-is-verdaccio)
+- [Tagaddod Design System Docs](https://tagaddod-design-system.vercel.app/)
+- [Monorepo Root README](../../README.md)
+
+## ⚠️ Important Notes
+
+- **This package is for local testing only** - It is excluded from git
+- **Verdaccio must be running** for npm install to work
+- **Always build packages before publishing** to Verdaccio
+- **Documentation syncs automatically** on React package build
+- **Use exact versions** in package.json (configured in .npmrc)
+
+## 🆘 Getting Help
+
+If you encounter issues:
+
+1. Check Verdaccio is running: `curl http://localhost:4873`
+2. Verify packages are published: Visit http://localhost:4873 in browser
+3. Check package versions: `npm view @tagaddod-design/react versions --registry http://localhost:4873`
+4. Clear npm cache: `npm cache clean --force`
+5. Reinstall: `rm -rf node_modules package-lock.json && npm install`
 
 ---
 
-**Happy Coding! 🚀**
+**Happy Testing! 🚀**

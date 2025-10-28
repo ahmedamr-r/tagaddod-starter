@@ -108,7 +108,7 @@ The Sidebar is a primary navigation component that organizes menu items into log
 ## Import
 
 ```jsx
-import { Sidebar } from 'tagaddod-design-react';
+import { Sidebar } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -160,7 +160,7 @@ The core `Sidebar` component works **without React Router** using callback-based
 - Static sites or SPAs with manual state management
 
 ```jsx
-import { Sidebar } from 'tagaddod-design-react';
+import { Sidebar } from '@tagaddod-design/react';
 
 function App() {
   const [selectedItem, setSelectedItem] = useState('dashboard');
@@ -200,7 +200,7 @@ The `SidebarWithRouter` component integrates with React Router v7/v6 to automati
 
 ```jsx
 import { BrowserRouter } from 'react-router';
-import { SidebarWithRouter } from 'tagaddod-design-react';
+import { SidebarWithRouter } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -642,7 +642,7 @@ The Sidebar component provides comprehensive Right-to-Left (RTL) language suppor
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Sidebar } from 'tagaddod-design-react';
+import { ThemeProvider, Sidebar } from '@tagaddod-design/react';
 import { IconHome, IconChartBar, IconArrowRight } from '@tabler/icons-react';
 
 function App() {
@@ -691,7 +691,7 @@ When RTL is enabled via ThemeProvider, the Sidebar component automatically:
 **Important**: When using directional icons (arrows, chevrons, etc.) in sidebar navigation, you should manually choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function DirectionalSidebar() {
@@ -797,7 +797,7 @@ const bilingualMenuItems = [
 The Sidebar works seamlessly with RTL layouts using flexbox:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function RTLLayout() {
   const { isRTL } = useTheme();

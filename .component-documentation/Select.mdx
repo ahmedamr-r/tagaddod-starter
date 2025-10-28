@@ -139,7 +139,7 @@ The Select component is ideal when you have 4 or more options to avoid clutterin
 ## Import
 
 ```jsx
-import { Select } from 'tagaddod-design-react';
+import { Select } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -582,7 +582,7 @@ The Select component provides comprehensive Right-to-Left (RTL) language support
 For full RTL support with automatic font switching and proper text rendering, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Select } from 'tagaddod-design-react';
+import { ThemeProvider, Select } from '@tagaddod-design/react';
 import { IconUser } from '@tabler/icons-react';
 
 function App() {
@@ -751,7 +751,7 @@ import { IconSearch, IconMapPin } from '@tabler/icons-react';
 **Important**: When using directional icons with Select (like navigation arrows), the component handles most iconography automatically, but for custom directional icons, consider the reading direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconChevronLeft, IconChevronRight, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function DirectionalSelect() {
@@ -778,7 +778,7 @@ function DirectionalSelect() {
 RTL Select components work seamlessly in modal contexts with proper z-index management:
 
 ```jsx
-import { Modal, Select } from 'tagaddod-design-react';
+import { Modal, Select } from '@tagaddod-design/react';
 
 const RTLModalWithSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -968,7 +968,7 @@ const organizedOptions = [
 The Select component automatically detects when it's used inside a modal and adjusts its z-index accordingly to ensure the dropdown appears above the modal overlay.
 
 ```jsx
-import { Modal, Select } from 'tagaddod-design-react';
+import { Modal, Select } from '@tagaddod-design/react';
 
 const ModalWithSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -1120,7 +1120,7 @@ interface SelectOption {
 ### Constants
 
 ```jsx
-import { selectSizes } from 'tagaddod-design-react';
+import { selectSizes } from '@tagaddod-design/react';
 
 // Available sizes: ['micro', 'medium', 'large']
 console.log(selectSizes);
@@ -1133,7 +1133,7 @@ console.log(selectSizes);
 ```jsx
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Select } from 'tagaddod-design-react';
+import { Select } from '@tagaddod-design/react';
 
 const options = [
   { value: 'apple', label: 'Apple' },

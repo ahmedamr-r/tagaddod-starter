@@ -35,9 +35,14 @@ This skill is **self-contained** and works in the standalone template repository
 
 🔍 Executing **TIER 1: Shadcn Search**
 
-Using tool: mcp__tavily-mcp__tavily-search
-Query: 'shadcn kanban 2025 latest implementation react typescript'
+Step 1a: Trying Shadcn MCP first...
+Using tool: mcp__shadcn__* (Shadcn MCP)
+⏳ Checking Shadcn component library via MCP...
 
+[If MCP unavailable/fails]
+Step 1b: Falling back to web search...
+Using tool: mcp__tavily-mcp__tavily-search (or WebSearch or mcp__brave-search__)
+Query: 'shadcn kanban 2025 latest implementation react typescript'
 ⏳ Waiting for results..."
 
 [Tool executes]
@@ -69,9 +74,15 @@ Query: 'antdesign kanban react 2025 best practices typescript'
 ### ☑️ TIER 1: Search Shadcn (REQUIRED - DO NOT SKIP)
 
 - [ ] **🚨 STOP HERE** - Execute search first
-- [ ] **Tool**: `mcp__tavily-mcp__tavily-search`
-- [ ] **Query**: `"shadcn [component] 2025 latest implementation react"`
-- [ ] **Wait for results** - Do not proceed until search completes
+- [ ] **Step 1a - Try Shadcn MCP First (Priority)**:
+  - [ ] **Tool**: `mcp__shadcn__*` (Shadcn MCP tools)
+  - [ ] Query Shadcn component library via MCP
+  - [ ] Wait for MCP results
+- [ ] **Step 1b - Fallback to Web Search (If MCP Fails)**:
+  - [ ] **IF MCP unavailable/fails**: Proceed to web search
+  - [ ] **Tool**: `mcp__tavily-mcp__tavily-search` OR `WebSearch` OR `mcp__brave-search__*`
+  - [ ] **Query**: `"shadcn [component] 2025 latest implementation react"`
+  - [ ] Wait for results
 - [ ] **Evaluate**:
   - ✅ If found → Extract component patterns + Apply Tagaddod design tokens
   - ❌ If NOT found → Proceed to Tier 2
@@ -129,6 +140,13 @@ I skipped TIER 1 and TIER 2 in the Custom Component Discovery workflow.
 Correcting now: Going back to execute Tier 1 search...
 
 🔍 Executing **TIER 1: Shadcn Search**
+
+Step 1a: Trying Shadcn MCP first...
+Using tool: mcp__shadcn__* (Shadcn MCP)
+⏳ Checking Shadcn component library via MCP...
+
+[If MCP unavailable/fails]
+Step 1b: Falling back to web search...
 Using tool: mcp__tavily-mcp__tavily-search
 Query: 'shadcn kanban 2025 latest implementation react typescript'
 ⏳ Waiting for results..."
@@ -181,7 +199,7 @@ From the documentation file, extract:
 
 1. **Import Statements** (exact syntax)
    ```tsx
-   import { Button } from 'tagaddod-design-react'
+   import { Button } from '@tagaddod-design/react'
    ```
 
 2. **Props and TypeScript Interfaces**
@@ -231,7 +249,7 @@ Use the **EXACT patterns** from the documentation to generate implementation cod
 ```tsx
 // Based on documentation from .component-documentation/Button.mdx
 
-import { Button } from 'tagaddod-design-react'
+import { Button } from '@tagaddod-design/react'
 
 export function MyForm() {
   return (
@@ -442,7 +460,7 @@ Apply: Tagaddod design tokens
 
 ### 2. Implement ThemeProvider
 ```tsx
-import { ThemeProvider } from 'tagaddod-design-react'
+import { ThemeProvider } from '@tagaddod-design/react'
 
 function App() {
   return (
@@ -506,7 +524,7 @@ src/
 ### Example: Custom Form Field
 ```tsx
 // src/components/custom/forms/FormField/FormField.tsx
-import { TextInput } from 'tagaddod-design-react'
+import { TextInput } from '@tagaddod-design/react'
 
 export interface FormFieldProps {
   label: string
@@ -578,7 +596,7 @@ Agent: [Reads .component-documentation/Table.mdx] → Cache context → Generate
 
 ### Pattern 1: Form with Validation
 ```tsx
-import { Button, TextInput } from 'tagaddod-design-react'
+import { Button, TextInput } from '@tagaddod-design/react'
 
 function LoginForm() {
   return (
@@ -609,7 +627,7 @@ function LoginForm() {
 
 ### Pattern 2: Data Table with Actions
 ```tsx
-import { Table, Button } from 'tagaddod-design-react'
+import { Table, Button } from '@tagaddod-design/react'
 
 function UserTable() {
   const columns = [
@@ -635,7 +653,7 @@ function UserTable() {
 
 ### Pattern 3: Modal Confirmation
 ```tsx
-import { Modal, Button } from 'tagaddod-design-react'
+import { Modal, Button } from '@tagaddod-design/react'
 import { useState } from 'react'
 
 function DeleteConfirmation() {
@@ -676,10 +694,10 @@ function DeleteConfirmation() {
 ## Troubleshooting
 
 ### Issue: Component not rendering
-**Solution:** Check import path - use `tagaddod-design-react` not relative imports
+**Solution:** Check import path - use `@tagaddod-design/react` not relative imports
 
 ### Issue: Styles not applied
-**Solution:** Ensure `tagaddod-design-react/styles` is imported in main.tsx
+**Solution:** Ensure `@tagaddod-design/react/styles` is imported in main.tsx
 
 ### Issue: RTL not working
 **Solution:** Wrap app in `<ThemeProvider defaultDirection="rtl">`
@@ -688,7 +706,7 @@ function DeleteConfirmation() {
 **Solution:** Check component documentation for correct prop types
 
 ### Issue: Design tokens not working
-**Solution:** Import design tokens CSS: `import 'tagaddod-design-react/styles'`
+**Solution:** Import design tokens CSS: `import '@tagaddod-design/react/styles'`
 
 ---
 

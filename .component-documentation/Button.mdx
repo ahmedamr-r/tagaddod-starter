@@ -364,7 +364,7 @@ The Button component provides comprehensive Right-to-Left (RTL) language support
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Button } from 'tagaddod-design-react';
+import { ThemeProvider, Button } from '@tagaddod-design/react';
 import { IconArrowRight } from '@tabler/icons-react';
 
 function App() {
@@ -395,7 +395,7 @@ When RTL is enabled via ThemeProvider, the Button component automatically:
 **Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function DirectionalButton() {
@@ -449,7 +449,7 @@ const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
 ### Complete RTL Integration Example
 
 ```jsx
-import { ThemeProvider, Button, useTheme } from 'tagaddod-design-react';
+import { ThemeProvider, Button, useTheme } from '@tagaddod-design/react';
 import { 
   IconArrowLeft, 
   IconArrowRight, 

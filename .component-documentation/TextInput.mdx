@@ -412,7 +412,7 @@ The TextInput component provides comprehensive Right-to-Left (RTL) language supp
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, TextInput } from 'tagaddod-design-react';
+import { ThemeProvider, TextInput } from '@tagaddod-design/react';
 import { IconSearch } from '@tabler/icons-react';
 
 function App() {
@@ -446,7 +446,7 @@ When RTL is enabled via ThemeProvider, the TextInput component automatically:
 **Important**: When using directional icons with TextInput (like arrow icons for search actions), choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight, IconSearch, IconSend } from '@tabler/icons-react';
 
 function SearchInput() {
@@ -497,7 +497,7 @@ function SearchInput() {
 #### RTL Email Input with Validation
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconMail, IconExclamationCircle } from '@tabler/icons-react';
 
 function RTLEmailInput() {

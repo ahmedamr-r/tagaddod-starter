@@ -221,7 +221,7 @@ The Checkbox component provides comprehensive Right-to-Left (RTL) language suppo
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Checkbox } from 'tagaddod-design-react';
+import { ThemeProvider, Checkbox } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -253,7 +253,7 @@ The Checkbox component handles Arabic form labels with proper styling:
 <Canvas of={CheckboxStories.RTL} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function PreferencesForm() {
   const { isRTL } = useTheme();
@@ -284,7 +284,7 @@ Error messages and validation work seamlessly in RTL mode:
 <Canvas of={CheckboxStories.RTLError} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function TermsAcceptance() {
   const { isRTL } = useTheme();

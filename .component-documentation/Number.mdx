@@ -92,7 +92,7 @@ The Number component is a sophisticated numeric input with stepper controls, com
 ## Import
 
 ```jsx
-import { Number } from 'tagaddod-design-react';
+import { Number } from '@tagaddod-design/react';
 ```
 
 ## Component Structure
@@ -108,7 +108,7 @@ The Number component combines a text input with optional stepper buttons, prefix
 <Canvas of={NumberStories.Default} />
 
 ```jsx
-import { Number } from 'tagaddod-design-react';
+import { Number } from '@tagaddod-design/react';
 
 // Basic number input
 <Number
@@ -447,7 +447,7 @@ The Number component provides comprehensive Right-to-Left (RTL) language support
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Number } from 'tagaddod-design-react';
+import { ThemeProvider, Number } from '@tagaddod-design/react';
 import { IconCalculator } from '@tabler/icons-react';
 
 function App() {
@@ -479,7 +479,7 @@ When RTL is enabled via ThemeProvider, the Number component automatically:
 **Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function DirectionalComponent() {

@@ -130,7 +130,7 @@ The RangeSlider is ideal for scenarios where users need to select numerical valu
 ## Import
 
 ```jsx
-import { RangeSlider } from 'tagaddod-design-react';
+import { RangeSlider } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -143,7 +143,7 @@ import { RangeSlider } from 'tagaddod-design-react';
 
 ```jsx
 import { useState } from 'react';
-import { RangeSlider } from 'tagaddod-design-react';
+import { RangeSlider } from '@tagaddod-design/react';
 
 const BasicSlider = () => {
   const [value, setValue] = useState([50]);
@@ -741,7 +741,7 @@ formatValue={(value) => `${(value / 1024).toFixed(1)} KB`}
 
 ```jsx
 import { render, screen, fireEvent } from '@testing-library/react';
-import { RangeSlider } from 'tagaddod-design-react';
+import { RangeSlider } from '@tagaddod-design/react';
 
 test('renders slider with correct initial value', () => {
   render(

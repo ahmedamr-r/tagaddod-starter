@@ -425,7 +425,7 @@ The Tabs component provides comprehensive Right-to-Left (RTL) language support w
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+import { ThemeProvider, Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod-design/react';
 import { IconUser, IconSettings } from '@tabler/icons-react';
 
 function App() {
@@ -491,7 +491,7 @@ When RTL is enabled via ThemeProvider or the `dir` prop, the Tabs component auto
 **Important**: When using directional icons in tabs (like navigation arrows, chevrons), choose appropriate icons based on direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function DirectionalTabs() {
@@ -538,7 +538,7 @@ function DirectionalTabs() {
 For complex tab navigation with multiple levels:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconFolder, IconFile, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function RTLNavigationTabs() {
@@ -678,7 +678,7 @@ Enable URL synchronization with the `syncWithUrl` prop:
 
 ```jsx
 import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod-design/react';
 
 function RoutedTabs() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -777,7 +777,7 @@ Control browser history behavior with `replaceHistory`:
 
 ```jsx
 import { useState, useEffect } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod-design/react';
 import { IconHome, IconChartBar, IconFileText, IconSettings } from '@tabler/icons-react';
 
 function DashboardPage() {
@@ -883,7 +883,7 @@ Open modals from within tab content - perfect for forms, confirmations, or detai
 
 ```jsx
 import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent, Modal, Button } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Modal, Button } from '@tagaddod-design/react';
 
 function TabsWithModal() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -942,7 +942,7 @@ Use Drawer for side panels, filters, or settings:
 
 ```jsx
 import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent, Drawer, Button } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Drawer, Button } from '@tagaddod-design/react';
 
 function TabsWithDrawer() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -1005,7 +1005,7 @@ function TabsWithDrawer() {
 Add contextual information, tooltips, or small menus:
 
 ```jsx
-import { Tabs, TabsList, TabsTrigger, TabsContent, Popover, Button } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Popover, Button } from '@tagaddod-design/react';
 import { IconInfoCircle } from '@tabler/icons-react';
 
 function TabsWithPopover() {
@@ -1061,7 +1061,7 @@ function TabsWithPopover() {
 A real-world scenario combining Tabs, Table, and Popover filters:
 
 ```jsx
-import { Tabs, TabsList, TabsTrigger, TabsContent, Table } from 'tagaddod-design-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, Table } from '@tagaddod-design/react';
 
 function InventoryManagement() {
   const columns = [

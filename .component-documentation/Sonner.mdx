@@ -100,7 +100,7 @@ First, add the Sonner component to your application root:
 <Source
   language="tsx"
   code={`
-import { Sonner } from 'tagaddod-design-react';
+import { Sonner } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -118,7 +118,7 @@ Then use the toast functions anywhere in your application:
 <Source
   language="tsx"
   code={`
-import { showSonner } from 'tagaddod-design-react';
+import { showSonner } from '@tagaddod-design/react';
 
 function MyComponent() {
   const handleSuccess = () => {
@@ -202,7 +202,7 @@ The Sonner component provides comprehensive Right-to-Left (RTL) language support
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Sonner, showSonner } from 'tagaddod-design-react';
+import { ThemeProvider, Sonner, showSonner } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -239,7 +239,7 @@ All toast types work seamlessly in RTL mode with proper styling:
 <Canvas of={SonnerStories.RTLSupport} />
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 
 function RTLToastExamples() {
   const { isRTL } = useTheme();

@@ -20,8 +20,8 @@ Use the Calendar component when you need:
 ## Import
 
 ```jsx
-import { Calendar } from 'tagaddod-design-react';
-import type { CalendarProps, CalendarMode, CalendarCaptionLayout } from 'tagaddod-design-react';
+import { Calendar } from '@tagaddod-design/react';
+import type { CalendarProps, CalendarMode, CalendarCaptionLayout } from '@tagaddod-design/react';
 ```
 
 ## Component Structure
@@ -44,7 +44,7 @@ The Calendar component provides a unified interface for date selection with cust
 
 ```jsx
 import { useState } from 'react';
-import { Calendar } from 'tagaddod-design-react';
+import { Calendar } from '@tagaddod-design/react';
 
 function DateSelection() {
   const [selectedDate, setSelectedDate] = useState();
@@ -476,7 +476,7 @@ The Calendar component integrates seamlessly with other design system components
 
 ```jsx
 import { useState } from 'react';
-import { Calendar, TextInput, Button } from 'tagaddod-design-react';
+import { Calendar, TextInput, Button } from '@tagaddod-design/react';
 import { IconCalendar } from '@tabler/icons-react';
 
 function BookingForm() {
@@ -598,7 +598,7 @@ function BookingForm() {
 
 ```jsx
 import { useState, useEffect } from 'react';
-import { Calendar, Select, Badge } from 'tagaddod-design-react';
+import { Calendar, Select, Badge } from '@tagaddod-design/react';
 
 function AnalyticsDashboard() {
   const [dateRange, setDateRange] = useState({ from: undefined, to: undefined });
@@ -744,7 +744,7 @@ function AnalyticsDashboard() {
 
 ```jsx
 import { useState } from 'react';
-import { Calendar, Modal, TextInput, Button, Badge } from 'tagaddod-design-react';
+import { Calendar, Modal, TextInput, Button, Badge } from '@tagaddod-design/react';
 
 function EventScheduler() {
   const [selectedDate, setSelectedDate] = useState();
@@ -938,7 +938,7 @@ The Calendar component provides comprehensive Right-to-Left (RTL) language suppo
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Calendar } from 'tagaddod-design-react';
+import { ThemeProvider, Calendar } from '@tagaddod-design/react';
 import { IconArrowRight } from '@tabler/icons-react';
 
 function App() {
@@ -971,7 +971,7 @@ When RTL is enabled via ThemeProvider, the Calendar component automatically:
 **Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function DirectionalCalendar() {
@@ -1036,7 +1036,7 @@ const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
 
 ```jsx
 import { useState } from 'react';
-import { Calendar } from 'tagaddod-design-react';
+import { Calendar } from '@tagaddod-design/react';
 
 function RTLCalendar() {
   const [selectedDate, setSelectedDate] = useState();

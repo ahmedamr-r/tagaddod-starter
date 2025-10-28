@@ -1,7 +1,7 @@
 # Table Cell Variants - AI Agent Implementation Guide
 
 **Version:** 1.0.0
-**Component:** tagaddod-design-react Table Cell System
+**Component:** @tagaddod-design/react Table Cell System
 **Documentation Type:** AI Agent Optimized
 **Related Docs:** [Table-AI-AGENT-GUIDE.mdx](./Table-AI-AGENT-GUIDE.mdx)
 
@@ -50,7 +50,7 @@ The fastest way to create table columns with pre-configured cell variants.
 ### Import
 
 ```typescript
-import { QuickColumns } from 'tagaddod-design-react';
+import { QuickColumns } from '@tagaddod-design/react';
 ```
 
 ### Available QuickColumns
@@ -82,7 +82,7 @@ QuickColumns.actionDropdown(header, actions, size?)
 ### Basic Implementation Example
 
 ```tsx
-import { Table, QuickColumns } from 'tagaddod-design-react';
+import { Table, QuickColumns } from '@tagaddod-design/react';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 
 interface Product {
@@ -153,7 +153,7 @@ const columns = [
 Single line of text with proper RTL support.
 
 ```typescript
-import { TextSingleLineCell } from 'tagaddod-design-react';
+import { TextSingleLineCell } from '@tagaddod-design/react';
 
 // Using QuickColumns
 QuickColumns.text('name', 'Name')
@@ -226,7 +226,7 @@ QuickColumns.textTruncated('description', 'Description')
 Text with an accompanying badge and optional icon.
 
 ```typescript
-import { TextSingleLineWithBadgeCell } from 'tagaddod-design-react';
+import { TextSingleLineWithBadgeCell } from '@tagaddod-design/react';
 
 // Data structure
 interface Row {
@@ -267,7 +267,7 @@ interface Row {
 Single badge with customizable tone.
 
 ```typescript
-import { BadgeCell } from 'tagaddod-design-react';
+import { BadgeCell } from '@tagaddod-design/react';
 
 // Using QuickColumns
 QuickColumns.badge('status', 'Status')
@@ -343,10 +343,10 @@ QuickColumns.number('price', 'Price')
 Shows current value with optional previous value (strikethrough).
 
 ```typescript
-import { UpdatedNumberCell } from 'tagaddod-design-react';
+import { UpdatedNumberCell } from '@tagaddod-design/react';
 
 // Using createCellColumn
-import { createCellColumn } from 'tagaddod-design-react';
+import { createCellColumn } from '@tagaddod-design/react';
 
 createCellColumn('updatedNumber', 'price', 'Price', 120)
 
@@ -455,7 +455,7 @@ interface Row {
 Radio button group within a cell.
 
 ```typescript
-import { RadioButtonCell } from 'tagaddod-design-react';
+import { RadioButtonCell } from '@tagaddod-design/react';
 
 const priorityOptions = [
   { label: 'Low', value: 'low' },
@@ -511,7 +511,7 @@ interface Row {
 Icon buttons for row actions.
 
 ```typescript
-import { ActionIconCell } from 'tagaddod-design-react';
+import { ActionIconCell } from '@tagaddod-design/react';
 import { IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
 
 // Using QuickColumns
@@ -581,7 +581,7 @@ QuickColumns.actions('Actions', [
 Dropdown menu for multiple actions.
 
 ```typescript
-import { ActionDropdownIconCell } from 'tagaddod-design-react';
+import { ActionDropdownIconCell } from '@tagaddod-design/react';
 
 // Using QuickColumns
 QuickColumns.actionDropdown('Actions', [
@@ -664,7 +664,7 @@ const columns = [
 For reusable custom cells:
 
 ```tsx
-import { createCustomCellColumn } from 'tagaddod-design-react';
+import { createCustomCellColumn } from '@tagaddod-design/react';
 
 // Progress bar cell component
 function ProgressBarCell({ value }: { value: number }) {
@@ -911,7 +911,7 @@ interface Row {
 ### Example 1: E-commerce Product Table
 
 ```tsx
-import { Table, QuickColumns } from 'tagaddod-design-react';
+import { Table, QuickColumns } from '@tagaddod-design/react';
 import { IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
 
 interface Product {

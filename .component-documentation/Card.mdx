@@ -95,7 +95,7 @@ The Card component is a versatile container that serves as a flexible building b
 
 ## Import
 ```jsx
-import { Card } from 'tagaddod-design-react';
+import { Card } from '@tagaddod-design/react';
 ```
 
 ## Props
@@ -509,7 +509,7 @@ The Card component provides comprehensive Right-to-Left (RTL) language support w
 For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-import { ThemeProvider, Card } from 'tagaddod-design-react';
+import { ThemeProvider, Card } from '@tagaddod-design/react';
 import { IconArrowRight } from '@tabler/icons-react';
 
 function App() {
@@ -540,7 +540,7 @@ When RTL is enabled via ThemeProvider, the Card component automatically:
 **Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
 
 ```jsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function DirectionalCard() {

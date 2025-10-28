@@ -262,7 +262,7 @@ flowchart TD
 The **ONLY** thing requiring manual handling is directional icons (arrows/chevrons):
 
 ```tsx
-import { useTheme } from 'tagaddod-design-react';
+import { useTheme } from '@tagaddod-design/react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function Component() {
@@ -283,17 +283,49 @@ function Component() {
 }
 ```
 
+### RTL for Custom Components (Shadcn/Antd/Custom)
+
+**IMPORTANT**: The above auto-switching applies to **Tagaddod native components only**.
+
+For **custom components** (Tier 2-4: Shadcn, Ant Design, or built from scratch), **ALWAYS invoke the RTL implementation skill**:
+
+```
+Skill: rtl-custom-component-implementation
+```
+
+This skill will automatically apply:
+- ✅ Line-height fix pattern (TypeScript + CSS)
+- ✅ CSS logical properties
+- ✅ RTL-specific overrides (`:global([dir="rtl"])`)
+- ✅ Layout mirroring (flexbox, grid)
+- ✅ Design token integration
+
+**When to invoke**:
+- After Tier 1 check fails (component NOT in `.component-documentation/`)
+- When adapting Shadcn components
+- When adapting Ant Design components
+- When building custom components from scratch
+- User explicitly requests RTL/Arabic support for custom component
+
+**Reference**: See `.claude/MANDATORY-WORKFLOWS.md` → WORKFLOW #3, Step 3
+
 ### Component Reference
 
 | Component | Manual Config Needed? |
 |-----------|----------------------|
+| **Tagaddod Native Components** | |
 | Sidebar | ❌ None - auto-switches |
 | Drawer | ❌ None - auto-switches |
 | TopBar | ❌ None - auto-switches |
 | Modal | ❌ None - auto-switches |
 | Pagination | ❌ None - auto-switches |
-| All Others | ❌ None - auto-switches |
-| **Exception** | ⚠️ Directional icons only (manual) |
+| All Tagaddod Components | ❌ None - auto-switches |
+| **Custom Components (Tier 2-4)** | |
+| Shadcn components | 🔴 **Invoke RTL skill** |
+| Ant Design components | 🔴 **Invoke RTL skill** |
+| Custom-built components | 🔴 **Invoke RTL skill** |
+| **Exception (All Components)** | |
+| Directional icons | ⚠️ Manual selection required |
 
 ### Complete RTL Guide
 
@@ -539,7 +571,7 @@ src/
 3. **Build molecular components** (form fields, cards, list items)
 4. **Compose organism components** (forms, tables, navigation)
 5. **Apply Tagaddod design tokens** throughout
-6. **Implement RTL support**
+6. **Implement RTL support** → Invoke `rtl-custom-component-implementation` skill
 7. **Add accessibility features**
 
 ### File Structure Pattern
@@ -598,7 +630,7 @@ npm run type-check     # TypeScript type checking
 
 **Technology Stack**:
 - Build System: Vite with React + TypeScript
-- UI Framework: Tagaddod Design System (tagaddod-design-react)
+- UI Framework: Tagaddod Design System (@tagaddod-design/react)
 - Styling: Global CSS with RTL support
 - Type Safety: Full TypeScript integration
 
@@ -625,7 +657,7 @@ src/
 
 ```tsx
 // Direct import from Tagaddod (recommended)
-import { Button, TextInput, Modal } from 'tagaddod-design-react'
+import { Button, TextInput, Modal } from '@tagaddod-design/react'
 
 // Or via convenience re-exports
 import { Button, TextInput, Modal } from '@/components/ui'
@@ -680,7 +712,7 @@ Uses Skill tool with command: "tagaddod-design-system"
 **Step 3**: Implementation using skill's guidance
 
 ```tsx
-import { Modal, Button } from 'tagaddod-design-react'
+import { Modal, Button } from '@tagaddod-design/react'
 
 function DeleteConfirmModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -757,7 +789,10 @@ function DeleteConfirmModal() {
 
 - **Component Documentation**: `.component-documentation/` (33 guides)
 - **Design System Guides**: `.design-system-guides/` (Discovery, RTL, Overlay)
-- **Skills**: `.claude/skills/` (tagaddod-design-system, rtl-auto-switching)
+- **Skills**: `.claude/skills/`
+  - `tagaddod-design-system` - Tagaddod component implementation
+  - `rtl-auto-switching` - RTL behavior reference
+  - `rtl-custom-component-implementation` - RTL for custom components (Shadcn/Antd/Custom)
 
 ---
 
